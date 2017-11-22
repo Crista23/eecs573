@@ -1,0 +1,7 @@
+CMD640
+
+CMD640, the California Micro Devices Technology Inc product 0640, is an IDE interface chip for the PCI and VLB buses. CMD640 had some sort of hardware acceleration: WDMA and Read-Ahead (prefetch) support. CMD Technology Inc was acquired by Silicon Image Inc. in 2001.
+
+Hardware bug
+The original CMD640 has a data corruption bug. The data corruption bug is similar to the bug affecting the contemporaneous PC Tech RZ1000 chipset. Both chipsets were used on a number of motherboards, including those from Intel.Мodern operating systems have a workaround for this bug by prohibiting aggressive acceleration mode and losing about 10% of the performance.
+

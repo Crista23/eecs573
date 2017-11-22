@@ -1,0 +1,14 @@
+Cyrix coma bug
+
+The Cyrix coma bug is a design flaw in Cyrix 6x86, 6x86L, and early 6x86MX processors that allows a non-privileged program to hang the computer.
+
+According to Andrew Balsa, around the time of the discovery of the F00F bug on Intel Pentium, Serguei Shtyliov from Moscow found a flaw in a Cyrix processor while developing an IDE disk driver in assembly language. Alexandr Konosevich, from Omsk, further researched the bug and coauthored an article with Uwe Post in the German technology magazine c't, calling it the "hidden CLI bug" (CLI is the instruction that disables interrupts in the x86 architecture). Balsa, as a member on the Linux-kernel mailing list, confirmed that the following C program could be compiled and run by an unprivileged user:
+
+Execution of this program renders the processor completely useless until it is rebooted, as it enters an infinite loop that cannot be interrupted. This presents a security flaw because any user with access to a Cyrix system with this bug could prevent other users from using the system. Exploitation of this flaw would therefore be a denial-of-service attack. It is similar to execution of a Halt and Catch Fire instruction, although the coma bug is not any one particular instruction.
+
+Analysis
+What causes the bug is not an interrupt mask, nor are interrupts being explicitly disabled. Instead, an anomaly in the Cyrix's instruction pipeline prevents interrupts from being serviced for the duration of the loop; since the loop never ends, interrupts will never be serviced. The xchg[1] instruction is atomic, meaning that other instructions are not allowed to change the state of the system while it is executed. In order to ensure this atomicity, the designers at Cyrix made the xchg uninterruptible. However, because of pipelining and branch predicting, another xchg enters the pipeline before the previous one completes, leaving the processor in this uninterruptible state forever.
+
+Workarounds
+A fix for unintentional instances of the bug is to insert another instruction in the loop, the nop instruction being a good candidate. Cyrix suggested serializing the xchg opcode, thus bypassing the pipeline. However, these techniques will not serve to prevent deliberate attacks.
+One way to prevent this bug is to enable bit 0x10 in the configuration register CCR1. This disables implicit bus locking normally done by xchg instruction. Since CPUs affected by this bug were not designed to work in multi-processor systems, loss of xchg atomicity is harmless.

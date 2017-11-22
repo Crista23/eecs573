@@ -1,0 +1,5 @@
+Green Lightning (computing)
+
+Green lightning originally referred to random flashing streaks across the screen of IBM 3278-9 computer terminals, which were produced by a hardware bug when a new symbol set was being downloaded. Instead of fixing the fault, IBM suggested that it was useful because it let the user know during the download that something was in progress.
+Later IBM colour graphics terminals were microprocessor driven and would not have produced flashing streaks. IBM decided to program them to re-create the "green lightning", since the bug had become a feature - a phenomenon known as a misbug.
+This is one of many terms from the Jargon File that are widely quoted but have little or no everyday usage.

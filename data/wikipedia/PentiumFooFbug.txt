@@ -1,0 +1,12 @@
+Pentium F00F bug
+
+The Pentium F00F bug, shorthand for F0 0F C7 C8, the hexadecimal encoding of one offending instruction,[1] more formally, the invalid operand with locked CMPXCHG8B instruction bug, is a design flaw in the majority of Intel Pentium, Pentium MMX, and Pentium OverDrive processors (all in the P5 microarchitecture).
+
+Description
+In the x86 architecture, the byte sequence F0 0F C7 C8 represents the instruction lock cmpxchg8b eax (locked compare and exchange of eight bytes in register eax), though the operand could be a register other than eax. The F0 0F C7 C8 instruction does not require any special privileges.
+This instruction encoding is invalid. The cmpxchg8b instruction compares the value in the edx and eax registers (the lower halves of R0 and R2 on more modern x86 processors) with an eight-byte value in a memory location. In this case, however, a register is used as the destination operand, which is not allowed.
+Under normal circumstances, this instruction would simply result in an exception; however, when used with the lock prefix (normally used to prevent two processors from interfering with the same memory location), the CPU erroneously uses locked bus cycles to read "exception handler descriptor." Locked reads without locked writes are not allowed bus operations; hence, after performing these bus cycles, all CPU activity stops, and the CPU must be reset to recover.
+Due to the proliferation of Intel microprocessors, the existence of this open privilege instruction was considered a serious issue at the time. Operating system vendors responded by implementing workarounds that detected the condition and prevented the crash. Information about the bug first appeared on the Internet on or around 8 November 1997.[4][5] Since the F00F bug has become common knowledge, the term is sometimes used to describe similar hardware design flaws such as the Cyrix coma bug.[citation needed]
+No permanent hardware damage results from executing the F00F instruction on a vulnerable system. Depending on the file system, operating system, and other circumstances, it is possible for data loss to occur if the disk buffers have not been flushed, if drives were interrupted during a write operation, or if some other non-atomic operation was interrupted.
+The B2 stepping solved this issue for Intel's Pentium processors.[2]
+Although technically not an example of either, the F00F instruction is often considered a killer poke, or a Halt and Catch Fire (HCF) instruction.
