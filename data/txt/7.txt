@@ -1,0 +1,283 @@
+AA1.	Bus Locks and SMC Detection May Cause the Processor to Hang Temporarily
+Problem:	The processor may temporarily hang in an Hyper-Threading Technology enabled system if one logical processor executes a synchronization loop that includes one or more locks and is waiting for release by the other logical processor. If the releasing logical processor is executing instructions that are within the detection range of the self -modifying code (SMC) logic, then the processor may be locked in the synchronization loop until the arrival of an interrupt or other event.
+Implication: If this erratum occurs in an HT Technology enabled system, the application may temporarily stop making forward progress. Intel has not observed this erratum with any commercially available software.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+AA2.	Memory Aliasing of Pages As Uncacheable Memory Type and Write Back (WB) May Hang the System
+Problem:	When a page is being accessed as either Uncacheable (UC) or Write Combining (WC) and WB, under certain bus and memory timing conditions, the system may loop in a continual sequence of UC fetch, implicit writeback, and Request For Ownership (RFO) retries.
+Implication: This erratum has not been observed in any commercially available operating system or application. The aliasing of memory regions, a condition necessary for this erratum to occur, is documented as being unsupported in the IA-32 Intel® Architecture Software Developer's Manual, Volume 3, section 10.12.4, Programming the PAT. However, if this erratum occurs the system may hang.
+Workaround: The pages should not be mapped as either UC or WC and WB at the same time.
+Status:	For the stepping affected, see the Summary Tables of Changes.
+
+
+AA3.	Data Breakpoints on the High Half of a Floating Point Line Split May Not Be Captured
+Problem:	When a floating point load which splits a 64-byte cache line gets a floating point stack fault, and a data breakpoint register maps to the high line of the floating point load, internal boundary conditions exist that may prevent the data breakpoint from being captured.
+Implication: When this erratum occurs, a data breakpoint will not be captured.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+AA4.	MOV CR3 Performs Incorrect Reserved Bit Checking When in PAE Paging
+Problem:	The MOV CR3 instruction should perform reserved bit checking on the upper unimplemented address bits. This checking range should match the address width reported by CPUID instruction 0x8000008. This erratum applies whenever PAE is enabled.
+Implication: Software that sets the upper address bits on a MOV CR3 instruction and expects a fault may fail. This erratum has not been observed with commercially available software.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+AA5.	VMEntry from 64-bit Host to 32-bit Guest may Cause IERR# with Hyper-Threading Technology Enabled
+Problem:	When transitioning from a 64-bit host environment to a 32-bit guest environment via a VMEntry, internal conditions in a processor with Hyper- Threading enabled may cause a speculative page-table walk to be prematurely terminated, resulting in a processor hang and the assertion of IERR#.
+Implication: An IERR# may occur on VMEntry from a 64-bit to a 32-bit environment with Hyper-Threading enabled.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+
+
+AA6.	FXRSTOR May Not Restore Non-canonical Effective Addresses on Processors with Intel® Extended Memory 64 Technology (Intel® EM64T) Enabled
+Problem:	If an x87 data instruction has been executed with a non-canonical effective address, FXSAVE may store that non-canonical FP Data Pointer (FDP) value into the save image. An FXRSTOR instruction executed with 64-bit operand size may signal a General Protection Fault (#GP) if the FDP or FP Instruction Pointer (FIP) is in non-canonical form.
+Implication: When this erratum occurs, Intel EM64T enabled systems may encounter an unintended #GP fault.
+Workaround: Software should avoid using non-canonical effective addressing in EM64T enabled processors. BIOS can contain a workaround for this
+erratum removing the unintended #GP fault on FXRSTOR.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+AA7.	A Push of ESP That Faults May Zero the Upper 32 Bits of RSP
+Problem:	In the event that a push ESP instruction, that faults, is executed in compatibility mode, the processor will incorrectly zero upper 32-bits of RSP.
+Implication: A Push of ESP in compatibility mode will zero the upper 32-bits of RSP. Due to this erratum, this instruction fault may change the contents of RSP. This erratum has not been observed in commercially available software.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+AA8.	Checking of Page Table Base Address May Not Match the Address Bit Width Supported by the Platform
+Problem:	If the page table base address, included in the page map level-4 table, page- directory pointer table, page-directory table or page table, exceeds the physical address range supported by the platform (e.g. 36-bit) and it is less than the implemented address range (e.g. 40-bit), the processor does not check if the address is invalid.
+Implication: If software sets such invalid physical address in those tables, the processor does not generate a page fault (#PF) upon access to that virtual address, and the access results in an incorrect read or write. If BIOS provides only valid physical address ranges to the operating system, this erratum will not occur.
+Workaround: BIOS must provide valid physical address ranges to the operating system.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+
+
+AA9.	With TF (Trap Flag) Asserted, FP Instruction That Triggers an Unmasked FP Exception May Take Single Step Trap before Retirement of Instruction
+Problem:	If an FP instruction generates an unmasked exception with the EFLAGS.TF=1, it is possible for external events to occur, including a transition to a lower power state. When resuming from the lower power state, it may be possible to take the single step trap before the execution of the original FP instruction completes.
+Implication: A Single Step trap will be taken when not expected.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+AA10.	BTS (Branch Trace Store) and PEBS (Precise Event Based Sampling) May Update Memory outside the BTS/PEBS Buffer
+Problem:	If the BTS/PEBS buffer is defined such that:
+The difference between BTS/PEBS buffer base and BTS/PEBS absolute maximum is not an integer multiple of the corresponding record sizes
+BTS/PEBS absolute maximum is less than a record size from the end of the virtual address space
+The record that would cross BTS/PEBS absolute maximum will also continue past the end of the virtual address space
+A BTS/PEBS record can be written that will wrap at the 4G boundary (IA32) or 2^64 boundary (EM64T mode), and write memory outside of the BTS/PEBS buffer.
+Implication:   Software that uses BTS/PEBS near the 4G boundary (IA32) or 2^64 boundary (EM64T mode), and defines the buffer such that it does not hold an integer multiple of records can update memory outside the BTS/PEBS buffer.
+Workaround: Define BTS/PEBS buffer such that BTS/PEBS absolute maximum minus BTS/PEBS buffer base is integer multiple of the corresponding record sizes as recommended in the IA-32 Intel® Architecture Software Developer’s Manual, Volume 3.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+AA11.	Control Register 2 (CR2) Can be Updated during a REP MOVS/STOS Instruction with Fast Strings Enabled
+Problem:	Under limited circumstances while executing a REP MOVS/STOS string instruction, with fast strings enabled, it is possible for the value in CR2 to be changed as a result of an interim paging event, normally invisible to the user. Any higher priority architectural event that arrives and is handled while the interim paging event is occurring may see the modified value of CR2.
+
+
+Implication: The value in CR2 is correct at the time that an architectural page fault is signaled. Intel has not observed this erratum with any commercially available software.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+AA12.	REP STOS/MOVS Instructions with RCX >=2^32 May Cause a System Hang
+Problem:	In IA-32e mode using Intel EM64T-enabled processors, executing a repeating string instruction with the iteration count greater than or equal to 2^32 and a pending event may cause the REP STOS/MOVS instruction to live lock and hang.
+Implication: When this erratum occurs, the processor may live lock and result in a system hang. Intel has not observed this erratum with any commercially available software.
+Workaround: Do not use strings larger than 4 GB.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+AA13.	A 64-Bit Value of Linear Instruction Pointer (LIP) May be Reported Incorrectly in the Branch Trace Store (BTS) Memory Record or in the Precise Event Based Sampling (PEBS) Memory Record
+Problem:	On a processor supporting Intel® EM64T,
+If an instruction fetch wraps around the 4G boundary in Compatibility Mode, the 64-bit value of LIP in the BTS memory record will be incorrect (upper 32 bits will be set to FFFFFFFFh when they should be 0).
+If a PEBS event occurs on an instruction whose last byte is at memory location FFFFFFFFh, the 64-bit value of LIP in the PEBS record will be incorrect (upper 32 bits will be set to FFFFFFFFh when they should be 0).
+Implication: Intel has not observed this erratum on any commercially available software.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+
+
+AA14.	Access to an Unsupported Address Range in Uniprocessor (UP) or Dual-processor (DP) Systems Supporting Intel® Virtualization Technology May Not Trigger Appropriate Actions
+Problem:	When using processors supporting Intel® Virtualization Technology and configured as dual- or single-processor-capable (i.e. not multiprocessor- capable), the processor should perform address checks using a maximum physical address width of 36. Instead, these processors will perform address checks using a maximum physical address width of 40.
+Implication: Due to this erratum, actions which are normally taken upon detection of an unsupported address may not occur. Software which does not attempt to access unsupported addresses will not experience this erratum.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+
+AA15.	VM Exit Due to a MOV from CR8 May Cause an Unexpected Memory Access
+Problem:	In a system supporting Intel® Virtualization Technology and Intel® Extended Memory 64 Technology, if the "CR8-store exiting" bit in the processor-based VM-execution control field is set and the "use TPR shadow" bit is not set, a MOV from CR8 instruction executed by a Virtual Machine Extensions (VMX) guest that causes a VM exit may generate an unexpected memory access.
+Implication: When this erratum occurs, a read access to unexpected address may be issued to the chipset. Subsequent side effects are dependent on chipset operation and may include system hang.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+
+AA16.	The Processor May Incorrectly Respond to Machine Checks during VM Entry/Exit Transitions
+Problem:	In systems supporting Intel® Virtualization Technology, when machine checks are encountered during VM entry/exit transitions, the processor is expected to respond with a VM exit (if a machine check occurs during VM entry) or abort (if a machine check occurs during VM exit). As a result of this erratum when machine checks occur during VM entry/exit transitions the processor will attempt to service the machine check which may lead to IERR-shutdown or execution of the Machine Check handler, dependent on the CR4.MCE setting.
+Implication: The system may end up in the shutdown state if CR4.MCE is not set.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+
+
+AA17.	Power Down Requests May not be Serviced if a Power Down Transition is Interrupted by an In-Target Probe Event in the Presence of a Specific Type of VM Exit
+Problem:	In a system supporting Intel® Virtualization Technology, the processor may service a pended VM exit prior to completely exiting out of a low power state when the following sequences of events occur:
+Chip-wide power down transition occurs and
+VM exit due to a VMLaunch, VMResume, STI, POPF, POPFD, or IRET instruction is pended and
+Chip-wide power down transition is interrupted by an In-Target Probe event.
+Implication: Due to this erratum the processor may not recognize further STPCLK# assertions, TM1, TM2, or Enhanced Intel SpeedStep® technology. Intel has not observed this erratum with any commercially available software.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+AA18.	VM EXIT Due to TPR shadow Below Threshold May Improperly Set and Cause "Blocking by STI" actions
+Problem:	In a system supporting Intel® Virtualization Technology and Intel® EM64T, the “blocking by STI” bit of the interruptibility-state field may be saved as 1 rather than 0. This erratum may occur when a STI instruction is executed directly prior to a MOV to CR8 which results in a VM exit due to a reduction of the TPR shadow value below the TPR threshold.
+Implication: When this erratum occurs, delivery of an interrupt may be delayed by one instruction.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+AA19.	Two Correctable L2 Cache Errors in Close Proximity May Cause a System Hang
+Problem:	If two correctable L2 cache errors are detected in close proximity to each other, a livelock may occur as a result of the processor being unable to resolve this condition.
+Implication: When this erratum occurs, the processor may livelock and result in a system hang. Intel has only observed this erratum while injecting cache errors in simulation..
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+
+
+AA20.	A VM Exit due to SMI or INIT in Parallel with a Pending FP Exception May Not Correctly Clear the Interruptibility State Bits
+Problem:	When a pending FP exception is ready to be taken, a VM exit due to SMI or INIT may not clear Blocking by STI and/or Blocking by MOV SS bits correctly in Virtual-Machine Control Structure (VMCS) as expected..
+Implication: A VM exit due to SMI or INIT may show incorrect STI and/or MOV SS blocking state in VM-exit Interruptibility field.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. .
+Status:	For the steppings affected, see the Summary Tables of Changes.
+AA21.	Processor May Hang with a 25% or Less STPCLK# Duty Cycle
+Problem:	If a system de-asserts STPCLK# at a 25% or less duty cycle and the processor thermal control circuit (TCC) on-demand clock modulation is active, the processor may hang. This erratum does not occur under the automatic mode of the TCC.
+Implication: When this erratum occurs, the processor may hang.
+Workaround: If use of the on-demand mode of the processor's TCC is desired in conjunction with STPCLK# modulation, then assure that STPCLK# is not asserted at a 25% duty cycle.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+AA22.	Attempting to Use an LDT Entry when the LDTR Has Been Loaded with an Unusable Segment May Cause Unexpected Memory Accesses
+Problem:	In a system supporting Intel® Virtualization Technology, the processor may incorrectly VM exit under the following conditions:
+Interrupt-Window-Exiting VM-execution control is set
+RFLAGS[IF]=1
+Chipwide Powerdown transition requests occur when the processor is in Wait-For-SIPI or Shutdown states
+Implication: Due to this erratum, Interrupt-Window-Exiting VM exits may take the logical processor out of Wait-For-SIPI and Shutdown states. Intel has not observed this erratum with any commercially available software.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum
+Status:	For the steppings affected, see the Summary Tables of Changes.
+
+
+AA23.	Machine Check Exceptions May not Update Last-Exception Record MSRs (LERs)
+Problem:	The Last-Exception Record MSRs (LERs) may not get updated when Machine Check Exceptions occur
+Implication: When this erratum occurs, the LER may not contain information relating to the machine check exception. They will contain information relating to the exception prior to the machine check exception.
+Workaround: None identified
+Status:	For the steppings affected, see the Summary Tables of Changes.
+AA24.	VM Entry/Exit Writes to LSTAR/SYSCALL_FLAG MSR's May Cause Incorrect Data to be Written to Bits [63:32]
+Problem:	Incorrect MSR data in bits [63:32] may be observed in the following two cases:
+When ECX contains 0xC0000084 and a VM entry/exit writes the IA32_CR_LSTAR MSR (MSR Address 0xC0000082) bits [63:32] of the data may be zeroed
+When ECX does not contain 0xC0000084 and a VM entry/exit writes the IA32_CR_SYSCALL_FLAG_MASK MSR (MSR Address 0xC0000084) bits [63:32] of the data may not be zeroed
+Implication: Bits [63:32] of the affected MSRs may contain the wrong data after a VM exit/entry which loads the affected MSR.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum
+Status:	For the steppings affected, see the Summary Tables of Changes.
+AA25.	Writing the Local Vector Table (LVT) when an Interrupt is Pending May Cause an Unexpected Interrupt
+Problem:	If a local interrupt is pending when the LVT entry is written, an interrupt may be taken on the new interrupt vector even if the mask bit is set.
+Implication: An interrupt may immediately be generated with the new vector when a LVT entry is written, even if the new LVT entry has the mask bit set.	If there is no Interrupt Service Routine (ISR) set up for that vector the system will GP fault.	If the ISR does not do an End of Interrupt (EOI) the bit for the vector will be left set in the in-service register and mask all interrupts at the same or lower priority.
+Workaround: Any vector programmed into an LVT entry must have an ISR associated with it, even if that vector was programmed as masked. This ISR routine must do an EOI to clear any unexpected interrupts that may occur. The ISR associated with the spurious vector does not generate an EOI, therefore the spurious vector should not be used when writing the LVT.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+
+
+AA26.	At a Bus Ratio of 13:1, RCNT and Address Parity May be Incorrect
+Problem:	In a system running at the 13:1 bus ratio, RCNT[0] ( ADDR# [28], phase b) may report incorrect information.
+Implication: RCNT[0] may contain incorrect information and cause address parity machine check errors.
+Workaround: Address parity should be disabled and RCNT information should be ignored at the bus ratio of 13:1.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+AA27.	The Execution of a VMPTRLD Instruction May Cause an Unexpected Memory Access
+Problem:	In a system supporting Intel® Virtualization Technology, executing VMPTRLD may cause a memory access to an address not referenced by the memory operand.
+Implication: This erratum may cause unpredictable system behavior including system hang.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+AA28.	The Execution of VMPTRLD or VMREAD May Cause an Unexpected Memory Access
+Problem:	On processors supporting Intel® Virtualization Technology, executing a VMPTRLD or a VMREAD instruction outside of VMX mode may result in a load to an unexpected address.
+Implication: This erratum may cause a load to an unexpected memory address. 
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Tables of Changes.
+AA29.	On a “Failed VM-entry” VM Exit, the VMCS Pointer May have Incorrect Value
+Problem:	On a “failed VM-entry” VM exit, the VMCS pointer may have incorrect value.
+Implication: The value of the VMCS pointer may be incorrect and may result in unpredictable behavior after the "failed VM-entry”.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+
+
+AA30.	During an Enhanced HALT or Enhanced Intel SpeedStep® Technology Ratio Transition the System May Hang
+Problem:	The BNR signal may not function properly during an Enhanced HALT or Enhanced Intel SpeedStep Technology ratio transition.
+Implication: The system may hang due to incorrect BNR signaling.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+AA31.	L2 Cache ECC Machine Check Errors May be erroneously Reported after an Asynchronous RESET# Assertion
+Problem:	Machine check status MSRs may incorrectly report the following L2 Cache ECC machine-check errors when cache transactions are in-flight and RESET# is asserted:
+•Instruction Fetch Errors (IA32_MC2_STATUS with MCA error code 153)
+•L2 Data Write Errors (IA32_MC1_STATUS with MCA error code 145)
+Implication: Uncorrected or corrected L2 ECC machine check errors may be erroneously reported. Intel has not observed this erratum on any commercially available system.
+Workaround: When a real run-time L2 Cache ECC Machine Check occurs, a corresponding valid error will normally be logged in the IA32_MC0_STATUS register. BIOS may clear IA32_MC2_STATUS and/or IA32_MC1_STATUS for these specific errors when IA32_MC0_STATUS does not have its VAL flag set.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+AA32.	VMCALL to Activate Dual-monitor Treatment of SMIs and SMM Ignores Reserved Bit settings in VM-exit Control Field
+Problem:	Processors supporting Intel® Virtualization Technology can execute VMCALL from within the Virtual Machine Monitor (VMM) to activate dual-monitor treatment of SMIs and SMM. Due to this erratum, if reserved bits are set to values inconsistent with VMX Capability MSRs, VMCALL may not VMFail.
+Implication: VMCALL executed to activate dual-monitor treatment of SMIs and SMM may not VMFail due to incorrect reserved bit settings in VM-Exit control field.
+Workaround: Software should ensure that all VMCS reserved bits are set to values consistent with VMX Capability MSRs.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+
+
+AA33.	Using 2M/4M Pages When A20M# Is Asserted May Result in Incorrect Address Translations
+Problem:    An external A20M# pin if enabled forces address bit 20 to be masked (forced to zero) to emulates real-address mode address wraparound at 1 megabyte. However, if all of the following conditions are met, address bit 20 may not be masked:
+paging is enabled
+a linear address has bit 20 set
+the address references a large page
+A20M# is enabled
+Implication: When A20M# is enabled and an address references a large page the resulting translated physical address may be incorrect. This erratum has not been observed with any commercially available operating system.
+Workaround: Operating systems should not allow A20M# to be enabled if the masking of address bit 20 could be applied to an address that references a large page. A20M# is normally only used with the first megabyte of memory.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+AA34.	Writing Shared Unaligned Data that Crosses a Cache Line without Proper Semaphores or Barriers May Expose a Memory Ordering Issue
+Problem:	Software which is written so that multiple agents can modify the same shared unaligned memory location at the same time may experience a memory ordering issue if multiple loads access this shared data shortly thereafter.
+Exposure to this problem requires the use of a data write which spans a cache line boundary.
+Implication: This erratum may cause loads to be observed out of order. Intel has not observed this erratum with any commercially available software or system.
+Workaround: Software should ensure at least one of the following is true when modifying shared data by multiple agents:
+The shared data is aligned
+Proper semaphores or barriers are used in order to prevent concurrent data accesses
+Status:	For the steppings affected, see the Summary Tables of Changes.
+
+
+AA35.	The IA32_MC0_STATUS and IA32_MC1_STATUS Overflow Bit is not set when Multiple Un-correctable Machine Check Errors Occur at the Same Time
+Problem:	When two enabled MC0/MC1 un-correctable machine check errors are detected in the same bank in the same internal clock cycle, the highest priority error will be logged in IA32_MC0_STATUS / IA32_MC1_STATUS register, but the overflow bit may not be set.
+Implication: The highest priority error will be logged and signaled if enabled, but the overflow bit in the IA32_MC0_STATUS/ IA32_MC1_STATUS register may not be set.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+AA36.	IRET under Certain Conditions May Cause an Unexpected Alignment Check Exception
+Problem:	In IA-32e mode, it is possible to get an Alignment Check Exception (#AC) on the IRET instruction even though alignment checks were disabled at the start of the IRET. This can only occur if the IRET instruction is returning from CPL3 code to CPL3 code. IRETs from CPL0/1/2 are not affected. This erratum can occur if the EFLAGS value on the stack has the AC flag set, and the interrupt handler's stack is misaligned. In IA-32e mode, RSP is aligned to a 16-byte boundary before pushing the stack frame.
+Implication: In IA-32e mode, under the conditions given above, an IRET can get a #AC even if alignment checks are disabled at the start of the IRET. This erratum can only be observed with a software generated stack frame.
+Workaround: Software should not generate misaligned stack frames for use with IRET.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+AA37.	Processor May Fault When the Upper 8 Bytes of Segment Selector Is Loaded from a Far Jump through a Call Gate via the Local Descriptor Table
+Problem:	In IA-32e mode of the Intel EM64T processor, control transfers through a call gate via the Local Descriptor Table (LDT) that uses a 16-byte descriptor, the upper 8-byte access may wrap and access an incorrect descriptor in the LDT. This only occurs on an LDT with a LIMIT>0x10008 with a 16-byte descriptor that has a selector of 0xFFFC.
+Implication: In the event this erratum occurs, the upper 8-byte access may wrap and access an incorrect descriptor within the LDT, potentially resulting in a fault or system hang. Intel has not observed this erratum with any commercially available software.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+
+
+AA38.	The Processor May Issue Front Side Bus Transactions up to 6 Clocks after RESET# is Asserted
+Problem:	The processor may issue transactions beyond the documented 3 Front Side Bus (FSB) clocks and up to 6 FSB clocks after RESET# is asserted in the case of a warm reset. A warm reset is where the chipset asserts RESET# when the system is running.
+Implication: The processor may issue transactions up to 6 FSB clocks after the RESET# is asserted
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+AA39.	Front Side Bus Machine Checks May be Reported as a Result of On- Going Transactions during Warm Reset
+Problem:	Processor Front Side Bus (FSB) protocol/signal integrity machine checks may be reported if the transactions are initiated or in-progress during a warm reset. A warm reset is where the chipset asserts RESET# when the system is running.
+Implication: The processor may log FSB protocol/signal integrity machine checks if transactions are allowed to occur during RESET# assertions.
+Workaround: BIOS may clear FSB protocol/signal integrity machine checks for systems/chipsets which do not block new transactions during RESET# assertions.
+Status:	For the steppings affected, see the Summary Tables of Changes
+AA40.	NMI-blocking Information Recorded in VMCS May be Incorrect after a
+#GP on an IRET Instruction
+Problem:	In a system supporting Intel® Virtualization Technology, the NMI blocking bit in the Interruption-Information Field in the guest VMCS may be set incorrectly. This erratum will happen if a VMExit occurs for a #GP fault on an IRET instruction due to an EIP that violates the segment limit or is non- canonical.
+Implication: If this erratum occurs, monitor software may not be able to handle #GP and then inject an NMI since monitor software does not have information about whether NMIs are blocked in the guest.
+Workaround: Monitor software can workaround this bug by avoiding injection of NMI after
+#GP emulation.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+
+
+AA41.	VMLAUNCH/VMRESUME May Not Fail when VMCS is Programmed to Cause VM Exit to Return to a Different Mode
+Problem:	VMLAUNCH/VMRESUME instructions may not fail if the value of the “host address-space size” VM-exit control differs from the setting of IA32_EFER.LMA.
+Implication: Programming the VMCS to allow the monitor to be in different modes prior to VMLAUNCH/VMRESUME and after VM-exit may result in undefined behavior.
+Workaround: Software should ensure that "host address-space size" VM-exit control has the same value as IA32_EFER.LMA at the time of VMLAUNCH/VMRESUME.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+AA42.	A Continuous Loop Executing Bus Lock Transactions on One Logical Processor may Prevent Another Logical Processor from Acquiring Resources
+Problem:	In a system supporting Hyper-Threading Technology, when one hardware thread is in a continuous loop executing bus locks plus other traffic, the other hardware thread may be prevented from acquiring resources to also execute a lock.
+Implication: This erratum may cause system hang or unpredictable system behavior. This erratum has not been observed with commercially available software.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+AA43.	An Unexpected Memory Access May be Issued During Execution of the WRMSR Instruction Under Certain Conditions
+Problem:	The processor may generate an unexpected memory access during the WRMSR instruction under certain conditions.
+Implication: When this erratum occurs, an unexpected read may be issued on FSB. Subsequent side effects are dependent on platform operation and may include a system hang. This erratum has not been observed on any commercial operating system.
+Workaround: It is possible for BIOS to contain a workaround for this erratum.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+AA44.	Combining Some Processors With Intel 945® Chipsets Can Lead to Unpredictable System Behavior
+Problem:	Some processors with 800 MHz Front Side Bus (FSB), when used in combination with a motherboard based on the Intel 945® chipset, may observe FSB bit errors which may result in unpredictable system behavior.
+
+
+Implication: Due to this erratum, FSB marginality is observed during processor core to core transactions as well as during read transactions driven by the Memory Controller Hub (MCH) leading to unpredictable system behavior.
+Workaround: It is possible for BIOS to contain a workaround for this erratum.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+
+Problem:	If a VM exit occurs while the processor is in IA-32e mode and the “host address-space size” VM-exit control is 0, a VMX abort should occur. Due to this erratum, the expected VMX aborts may not occur and instead the VM Exit will occur normally. The conditions required to observe this erratum are a VM entry that returns from SMM with the “IA-32e guest” VM-entry control set to 1 in the SMM VMCS and the “host address-space size” VM-exit control cleared to 0 in the executive VMCS.
+Implication: A VM Exit will occur when a VMX Abort was expected.
+Workaround: An SMM VMM should always set the “IA-32e guest” VM-entry control in the SMM VMCS to be the value that was in the LMA bit (IA32_EFER.LMA.LMA[bit 10]) in the IA32_EFER MSR (C0000080H) at the time of the last SMM VM exit. If this guideline is followed, that value will be 1 only if the “host address-space size” VM-exit control is 1 in the executive VMCS.
+Status:	For the steppings affected, see the Summary Tables of Changes.

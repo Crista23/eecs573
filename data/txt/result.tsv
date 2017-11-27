@@ -1,0 +1,160 @@
+title	cacheable mmio requests may block pcie* memory requests in smm mode
+problem	when operating in smm mode, cacheable mmio requests may prevent pcie memory requests from completing.
+implication	if pcie memory requests are blocked by cacheable mmio requests, the system may hang.
+workaround	do not issue cacheable mmio request during smm mode.
+
+title	ddrcrclktraining csr cannot be read
+problem	due to this erratum, two fields in ddrcrclktraining csr (bus: 2; device:17; function: 5; offset: a1ch), that should have been read-write, vmselogicdelay0 (bit 29) and vmselogicdelay2 (bit 30), are write-only; reading the csr always returns 0s for these fields.
+implication	data read from this register is not reliable. intel has not observed this erratum to affect processor functionality.
+workaround	none identified.
+
+title	performance monitoring event no_alloc_cycles counts incorrectly on logical processors 2 and 3
+problem	due to this erratum, all sub-events of performance monitoring event no_alloc_cycles (event cah) will be incorrect on logical processors 2 and 3. logical processors 0 and 1 are not affected by this erratum.
+implication	using the no_alloc_cycles performance monitoring event on logical processors 2 or 3 will not provide reliable results.
+workaround	use the results of the no_alloc_cycles performance monitoring event only when running the workload on logical processors 0 and/or 1.
+
+title	a and/or d bit may be set on a paging-structure entry that is not present or has reserved bit set
+problem	the a (accessed, bit 5) and/or d (dirty, bit 6) bits in a paging-structure entry (e.g., a page-table entry) may be set to 1 even when that entry has its present bit cleared or has a reserved bit set. this can only occur when one logical processor has cleared the present bit or set a reserved bit in a paging-structure entry, while at the same time another logical processor accesses the contents of a linear address mapped by that entry.
+implication	software that does not expect hardware to modify a paging-structure entry when it is marked not present, or has a reserved bit set, may behave unexpectedly.
+workaround	operating systems can take steps to ensure they are not exposed to this erratum.
+
+title	pci express inbound memory write with ro and ns attributes set will cause the processor to hang intel® xeon phi™ processor x200 product family 
+problem	inbound memory writes with the ro (relaxed ordering) and ns (no snoop) attributes set in the tlp will cause the processor to hang.
+implication	when this erratum occurs, the system will experience a hang.
+workaround	bios should disable relaxed ordering for inbound transactions.
+
+title	cltt peci pass-through mode does not work
+problem	when cltt (closed loop thermal throttling) peci pass-through mode is enabled, peci thermal update messages are dropped.
+implication	integrated memory controller does not receive thermal data from the peci update messages.
+workaround	do not use cltt peci pass-through mode for ddr throttling.
+
+title	uncorrectable memory machine check may not set ia32_mc3_status.en
+problem	when an uncorrectable memory error follows a correctable memory error, the error logged may not set the en field (bit 60) in the ia32_mc3_status msr (40ch).
+implication	an uncorrectable machine check may be logged with en incorrectly set to 0, possibly leading to unexpected machine check handler behavior.
+workaround	none identified.
+
+title	package c6 may cause incorrect apic timer value
+problem	the apic timer ccr (current count register) may be too high after waking from package c6. the next timer interrupt will be delivered at the correct time. however, in periodic mode, the reload of the apic timer may be delayed.
+implication	when this erratum occurs, ccr reads may be too high and in periodic mode an apic timer interrupt may occur later than expected.
+workaround	none identified.
+
+title	unsynchronized cross-modifying code operations can cause unexpected instruction execution results
+problem	the act of one processor or system bus master writing data into a currently executing code segment of a second processor with the intent of having the second processor execute that data as code is called cross-modifying code (xmc). xmc that does not force the second processor to execute a synchronizing instruction prior to execution of the new code is called unsynchronized xmc. software using unsynchronized xmc to modify the instruction byte stream of a processor can see unexpected or unpredictable execution behavior from the processor that is executing the modified code.
+implication	in this case the phrase “unexpected or unpredictable execution behavior” encompasses the generation of most of the exceptions listed in the intel architecture software developer's manual volume 3: system programming guide including a general protection fault (gpf) or other unexpected behaviors. in the event that unpredictable execution causes a gpf the application executing the unsynchronized xmc operation would be terminated by the operating system. 
+workaround	in order to avoid this erratum programmers should use the xmc synchronization algorithm as detailed in the intel architecture software developer's manual volume 3: system programming guide, section: handling self- and cross-modifying code.
+
+title	upper 48 bits of the scatter/gather mask register do not function as expected
+problem	when one element of a scatter or gather instruction faults, the upper 48 bits of the mask register will be cleared. ideally, only bits corresponding to completed operations should be cleared.
+implication	intel® advanced vector extensions 512 (intel® avx-512) instructions supported by knl use only the lower 16 bits of these mask registers. intel has not observed this erratum to affect commercially available software.
+workaround	none identified
+
+title	dr6 may be zero after data breakpoint on gather, scatter or vrsqrt14 instructions
+problem	if gather, scatter or vrsqrt14 instructions trigger a data breakpoint, the debug status register (dr6) may be cleared.
+implication	software will see a breakpoint trap but with no indication of which data breakpoint register was triggered.
+workaround	none identified.
+
+title	performance monitoring event cpu_clk_unhalted.thread_p counts incorrectly on counter 1 if anythread bit is set for counter 0
+problem	due to this erratum, gp (general-purpose) counter 1 may overcount cpu_clk_unhalted.thread_p (event 3ch umask 00h) if ia32_perfevtsel0.anythread (msr 186h, bit 21) is set.
+implication	cpu_clk_unhalted.thread_p event should not be relied upon on gp counter 1.
+workaround	use only gp counter 0 or fixed counter 1 for unhalted core cycles.
+
+title	an instruction with7or more prefixes may cause a spurious #pf or spuriously read uc memory
+problem	an instruction with 7 or more prefixes can result in a spurious code fetch that may signal a #pf (page fault) or read uc (un-cacheable) memory.
+implication	a spurious uc memory access may result in unexpected and undesired side effect(s). the os may mishandle a spurious #pf due to there being no reason for the #pf
+workaround	avoid using 7 or more prefixes on an instruction. if limiting the number of prefixes is not feasible then marking mmio (memory mapped i/o) as xd (execute disable) in the page tables will prevent speculative reads from uc mmio.
+
+title	machine check exception mscod is incorrect for poisoned case intel® xeon phi™ processor x200 product family 
+problem	when poisoned data is received at the edc, mscod should be logged as a data error (encoding = 0x2). instead, the encoding is set for an uncorrectable error (0x40). the effected machine check bank registers are ia32_mc7_status through ia32_mc14_status.
+implication	error reporting for poisoned data is incorrectly reported as an uncorrected error and not a data error. the error flow will be incorrect for poisoned data.
+workaround	none identified.
+
+title	poc_reset_straps csr does not report correct values
+problem	the poc_reset_straps csr (bus: 1; device 30; function 1; offset: a0h) does not correctly report the strap settings.
+implication	the register cannot be used to check the strap settings.
+workaround	a bios workaround has been identified. contact intel representative for more information.
+
+title	invalid vex instructions may not signal a #gp
+problem	under certain conditions, invalid vex instructions with prefixes may not signal a #gp. implication: processor may not operate as expected with invalid vex instructions.
+implication	
+workaround	none identified.
+
+title	performance monitoring ovfuncore capability is not functional
+problem	due to this erratum, ia32_perf_global_status.ovfuncore (msr 38eh, bit[61]) is always 0 and writing 1 to ia32_perf_global_ovf_ctrl.clrovfuncore (msr 390h, bit[61]) signals #gp.
+implication	software attempting to use ovfuncore capability may not function as expected.
+workaround	none identified.
+
+title	peci pcs (package configuration space) read for max thread id is incorrect
+problem	the peci command rdpkgconfig (index 0) with data max thread id always returns a value of 0x12f regardless of the number of tiles enabled.
+implication	this peci command does not report an accurate max thread id.
+workaround	it is possible for bios to contain processor configuration data and code changes as a workaround for this erratum.
+
+title	bist results always indicate bist failure
+problem	bist results in bist_results_cfg_2 (bus 0, device 8, function1, offset 0xb8, bits [5:0]) returns 0 regardless of actual bist status.
+implication	bist results in bist_results_cfg_2 are incorrect.
+workaround	it is possible for the bios to contain a workaround for this erratum.
+
+title	incorrect linear-address translation may be used for instruction fetch intel® xeon phi™ processor x200 product family 
+problem	under complex micro-architectural conditions when mt is active, operations which should invalidate instruction tlb entries may fail to do so. this may lead a later instruction fetch using a stale linear address translation.
+implication	when this erratum occurs, the processor may use incorrect translations, this may result in unexpected faults or other unpredictable system behavior.
+workaround	it is possible for the bios to contain a workaround for this erratum.
+
+title	accesses between tohm and 2^45 - 1 may lead to unpredictable system behavior
+problem	a cpu access to addresses at or above tohm (top of high memory) as configured in the tohm csr (bus: 0; device: 5; function: 0; offset: d8h) and below 2^45 may lead to unpredictable system behavior when the l1 data prefetcher is enabled.
+implication	unpredictable system behavior may occur.
+workaround	this address range inclusively between tohm and 2^45 - 1 should be marked as not present in page or ept tables and not used. alternatively, msr_misc_feature_control.l1_data_prefetch_disable (msr 01a4h, bit 0)
+
+title	system may hang when loading a second microcode update
+problem	system may hang during warm reset with a pcu_mc_status.mccod = 0x0402 and pcu_mc_status. msec_fw = 0x9c or 0x9e.
+implication	when this erratum occurs, the system may hang during a warm reset.
+workaround	it is possible for bios to contain a workaround for this erratum.
+
+title	programmatic and peci smbus access may not work as intended
+problem	when bios locks access to smbcntl_0 (bus 1; device 30; function 0; offset 108h) and smbcntl_1 (bus 1; device 30; function; offset 108h), programmatic access outside smm and peci access may not be able to select their intended smbus devices.
+implication	smbus transactions will reference the previously addressed devices.
+workaround	it is possible for bios to contain a partial mitigation for this erratum that enables peci access to change the unlocked portions of smbcntl_0 and smbcntl_1.
+
+title	system may hang during warm reset
+problem	system may hang during warm reset with a pcu_mc_status.mccod = 0x0402 and pcu_mc_status. msec_fw = 0x9c or 0x9e.
+implication	when this erratum occurs, the system may hang during a warm reset.
+workaround	it is possible for the bios to contain a workaround for this erratum.
+
+title	operating with ddr4-2400 memory may cause unpredictable system behavior intel® xeon phi™ processor x200 product family 
+problem	operating the processor with ddr4 memory configured to operate at 2400 mt/s may cause unpredictable system behavior.
+implication	when the erratum occurs, the system will exhibit unpredictable system behavior.
+workaround	it is possible for bios to contain a workaround for this erratum.
+
+title	enabling ddr opportunistic self refresh may lead to memory errors
+problem	correctable and uncorrectable memory errors may occur when ddr opportunistic self- refresh is enabled.
+implication	the system may experience a higher rate of memory errors when ddr opportunistic self-refresh is enabled, potentially leading to a system crash.
+workaround	it is possible for bios to contain code changes to work around this erratum.
+
+title	certain memory controller uncorrectable errors do not signal a machine check
+problem	uncorrectable errors logged into the ia32_mci_status registers for bank 7 to bank 16 do not signal a machine check exception if the error cause was ca parity, data parity, or byte en parity (mscod value of 0001h, 0002h, or 0004h, respectively).
+implication	the system may continue execution after encountering an uncorrectable error instead of responding to a machine check exception. uncorrectable errors may lead to unpredictable system behavior.
+workaround	it is possible for the bios to contain a workaround for this erratum. implementing this workaround will cause signaling of ierr# instead of mcerr# when this uncorrectable error occurs. there may be an increased delay in error reporting.
+
+title	pcc is not set for certain memory controller uncorrectable errors when poison is enabled
+problem	pcc field (bit[57]) of ia32_mci_status registers for bank 7 to bank 16 is not set as expected for a ca parity error (mscod value of 0001h) when poison is enabled.
+implication	the machine check handlers incorrectly log the error as an uncorrectable error with no action, instead of logging an uncorrectable error and signaling a machine check exception.
+workaround	it is possible for the bios to contain a workaround for this erratum. implementing this workaround will cause signaling of ierr# when this uncorrectable error type occurs, in addition to the machine check exception. there may be an increased delay in error reporting.
+
+title	memory controller machine check errors may be incorrectly logged intel® xeon phi™ processor x200 product family 
+problem	uc (uncorrectable) errors logged into the ia32_mci_status registers for bank 7 to bank 16 will not indicate pcc=1 (processor context corrupt, bit 57) and over=1 (bit 62) if the error is overwriting a previous ucna (uncorrected no action required) error.
+implication	the system may continue execution after encountering an uncorrectable error instead of responding to a machine check exception. uncorrectable errors may lead to unpredictable system behavior.
+workaround	it is possible for the bios to contain a workaround for this erratum. implementing this workaround will cause signaling of ierr# instead of mcerr# when this uncorrectable error occurs. there may be an increased delay in error reporting.
+
+title	complex set of conditions may result in unpredictable system behavior
+problem	a complex set of micro-architectural conditions may result in unpredictable system behavior.
+implication	when this erratum occurs, the system may exhibit unpredictable system behavior.
+workaround	it is possible for bios to contain processor configuration data and code changes as a workaround for this erratum.
+
+title	processor may hang and machine check
+problem	under complex micro-architectural conditions, the processor may hang, resulting in an internal timer error machine check (ia32_mci_status.mcacod=400h; bits [15:0]).
+implication	when this erratum occurs, the system may hang.
+workaround	it is possible for bios to contain a workaround for this erratum.
+
+title	unpredictable system behavior may occur with mcdram scrubbing enabled
+problem	when the mcdram controller is configured in a cache or hybrid mode and error scrubbing is enabled, a complex set of micro-architectural conditions may lead to unpredictable system behavior.
+implication	when this erratum occurs, unpredictable system behavior may occur.
+workaround	bios code change has been identified and may be implemented as a workaround for this erratum.
+

@@ -1,0 +1,138 @@
+SKZ1	A CAP Error While Entering Package C6 May Cause DRAM to Fail to Enter Self-Refresh
+Problem:	A CAP (Command/Address Parity) error that occurs on the command to direct DRAM to enter self-refresh may cause the DRAM to fail to enter self-refresh although the processor enters Package-C6.
+Implication:	Due to this erratum, DRAM may fail to be refreshed, which may result in uncorrected errors being reported from the DRAM.
+Workaround: None Identified.
+Status:	For the Steppings affected, see the Summary Tables of Changes.
+SKZ2	PCIe* Lane Error Status Register May Log False Correctable Error
+Problem:	Due to this erratum, PCIe* LNERRSTS (Device 0; Function 0; Offset 258h; bits [3:0]) may log false lane-based correctable errors.
+Implication:	Diagnostics cannot reliably use LNERRSTS to report correctable errors. 
+Workaround: None Identified
+Status:	For the Steppings affected, see the Summary Tables of Changes.
+SKZ3	In Memory Mirror Mode, DataErrorChunk Field May be Incorrect
+Problem:	In Memory Mirror Mode, DataErrorChunk bits (IA32_MC7_MISC register MSR(41FH) bits [61:60]) may not correctly report the chunk containing an error.
+Implication:	Due to this erratum, this field is not accurate when Memory Mirror Mode is enabled. 
+Workaround: None Identified.
+Status:	For the Steppings affected, see the Summary Tables of Changes.
+SKZ4	Intel® RDT MBM Does Not Accurately Track Write Bandwidth
+Problem:  Intel® RDT (Resource Director Technology) MBM (Memory Bandwidth Monitoring) does not count cacheable write-back traffic to local memory. This will result in the RDT MBM feature under counting total bandwidth consumed.
+Implication:	Applications using this feature may report incorrect memory bandwidth. 
+Workaround: None Identified.
+Status:	For the Steppings affected, see the Summary Tables of Changes.
+SKZ5	Intel UPI Initialization Aborts May be Logged
+Problem:	If Intel® UPI (Ultra Path Interconnect) is configured for slow mode operation, initialization aborts may occur.
+Implication: Unexpected Initialization aborts may be logged in the ktireut_ph_ctr1 register (Bus: 3; Device: 16-14; Function 1; Offset 12h; Bit 4).
+Workaround: None Identified.
+Status:	For the Steppings affected, see the Summary Tables of Changes.
+SKZ6	PCIe* Port May Incorrectly Log Malformed_TLP Error
+Problem: If the PCIe port receives a TLP that triggers both a Malformed_TLP error and an ECRC_TLP error, the processor should only log an ECRC_TLP error. However, the processor logs both errors.
+Implication:	Due to this erratum, the processor may incorrectly log Malformed_TLP errors. 
+Workaround: None Identified
+
+
+
+Status:	For the Steppings affected, see the Summary Tables of Changes.
+SKZ7	Short Loops Which Use AH/BH/CH/DH Registers May Cause Unpredictable System Behavior
+Problem:	Under complex micro-architectural conditions, short loops of less than 64 instructions that use AH, BH, CH or DH registers as well as their corresponding wider register (e.g. RAX, EAX or AX for AH) may cause unpredictable system behavior. This can only happen when both logical processors on the same physical processor are active.
+Implication:	Due to this erratum, the system may experience unpredictable system behavior 
+Workaround: It is possible for the BIOS to contain a workaround for this erratum.
+Status:	For the Steppings affected, see the Summary Tables of Changes.
+SKZ8	Credits Not Returned For PCIe* Packets That Fail ECRC Check
+Problem:	The processor's IIO does not return credits back to the PCIe* link in case of end-to-end CRC (ECRC) errors.
+Implication:	Due to this erratum, the link may experience degraded performance or may eventually fail due to a loss of credits.
+Workaround: For processors that support LER (Live Error Recovery) the link would be reset and credits would be restored. Processors that do not support LER should configure ECRC errors to be fatal.
+Status:	For the Steppings affected, see the Summary Tables of Changes.
+SKZ9	Link Training Error Due to Single Polarity of a PCIe* Differential Data Pair Being Disconnected
+Problem:	A PCIe Port may not reach L0 state if a single polarity of a PCIe* differential data pair is disconnected.
+Implication:	Due to this erratum, the Port will not downlink and be able to train up to L0. 
+Workaround: None Identified.
+Status:	For the Steppings affected, see the Summary Tables of Changes.
+SKZ10	UPI CRC32 Rolling Mode is Not Functional
+Problem:	With UPI CRC32 Rolling Mode enabled, UPI Rx CRC errors may be seen.
+Implication:	Due to this erratum, when UPI CRC32 Rolling Mode is enabled, UPI Rx CRC errors may be seen.
+Workaround: None. Do not enable UPI CRC32 setting in BIOS.
+Status:	For the Steppings affected, see the Summary Tables of Changes.
+SKZ11	IODC Entry 0 Cannot be Masked
+Problem:	The Individual IODC (IO Directory Cache) Entry 0 cannot be masked using HA_COH_CFG_1, (Bus 1; Devices 11-8; Functions 7-0, Offset 0x11C, bit 0) therefore entry 0 is always allocated.
+Implication:	No functional implications. 
+Workaround: None.
+Status:	For the Steppings affected, see the Summary Tables of Changes.
+SKZ12	With eMCA2 Enabled a 3-Strike May Cause an Unnecessary CATERR# Instead of Only MSMI
+Problem:	When eMCA2 is enabled to cause an MSMI due to a 3-strike event, a pulsed CATERR# and MSMI# event may both be observed on the pins.
+Implication:	When this erratum occurs, an unnecessary CATERR# pulse may be observed. 
+Workaround: None.
+
+
+
+Status:	For the Steppings affected, see the Summary Tables of Changes.
+SKZ13	CMCI May Not be Signalled for Corrected Error
+Problem:	Machine check banks 9, 10, and 11 may not signal CMCI after the first corrected error is reported in the bank even if the MCi_STATUS register has been cleared.
+Implication:	After the first corrected error is reported in one of the affected machine check banks, subsequent errors will be logged but may not result in a CMCI.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the Steppings affected, see the Summary Tables of Changes.
+SKZ14		A UPI Phy Reset And Rx CRC Error on The Same Packet May Cause Link Layer LLRSM Aborts
+Problem:	A UPI Phy Reset and Rx CRC error on same packet are causing the retry sequence to abort leading to a UPI Phy re-initialization.
+Implication:	Due to this erratum, an unexpected UPI Phy re-initialization may occur before the program LLSRM threshold has been hit.
+Workaround: None Identified.
+Status:	For the Steppings affected, see the Summary Tables of Changes.
+SKZ15	CSRs SVID And SDID Are Not Implemented For Some DDRIO And PCU devices
+Problem:	The DDRIO (Bus: 3; Device 19,22; Function 6,7 and “Bus: 0; Device: 20,23; Function: 4,5,6,7;) and PCU (Bus: 3; Device 31; Functions 0,2) do not implement the SVID (Offset 0x2C) and SDID (Offset 0x2E) CSRs.
+Implication:	SW relying on DDRIO and PCU SVID and SDID CSR support may not function correctly. Workaround: None. Do not use SVID and SDID for these devices and functions.
+Status:	For the Steppings affected, see the Summary Tables of Changes.
+SKZ16	Register Broadcast Read From DDRIO May Return a Zero Value
+Problem:	When performing a BIOS broadcast register read to DDRIO a value of 0 is always returned.
+Implication:	When this erratum occurs, BIOS may not be able to proceed due to always reading a value of 0.
+Workaround: None. Use unicast register read for each instance instead of broadcast register read for all instances at once.
+Status:	For the Steppings affected, see the Summary Tables of Changes.
+SKZ17	Intel® CMT Counters May Not Count Accurately
+Problem:	Under complex microarchitectural conditions, the CMT (Cache Monitoring Technology) counters may overcount.
+Implication:	Software relying on CMT registers to enable resource allocation may not operate correctly. This may lead to reporting of more cachelines used than the cache supports or the counter wrapping and returning a too small value. WBINVD may not result in the CMT counters being zeroed. Intel has not observed this erratum in commercially available software.
+Workaround: None.
+Status:	For the Steppings affected, see the Summary Tables of Changes.
+
+
+
+SKZ18	Intel® CAT May Not Restrict Cacheline Allocation Under Certain Conditions
+Problem:	Under certain microarchitectural conditions involving heavy memory traffic , cachelines may fill outside the allocated L3 capacity bitmask (CBM) associated with the current Class of Service (CLOS).
+Implication:	CAT (Cache Allocation Technology) may appear less effective at protecting certain classes of applications, including cache-sensitive workloads than on previous platforms.
+Workaround: None identified.
+Status:	For the Steppings affected, see the Summary Tables of Changes.
+SKZ19	Intel® MBM Counters May Undercount
+Problem:	The MBM (Memory Bandwidth Monitoring) counters will increment for reads but will not increment for memory writes. The performance counters in the IMC (integrated memory controller) are not affected and can report the read and write memory bandwidths.
+Implication:	MBM accuracy may be reduced, which can affect performance monitoring or bandwidth-aware scheduling. Applications may be unevenly charged for bandwidth depending on their characteristics.
+Workaround: None identified. This erratum can be mitigated by using the IMC performance monitoring counters to derive a read/write ratio that can be used to adjust the MBM counters.
+Status:	For the Steppings affected, see the Summary Tables of Changes.
+SKZ20	Intel® PCIe* Corrected Error Threshold Does Not Consider Overflow Count When Incrementing Error Counter
+Problem:	The PCIe* corrected error counter feature does not take the overflow bit in the count (bit 15 of XPCORERRCOUNTER (Bus; RootBus Device; 0 Function; 0 Offset; 4D0h)) into account when comparing the count to the threshold in XPCORERRTHRESHOLD.ERROR_THRESHOLD. Therefore, you end up with another interrupt once the counter has rolled over and hit your threshold + 0x8000.
+Implication:	Due to this erratum, the PCIe* corrected error signaling may occur even after the error count has exceeded the corrected error count threshold, not just a single time when reaching the threshold. Intel has not observed this erratum with any commercially available system.
+Workaround: None Identified
+Status:	For the Steppings affected, see the Summary Tables of Changes.
+SKZ21	IIO RAS VPP Hangs During The Warm Reset Test
+Problem:	When VPPCL bit 0 of VPP_reset_Mode (Bus 1; Device 30; Function 5; Offset 0xF0) bit is set to 0, and the CPU is undergoing reset flow while PCIe* hotplug operation is in process, the VPP (Virtual Pin Port) hotplug commands may stop responding.
+Implication:	Due to this erratum, during CPU reset hotplug commands may not get completed. 
+Workaround: None. Do not set VPP reset mode to 0.
+Status:	For the Steppings affected, see the Summary Tables of Changes. 
+
+SKZ22	CRC Store Operation Corner Case May Result in Hang
+Problem:	Intel QuickData Technology Local and Remote CRC Store operations may result in a DMA channel hang when the CRC Store transfer size is less than 32 bytes and the destination offset is not DWORD-aligned.
+Implication:	Due to this erratum, the processor may hang.
+Workaround: Software must configure Intel QuickData Technology Local and Remote CRC Store operations to have descriptor destination offset addresses DWORD-aligned.
+
+
+
+Status:	For the Steppings affected, see the Summary Tables of Changes.
+SKZ23	Intel® PCIe* Slot Presence Detect And Presence Detect Changed Logic Not PCIe* Specification Compliant
+Problem:	When Hot-Plug Surprise is set in the Slot Capabilities register (Bus: RootBus, Dev: 1-3, Function: 0, Offset: A4h, Bit: 5), the Presence Detect State and Presence Detect Change in the Slot Status register (Bus: RootBus, Dev: 1-3, Function: 0, Offset: A2h), incorrectly ignores the out-of-band presence detect mechanism and only reflects the Physical Layer in-band presence detect mechanism.
+Implication:	Due to this erratum, if the Hot-Plug Surprise bit is set in the Slot Capabilities register, software will not be able to detect the presence of an adapter inserted while a slot is powered down. Therefore, Hot-Plug Surprise must only be set in configurations where the slot power is always enabled.
+Workaround: None Identified.
+Status:	For the Steppings affected, see the Summary Tables of Changes.
+SKZ24	Unexpected DDR ECC Errors May be Seen
+Problem:	The processor may incorrectly configure the processor's Vccp rail voltage. 
+Implication:	Due to this erratum, unexpected Memory ECC errors may occur.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum
+Status:	For the Steppings affected, see the Summary Tables of Changes.
+SKZ25	In Patrol Scrub System Address Mode, Address is Not Loaded from CSRs After Re-enable
+Problem:	The patrol scrub starting address registers (scrubaddresshi (Bus 2; Devices 12, 10; Function 0; Offset 910) and scrubaddresslo Bus 2; Devices 12, 10; Function 0; Offset 90c) should indicate when the first memory address from which patrol logic should start scrubs (when scrubctl.startscrub (Bus 2; Devices 12, 10; Function 0; Offset 914; Bit 24)is set). Due to this erratum, after patrol is disabled, if the patrol scrub engine is re-enabled in System Address Mode with scrubctl.startscrub set, the patrol scrubbing engine may ignore the starting address registers. Re-enabling patrol after S3 exit or other warm reset event is not impacted by this.
+Implication:	Due to this erratum, when configured in system address mode, Patrol scrubs will not start from the address specified in the starting address registers. This may cause certain memory lines to be scrubbed more or less frequently than expected. Intel has not seen this erratum to affect the operation of any commercially available software.
+Workaround: None Identified.
+Status:	For the Steppings affected, see the Summary Tables of Changes.
+§ §
