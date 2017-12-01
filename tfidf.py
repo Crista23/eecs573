@@ -23,32 +23,24 @@ def tfidf(word, blob, bloblist):
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-data = {}
+data = []
 currCore = ""
 # Read all the data in
-file = open("data/newData.tsv", "r")
+file = open("data/NewData.tsv", "r")
 for line in file:
     line = line.strip().split("\t")
-    core = line[0]
-    manu = line[1]
-    chip = line[2]
-    detail = line[3].lower()
-    workaround = line[4]
-    failure = line[5]
-    if chip <> "":
-        if chip in data:
-            data[chip] += "\n" + detail
-        else:
-            data[chip] = detail
+    if len(line) > 1:
+      category = line[0]
+      detail = line[1]
+      if category == "title":
+        data.append(detail)
 
-dataList = []
-for core in data:
-    dataList.append(tb(data[core]))
-
+print len(data)
+'''
 for i, d in enumerate(dataList):
     print("Top words in document {}".format(i + 1))
     scores = {word: tfidf(word, d, dataList) for word in d.words}
     sorted_words = sorted(scores.items(), key=lambda x: x[1], reverse=True)
     for word, score in sorted_words[:10]:
         print("{}\t{}".format(word, round(score, 5)))
-
+'''
