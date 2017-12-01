@@ -1,0 +1,652 @@
+HSE1		VM Exit May Set IA32_EFER.NXE When IA32_MISC_ENABLE Bit 34 is Set to 1
+Problem:	When “XD Bit Disable” in the IA32_MISC_ENABLE MSR (1A0H) bit 34 is set to 1, it should not be possible to enable the “execute disable” feature by setting IA32_EFER.NXE. Due to this erratum, a VM exit that occurs with the 1-setting of the “load IA32_EFER” VM-exit control may set IA32_EFER.NXE even if IA32_MISC_ENABLE bit 34 is set to 1. This erratum can occur only if IA32_MISC_ENABLE bit 34 was set by guest software in VMX non-root operation.
+Implication:	Software in VMX root operation may execute with the “execute disable” feature enabled despite the fact that the feature should be disabled by the IA32_MISC_ENABLE
+MSR. Intel has not observed this erratum with any commercially available software.
+Workaround: A virtual-machine monitor should not allow guest software to write to the IA32_MISC_ENABLE MSR.
+Status:	For the affected steppings, see the .
+HSE2	Intel® QuickPath Interconnect (Intel® QPI) Layer May Report Spurious Correctable Errors
+Problem: Intel® QPI may report an inband reset with no width change (error 0x22) correctable error upon exit from the L1 power state as logged in its IA32_MC{5, 20, 21}_STATUS MSRs (415H,451H,455H).
+Implication:	An unexpected inband reset with no width change error may be logged.
+Workaround: A BIOS code change has been identified and may be implemented as a workaround for this erratum.
+Status:	For the affected steppings, see the .
+HSE3	NTB May Incorrectly Set MSI or MSI-X Interrupt Pending Bits
+Problem:	The NTB (Non-transparent Bridge) may incorrectly set MSI (Message Signaled Interrupt) pending bits in MSIPENDING (BAR PB01BASE,SB01BASE; Offset 74H) while operating in MSI-X mode or set MSI-X pending bits in PMSIXPBA (BAR PB01BASE, SB01BASE; Offset 03000H) while operating in MSI mode.
+Implication:	Due to this erratum, NTB incorrectly sets MSI or MSI-X pending bits. The correct pending bits are also set and it is safe to ignore the incorrectly set bits.
+Workaround: None identified.
+Status:	For the affected steppings, see the .
+HSE4	Processor May Issue Unexpected NAK DLLP Upon PCIe* L1 Exit
+Problem:	Upon exiting the L1 link power state, the processor’s PCIe port may unexpectedly issue a NAK DLLP (Data Link Layer Packet).
+Implication:	PCIe endpoints may unexpectedly receive and log a NAK DLLP. 
+Workaround: None identified.
+Status:	For the affected steppings, see the .
+HSE5	PECI DDR DIMM Digital Thermal Reading Returns Incorrect Value
+Problem:	When using the PECI RdPkgConfig() command to read PCS (Package Config Space) Service 14 “DDR DIMM Digital Thermal Reading”, the value returned is incorrect.
+Implication:	Platform thermal management may not behave as expected.
+
+
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE6	IIO CSR Lnkcon2 Field Selectable_De_Emphasis Cannot Be Set For DMI2 Mode
+Problem:	The CSR lnkcon2 (Bus 0; Device 0; Function 0, Offset 0x1C0) field selectable_de_emphasis (bit 6) cannot be set for a link when the DMI port is operating at 5 GT/s.The documentation has the attribute of RW-O (read, write once), but the processor incorrectly operates as read-only. This erratum does not occur when link is operating as a PCIe port.
+Implication:	When the link is in DMI2 mode, the de-emphasis cannot be changed for an upstream component.
+Workaround: None identified.
+Status:	For the affected steppings, see the .
+HSE7	PCIe* Receiver May Not Meet the Specification for AC Common Mode Voltage And Jitter
+Problem:	Due to this erratum, PCIe receivers may not meet the specification for AC common mode voltage (300 mV) and jitter (78.1 ps) at high temperatures when operating at 5 GT/s.
+Implication:	Specifications for PCIe receiver AC common mode voltage and jitter may not be met. Intel has not observed this erratum on any commercially available system with any commercially available PCIe devices.
+Workaround: None identified.
+Status:	For the affected steppings, see the .
+HSE8	Receiver Termination Impedance On PCIe 3.0 Does Not Comply With The Specification
+Problem:	The PCIe Base Specification revision 3.0 defines ZRX-HIGH-IMP-DC-NEG and ZRX- HIGH-IMP-DC-POS for termination impedance of the receiver. The specified impedance for a negative voltage (-150 mV to 0V) is expected to be greater than 1 Kohm.
+Sampled measurements of this impedance as low as 400 ohms have been seen. The specified impedance for a positive voltage (> 200 mV) is greater than 20 Kohms.
+Sampled measurements of this impedance as low as 14.6 Kohms have been seen.
+Implication:	Intel has not observed functional failures from this erratum on any commercially available platforms using any commercially available PCIe device.
+Workaround: None identified.
+Status:	For the affected steppings, see the .
+HSE9	Platform Recovery After a Machine Check May Fail
+Problem:	While attempting platform recovery after a machine check (as indicated by CATERR# signaled from the legacy socket), the original error condition may prevent normal platform recovery which can lead to a second machine check. A remote processor detecting a second Machine Check Event will hang immediately.
+Implication:	Due to this erratum, it is possible a system hang may be observed during a warm reset caused by a CATERR#.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+
+
+HSE10	USB3 xHCI Not Compatible With MSIs
+Problem:	When the PCH xHCI (Extensible Host Controller Interface) is configured to use MSI interrupts, a PCIe device number conflict between the processor and xHCI controller may cause the interrupts be routed incorrectly.
+Implication:	Due to this erratum, unpredictable system behavior may result.
+Workaround: A BIOS code change has been identified and may be implemented as a workaround for this erratum.
+Status:	the For the affected steppings, see the .
+HSE11	A Memory Channel With More Than 4 Ranks May Lead to a System Hang
+Problem:	A memory controller channel with more than 4 ranks and with TRR (Targeted Row Refresh) enabled may fail leading to a system hang. This erratum only impacts memory channels with three dual-rank DDR4 RDIMMs.
+Implication:	Due to this erratum, the system may hang.
+Workaround: A BIOS code change has been identified and may be implemented as a workaround for this erratum.
+Status:	For the affected steppings, see the .
+HSE12	Writing R3QPI Performance Monitor Registers May Fail
+Problem:	Due to this erratum, attempting to write R3QPI performance monitor registers (Bus 0; Device 11; Functions 1,2,5,6; Offset 0xA0-0xF7) may be unsuccessful.
+Implication:	A failed write to one or more R3QPI performance monitor registers is likely to yield incorrect performance events counts.
+Workaround: Consecutively write the identified registers twice with the same value before performance monitoring is globally enabled.
+Status:	For the affected steppings, see the .
+HSE13	Enabling PPD May Cause Unpredictable System Behavior
+Problem:	Enabling memory PPD (Precharge Power Down) may cause unpredictable system behavior.
+Implication:	This erratum may cause unpredictable system behavior. 
+Workaround: PPD is not supported. Use Active Power Down (APD) mode only. 
+Status:	For the affected steppings, see the .
+HSE14	CPUID Extended Topology Enumeration Leaf May Indicate an Incorrect Number of Logical Processors
+Problem:	The Extended Topology Enumeration Leaf of CPUID (EAX = 0xB) may return an incorrect value in EBX[15:0] for the core level type (ECX[15:8] = 2). In this instance, the number of logical processors at the core level reported in EBX[15:0] should reflect the configuration as shipped by Intel.
+Implication:	Software that uses the referenced CPUID function may not properly initialize all logical processors in the system or correctly report the actual number of factory-configured logical processors.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+
+
+HSE15	Intel® QPI Link Re-training After a Warm Reset or L1 Exit May be Unsuccessful
+Problem:	After a warm reset or an L1 exit, the Intel® QPI (Intel QuickPath Interconnect) links may not train successfully.
+Implication:	A failed Intel® QPI link can lead to reduced system performance or an inoperable system.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE16	VCCIN VR Phase Shedding is Disabled
+Problem:	Due to this erratum, the processor does not direct the VCCIN VR (voltage regulator) to shed phases during low power states.
+Implication:	Platform power consumption may exceed expected levels during deep package C- states.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE17	Quad-rank DDR4 LRDIMMs May Not be Properly Calibrated
+Problem:	Quad-rank LRDIMMs require calibration of all four of their DRAM ranks. Due to this erratum, only half of the ranks are calibrated.
+Implication:	This erratum applies when a memory channel has three quad-rank DDR4 LRDIMMs.
+Uncalibrated ranks can result in higher correctable and uncorrectable error rates.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE18	Possible Non-Optimal Electrical Margins on The DDR Command Bus
+Problem:	The processor periodically adjusts drive strength for DDR signals to optimize electrical margins. Due to this erratum, the drive strength on the DDR command bus may be incorrectly adjusted.
+Implication:	Reduced electrical margins on the command bus can lead to higher error rates possibly affecting system stability.
+Workaround: A BIOS code change has been identified and may be implemented as a workaround for this erratum.
+Status:	For the affected steppings, see the .
+HSE19	PECI Commands During Reset May Result in Persistent Timeout Response
+Problem:	Due to this erratum, a PECI (Platform Environment Control Interface) command other than GetDIB(), Ping(), or GetTemp() received before RESET_N is de-asserted may result in a timeout (0x81 completion code) for all subsequent such commands.
+Implication:	Future PECI commands other than GetDIB(), Ping(), and GetTemp() will not be serviced after this erratum occurs.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE20	System May Hang When Using the TPH Prefetch Hint
+Problem:	When all enabled cores on a socket are simultaneously in core C3, core C6, or package C6 state and a PCIe TPH (Transaction layer packet Processing Hint) with the prefetch hint set is received, the system may hang.
+Implication:	Due to this erratum, the system may hang.
+
+
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE21	TS1s Do Not Convey The Correct Transmitter Equalization Values During Recovery.RcvrLock
+Problem:	The PCIe 3.1 Base Specification requires that TS1s sent during Recovery.RcvrLock following 8.0 GT/s EQ (adaptive equalization) contain the final transmitter preset number and coefficient values that were requested by an endpoint during phase 2 of EQ. Due to this erratum, TS1s with incorrect transmitter preset number values may be sent during Recovery.RcvrLock following 8.0 GT/s adaptive equalization.
+Implication:	Endpoints that check these values may, when unexpected values are found, request equalization restart in subsequent TSs it sends. If EQ requests from the endpoint are supported in the BIOS or OS, EQ will be restarted and the link may continue this EQ loop indefinitely.
+Workaround: None identified.
+Status:	For the affected steppings, see the .
+HSE22	MSR_TEMPERATURE_TARGET MSR May Read as '0'
+Problem:	Due to this erratum, reading the MSR_TEMPERATURE_TARGET MSR (1A2H) may incorrectly return '0'.
+Implication:	Software that depends on the contents of the MSR_TEMPERATURE_TARGET MSR may not behave as expected.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE23	PECI RdIAMSR() Command May Fail After Core C6 State is Entered
+Problem:	Reading core Machine Check Bank registers using the PECI (Platform Environment Control Interface) RdIAMSR() command may fail after core C6 state has been entered.
+Implication:	Invalid data may be returned when using PECI to read core Machine Check Bank registers.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum 
+Status:	For the affected steppings, see the .
+HSE24	Processor May Not Enter PC3 or PC6 State
+Problem:	Due to this erratum, the processor may not enter PC3 (Package C3) or PC6 (Package C6) state when Intel Server Platform Services firmware is in use.
+Implication:	The processor may not meet power or thermal operating targets. 
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE25	Disabling Intel® QPI L1 State May Cause a Machine Check On PC3 or PC6 Exit
+Problem:	If Intel® QPI L1 state is disabled, exiting PC3 (Package C3) or PC6 (Package C6) state may signal a Machine Check with IA32_MC4_STATUS_MSCOD (bits [31:16]) = 0x70XX.
+Implication:	Disabling Intel® QPI link low power states can lead to a Machine Check if deep Package C-states are enabled.
+Workaround: A BIOS code change has been identified and may be implemented as a workaround for this erratum.
+Status:	For the affected steppings, see the .
+
+
+HSE26	CLTT May Cause BIOS To Hang On a Subsequent Warm Reset
+Problem:	If CLTT (Closed Loop Thermal Throttling) is enabled when a warm reset is requested, due to this erratum, the processor will resume DIMM temperature polling before the memory sub-system has been re-initialized.
+Implication:	This erratum may lead to a BIOS hang. The warm reset request will fail, along with subsequence warm reset attempts. The failing condition is cleared by a cold reset.
+Workaround: A BIOS code change has been identified and may be implemented as a workaround for this erratum.
+Status:	For the affected steppings, see the .
+HSE27	Systems May Experience Uncorrectable Errors When Using 2133 MHz LRDIMM
+Problem:	Due to this erratum, a memory subsystem with 2133 MHz LRDIMMs may experience uncorrectable memory errors.
+Implication:	The use of 2133 MHz LRDIMMs may lead to system failure. 
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE28	PCIe* Extended Tag Field May be Improperly Set
+Problem:	The Extended Tag field in the TLP Header will not be zero for TLPs issued by PCIe ports 1a, 1b, 2c, 2d, 3c, and 3d even when the Extended Tag Field Enable bit in the Device Control Register (Offset 08H, bit 8) is 0.
+Implication:	This does not affect ports 0, 2a, 2b, 3a and 3b. This will not result in any functional issues when using device that properly track and return the full 8 bit Extended Tag value with the affected ports. However, if the Extended Tag field is not returned by a device connected to an affected port then this may result in unexpected completions and completion timeouts.
+Workaround: None identified.
+Status:	For the affected steppings, see the .
+HSE29	A MOV to CR3 When EPT is Enabled May Lead to an Unexpected Page Fault or an Incorrect Page Translation
+Problem:	If EPT (extended page tables) is enabled, a MOV to CR3 or VMFUNC may be followed by an unexpected page fault or the use of an incorrect page translation.
+Implication:	Guest software may crash or experience unpredictable behavior as a result of this erratum.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE30	The System May Hang When a C/A Parity Error is Detected
+Problem:	Due to this erratum, detection of a C/A (Command/Address) parity error by the memory controller can lead to a system hang.
+Implication:	System may experience a hang condition in the presence of C/A parity errors. 
+Workaround: It is possible for the BIOS to contain a workaround for this erratum.
+Status:	For the affected steppings, see the .
+
+
+HSE31	A C/A Parity Error When DDR4 is Operating at 2133 MHz May Result in Unpredictable System Behavior
+Problem:	Due to this erratum, when DDR4 is operating at 2133 MHz and a C/A (Command/ Address) parity error occurs while exiting a package C-state then unpredictable system behavior may occur.
+Implication:	Due to this erratum, the system may experience unpredictable system behavior.
+Workaround: A BIOS code change has been identified and may be implemented as a workaround for this erratum.
+Status:	For the affected steppings, see the .
+HSE32		Enabling Isochronous Transfers May Result in Unpredictable System Behavior
+Problem:	Enabling isochronous transfers may lead to spurious correctable memory errors, uncorrectable memory errors, patrol scrub errors and unpredictable system behavior.
+Implication:	The system may hang, report spurious memory errors, or behave unpredictably.
+Workaround: A BIOS code change has been identified and may be implemented as a workaround for this erratum.
+Status:	For the affected steppings, see the .
+HSE33	Enabling Secondary To Primary Snoop Overrides On NTB May Cause a Hang
+Problem:	Due to this erratum, NTB (Non-Transparent Bridge) completions may be dropped when Secondary to Primary Snoop Overrides are enabled.
+Implication:	The system may hang or experience timeout machine checks when the secondary to primary snoop override is enabled. This erratum does not affect primary to secondary snoop override.
+Workaround: None identified. A BIOS code change has been identified and may be implemented to avoid this erratum.
+Status:	For the affected steppings, see the .
+HSE34	Memory Controller tsod_present Settings Being Improperly Cleared
+Problem:	On single Home Agent configurations, due to this erratum, the processor interferes with TSOD (thermal sensor on DIMM) usage by incorrectly clearing the tsod_present field (bits[7:0]) of the smbcntl_1 CSR (Bus 0; Device 19; Function 0; Offset 0x198) after BIOS writes that field.
+Implication:	Closed Loop Thermal Throttle will not work as expected. 
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE35	DDR4 Protocol May be Violated During C/A Parity Error Handling
+Problem: Due to this erratum, if the error information in the DRAM is accessed because of a C/A (Command/Address) parity error, DDR4 DIMM protocol rules may be violated leading to unpredictable system behavior.
+Implication:	Attempts to access DDR4 DIMM error information may lead to unpredictable system behavior.
+Workaround: None identified. The en field (bit 31) of erf_ddr4_cmd_reg[4-0] CSRs (Bus 1; Device 20,21,23,24; Function 0,1; Offset 0x24C, 0x250, 0x254, 0x258, 0x26C) must not be set, preventing access to error information.
+Status:	For the affected steppings, see the .
+
+
+HSE36	DDR4 Power Down Timing Violation
+Problem:	When DDR4 is operating at 2133 MHz, the processor’s memory control may violate the JEDEC tPRPDEN timing specification.
+Implication:	Violation of timing specifications can lead to unpredictable system behavior; however, Intel has not observed this erratum to impact the operation of any commercially available system using validated DIMMs by Intel Platform Memory Operations.
+Workaround: None identified.
+Status:	For the affected steppings, see the .
+HSE37	Correctable Memory ECC Errors May Occur at Boot
+Problem:	With memory lockstep enabled, the system may experience correctable memory errors during boot with IA32_MCi_STATUS.MCACOD= 0x009x (where x is 0,1,2, or 3 and indicates the channel number reporting the error)
+Implication:	The system may experience correctable memory errors. 
+Workaround: None identified.
+Status:	For the affected steppings, see the .
+HSE38	Remote P2P MCTP Transactions Cause Requests Timeouts
+Problem:	Remote P2P (Peer to Peer) MCTP (Management Component Transport Protocol) messages may cause timeouts with IA32_MCi_STATUS.MSCOD=0x000c.
+Implication:	Due to this erratum, the system may hang.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE39	Reserving Resources For Isochronous Transfers With Non-Posted Prefetching Enabled May Cause a Hang
+Problem:	Resources in the IIO (Integrated I/O) unit are reserved for isochronous transfers to ensure performance guarantees are met. Due to this erratum, enabling non-posted prefetching in the IIO when resources are reserved for isochronous traffic may result in a hang.
+Implication:	Due to this erratum, configuring the IIO unit to prefetch may result in a system hang.
+Workaround: A BIOS code change has been identified and may be implemented as a workaround for this erratum.
+Status:	For the affected steppings, see the .
+HSE40	BT Timeouts May Cause Spurious Machine Checks
+Problem:	The BT (Backup Tracker) timeout logic in the Home Agent can trigger spuriously, causing false machine checks indicated by IA32_MCi_STATUS.MSCOD=0x0200.
+Implication:	Due to this erratum, timeout machine check may occur. 
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE41	PCIe Type 1 VDMs May be Silently Dropped
+Problem:	Due to this erratum, a PCIe Type 1 VDMs (Vendor Defined Message) is silently dropped unless the vendor ID is the MCTP (Management Component Transport Protocol) value of 0x1AB4.
+Implication:	PCIe Type 1 VDMs may be unexpectedly dropped. Intel has not observed this erratum to impact the operation of any commercially available system.
+Workaround: None identified.
+
+HSE42	Full Duplex NTB Traffic Can Cause a System Hang
+Problem:	If two PCIe endpoints target traffic to PB23BASE (Bus 0; Device 3; Function 0; Offset 0x18, 0x1c) and PB45BASE (Bus 0; Device 3; Function 0; Offset 0x20, 0x24) registers at the same time, a deadlock can result.
+Implication:	Due to this erratum, the system may hang.
+Workaround: A BIOS code change has been identified and may be implemented as a workaround for this erratum.
+Status:	For the affected steppings, see the .
+HSE43	CONFIG_TDP_NOMINAL CSR Implemented at Incorrect Offset
+Problem:	The PCIe Base Specification indicates that Configuration Space Headers have a base address register at offset 0x10. Due to this erratum, the Power Control Unit’s CONFIG_TDP_NOMINAL CSR (Bus 1; Device 30; Function 3; Offset 0x10) is located where a base address register is expected.
+Implication:	Software may treat the CONFIG_TDP_NOMINAL CSR as a base address register leading to a failure to boot.
+Workaround: None identified.
+Status:	For the affected steppings, see the .
+HSE44	Software Using Intel® TSX May Result in Unpredictable System Behavior
+Problem:  Under a complex set of internal timing conditions and system events, software using the Intel® TSX (Transactional Synchronization Extensions) instructions may result in unpredictable system behavior.
+Implication:	This erratum may result in unpredictable system behavior. 
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE45	A Machine-Check Exception Due to Instruction Fetch May Be Delivered Before an Instruction Breakpoint
+Problem:	Debug exceptions due to instruction breakpoints take priority over exceptions resulting from fetching an instruction. Due to this erratum, a machine-check exception resulting from the fetch of an instruction may take priority over an instruction breakpoint if the instruction crosses a 32-byte boundary and the second part of the instruction is in a 32-byte poisoned instruction fetch block.
+Implication:	Instruction breakpoints may not operate as expected in the presence of a poisoned instruction fetch block.
+Workaround: None identified.
+Status:	For the affected steppings, see the .
+HSE46	Spurious Corrected Errors May be Reported
+Problem:	Due to this erratum, spurious corrected errors may be logged in the IA32_MC0_Status register with the valid field (bit 63) set, the uncorrected error field (bit 61) not set, a Model Specific Error Code (bits [31:16]) of 0x000F, and an MCA Error Code (bits [15:0]) of 0x0005. If CMCI is enabled, these spurious corrected errors also signal interrupts.
+Implication:	When this erratum occurs, software may see corrected errors that are benign. These corrected errors may be safely ignored.
+Workaround: None identified.
+
+
+Status:	For the affected steppings, see the .
+HSE47	PCIe LBMS Bit Incorrectly Set
+Problem:	If a PCIe Link autonomously changes width or speed for reasons other than to attempt to correct unreliable Link operation, the Port should set LABS bit (Link Autonomous Bandwidth Status) (Bus 0; Device 0; Function 0 and Device 1; Function 0-1 and Device 2-3; Function 0-3; Offset 0x1A2; bit 15). Due to this erratum, the processor will not set this bit and will incorrectly set LBMS bit (Link Bandwidth Management Status) (Bus 0; Device 0; Function 0 and Device 1; Function 0-1 and Device 2-3; Function 0-3; Offset 0x1A2; bit14) instead.
+Implication:	Software that uses the LBMS bit or LABS bit may behave incorrectly. 
+Workaround: None identified.
+Status:	For the affected steppings, see the .
+HSE48	Power Consumed During Package C6 May Exceed Specification
+Problem:	Due to this erratum, the processor power usage may be higher than specified for the VCCIN and/or IIO domains while in Package C6 state.
+Implication:	Systems may experience increased power consumption while the processor is in Package C6.
+Workaround: A BIOS code change has been identified and may be implemented as a workaround for this erratum.
+Status:	For the affected steppings, see the .
+HSE49	Platform Performance Degradation When C1E is Enabled
+Problem:	Due to this erratum, when C1E is enabled and after the processor has entered Package C1E state, core clock frequency becomes limited to its minimum value (sometimes referred to as Pn) until the system exits Package C3 state (or deeper) or the system is reset.
+Implication:  When this erratum occurs, operating frequency will be lower than expected. Note: After a Package C3 exit, re-entering Package C1E state re-imposes this erratum’s frequency limit.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE50	Memory Power Down Entry May Lead to Unpredictable System Behavior
+Problem:	Due to this erratum, the processor may violate DDR4 page close protocol at power down entry.
+Implication:	When this erratum occurs, it may result in unpredictable system behavior.
+Workaround: A BIOS code change has been identified and may be implemented as a workaround for this erratum.
+Status:	For the affected steppings, see the .
+HSE51	PCIe Correctable Error Status Register May Not Log Receiver Error at
+8.0 GT/s
+Problem:	Due to this erratum, correctable PCIe receiver errors may not be logged in the DPE field (bit 15) of the PCISTS CSR (Bus: 0; Device 1,2,3; Function 0-1, 0-3, 0-3; Offset 6H) when operating at 8.0 GT/s.
+Implication:	Correctable receiver errors during 8.0 GT/s operation may not be visible to the OS or driver software.
+Workaround:  None identified.
+
+HSE52	Sending PECI Messages Concurrently Over Two Interfaces May Result in a System Hang
+Problem:	Sending messages concurrently via the PECI (Platform Environment Control Interface) channel and the IBPECI (In-Band PECI) channel during Package C-State transitions may result in a system hang.
+Implication:	Due to this erratum, the system may hang.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE53	Platform Recovery After a Machine Check May Fail
+Problem:	While attempting platform recovery after a machine check (as indicated by CATERR# signaled from the legacy socket), the original error condition may prevent normal platform recovery which can lead to a second machine check. A remote processor detecting a second Machine Check Event will hang immediately
+Implication:	Due to this erratum, it is possible a system hang may be observed during a warm reset caused by a CATERR#.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE54	Intel® Turbo Boost Technology Does Not Behave As Expected
+Problem:	Due to this erratum, the maximum turbo frequency may be incorrectly set to the maximum non-turbo frequency after BIOS initialization completes.
+Implication:	Intel® Turbo Boost Technology may appear to be disabled. 
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE55	PCIe Hot Plug Slot Status Register May Not Indicate Command Completed
+Problem:	The PCIe Base Specification requires a write to the Slot Control register (Offset A8H) to generate a hot plug command when the downstream port is hot plug capable. Due to this erratum, a hot plug command is generated only when one or more of the Slot Control register bits [11:6] are changed.
+Implication:	Writes to the Slot Control register that leave bits [11:6] unchanged will not generate a hot plug command and will therefore not generate a command completed event.
+Software that expects a command completed event may not behave as expected.
+Workaround: It is possible for software to implement a one-second timeout in lieu of receiving a command completed event.
+Status:	For the affected steppings, see the .
+HSE56	Local PCIe P2P Traffic on x4 Ports May Cause a System Hang
+Problem:	Under certain conditions, P2P (Peer-to-Peer) traffic with x4 PCIe ports on the same processor (i.e., local) may cause a system hang.
+Implication:	Due to this erratum, the system may hang.
+Workaround: None identified. Local P2P traffic should not be used to or from x4 PCIe ports. 
+Status:	For the affected steppings, see the .
+
+
+HSE57	NTB Operating In NTB/RP Mode May Complete Transactions With Incorrect ReqID
+Problem:	When the NTB (Non-Transparent Bridge) is operating in NTB/RP (NTB Root Port mode) it is possible for transactions to be completed with the incorrect ReqID (Requester ID). This erratum occurs when an outbound transaction is aborted before a completion for inbound transaction is returned.
+Implication:	Due to this erratum, a completion timeout and an unexpected completion may be seen by the processor connected to the NTB/RP. Intel has not observed this erratum with any commercially available system.
+Workaround: None identified.
+Status:	For the affected steppings, see the .
+HSE58	Incorrect Single-Core Turbo Ratio Limit May be Applied When Using AVX Instructions
+Problem:	The AVX single-core turbo ratio limit may not be applied correctly, unnecessarily limiting the core frequency.
+Implication:	Single-core AVX workloads may not achieve single-core AVX turbo limit in some cases.
+This erratum does not apply to non-AVX workloads or multi-core workloads.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE59	LLC Error Conditions May be Dropped or Incorrectly Signaled
+Problem:	When two LLC (last level cache) errors happen in close proximity, a UCNA (uncorrectable no action required) machine check may be dropped or a spurious machine check or CMCI (Corrected Machine Check Interrupt) may be issued. Further, when this erratum occurs, the merged CBo LLC machine check bank IA32_MC[17- 19]_STATUS MSRs may be incorrect.
+Implication:	IA32_MC[17-19]_STATUS MSR may not reflect most current error.
+Workaround: It is possible for the BIOS to contain a partial workaround for this erratum. The workaround does not address the potential dropped UCNA machine check.
+Status:	For the affected steppings, see the .
+HSE60	Unexpected System Behavior May Occur Following Virtualization of Some APIC Writes
+Problem:	If the “virtual-interrupt delivery” VM-execution control is enabled, unexpected system behavior may occur following virtualization of the MOV to CR8 instruction, memory- mapped accesses to the EOI (End of Interrupt), TPR (Task Priority Register), or the interrupt command register to send an interprocessor interrupt to itself. This erratum does not apply to the corresponding WRMSR access.
+Implication:	The unexpected system behavior may result in incorrect instruction execution, EPT (Extended Page Table) violation, page fault, or similar event. These may cause incorrect guest execution or may lead a virtual-machine monitor to terminate the virtual machine that was running at the time.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE61	A DDR4 C/A Parity Error in Lockstep Mode May Result in a Spurious Uncorrectable Error
+Problem:	If a memory C/A (Command/Address) parity error occurs while the memory subsystem is configured in lockstep mode then the channel that observed the error will properly log the error but the associated channel in lockstep will incorrectly log an uncorrectable error in its IA32_MCi_STATUS MSR.
+
+
+Implication:	Due to this erratum, incorrect logging of an uncorrectable memory error in IA32_MCi_STATUS may occur.
+Workaround: A BIOS code change has been identified and may be implemented as a workaround for this erratum.
+Status:	For the affected steppings, see the .
+HSE62	Some IMC and Intel QPI Functions Have Incorrect PCI CAPPTR Values
+Problem:	The PCI CAPPTR (Capability Pointer Register) is defined to contain the offset to the capabilities list structure when the PCI PCISTS (PCI Status Register) bit 4 (Capabilities_List) is set to 1. Due to this erratum, CAPPTR (offset 0x34) should hold a value of 0x40 but is instead zero for these IMC (Integrated Memory Controller) and Intel® QPI (Intel QuickPath Interconnect) device:
+Device 8, functions 3,5,6
+Device 9, functions 3,5,6
+Device 10, functions 3,5,6
+Device 19, functions 0-5
+Device 20, functions 0-3
+Device 21, functions 0-3
+Device 22, functions 0-3
+Device 23, functions 0-3
+Implication:	Software that depends on CAPPTR to access additional capabilities may not behave as expected.
+Workaround: Software that needs to access these capabilities must take this erratum into account. 
+Status:	For the affected steppings, see the .
+HSE63	PCIe TLP Translation Request Errors Are Not Properly Logged For Invalid Memory Writes
+Problem:	A PCIe Memory Write TLP (Transaction Layer Packet) with an AT field value of 01b (address translation request) does not set the UR (Unsupported Request) bit (UNCERRSTS CSR, Bus 0; Device 0; Function 0; Offset 0x14C; Bit 20) as required by the PCIe Base Specification.
+Implication:	System or software monitoring error status bits may not be notified of an unsupported request. When this erratum occurs, the processor sets the 'advisory_non_fatal_error_status' bit (CORERRSTS CSR, Bus 0; Device 0; Function 0; Offset 0x158; Bit 13) and drops the failing transaction.
+Workaround: None identified.
+Status:	For the affected steppings, see the .
+HSE64	The TSC May be Inaccurate When Per Core P-States Are Enabled
+Problem:	Due to this erratum, when per core P-States are enabled, the TSC (Time Stamp Counter) may not be synchronized across the processor's cores.
+Implication:	The RDTSC (Read Time Stamp Counter) instruction may return a value that is not monotonically increasing.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+
+
+HSE65	Dual HA Processors With CLTT Enabled And no Memory on Channels 0 And 1 May Hang During Warm Reset
+Problem:	A dual HA (Home Agent) processor may hang during an attempted warm reset when there is no memory installed on memory channels 0 and 1 and CLTT (Closed Loop Thermal Throttling) is enabled.
+Implication:	Due to this erratum, a system may hang during warm reset. This erratum does not occur if the processor has a single HA or at least one DIMM is installed on memory channel 0 or 1.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE66	PCIe Slave Loopback May Transmit Incorrect Sync Headers
+Problem:	The PCIe Base Specification requires that, in the Loopback.Active state, a loopback slave re-transmits the received bit stream bit-for-bit on the corresponding Tx. If the link is directed to enter loopback slave mode at 8 GT/s via TS1 ordered sets with both the Loopback and Compliance Receive bits set, the processor may place sync headers in incorrect locations in the loopback bit stream.
+Implication: In PCIe CEM (Card Electromechanical specification) Rx compliance testing directing the link to loopback slave mode, the received data may not be correctly re-transmitted on the Tx, causing the test to fail.
+Workaround: None identified.
+Status:	For the affected steppings, see the .
+HSE67	Consecutive PECI RdIAMSR Commands When Core C6 is Enabled May Cause a System Hang
+Problem: Consecutive PECI (Platform Environment Control Interface) RdIAMSR commands to access core Machine Check MSRs can result in a system hang when core C6 state is enabled.
+Implication:	When this erratum occurs, PECI commands can lead to a system hang. 
+Workaround: It is possible for the BIOS to contain a workaround for this erratum.
+Status:	For the affected steppings, see the .
+HSE68	Data Poisoning May Not Behave as Expected
+Problem:	When data poisoning is enabled, poisoned data consumption may not log and signal an uncorrected machine check error.
+Implication:	Due to this erratum, unpredictable system behavior may result. 
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE69	Enabling TRR With DDR4 LRDIMMs May Lead to Unpredictable System Behavior
+Problem:	Due to this erratum, TRR (Targeted Row Refresh) is not compatible with DDR4 LRDIMMs.
+Implication:	Unpredictable system behavior may occur.
+Workaround: A BIOS code change has been identified and may be implemented as a workaround for this erratum.
+Status:	For the affected steppings, see the .
+
+
+HSE70	Warm Reset May Cause PCIe Hot-Plug Sequencing Failure
+Problem:	The Integrated I/O unit uses the VPP (Virtual Pin Port) to communicate with power controllers, switches, and LEDs associated with PCIe Hot-Plug sequencing. Due to this erratum, a warm reset occurring when a VPP transaction is in progress may result in an extended VPP stall, termination of the in-flight VPP transaction, or a transient power down of slots subject to VPP power control.
+Implication:	During or shortly after a warm reset, when this erratum occurs, PCIe Hot-Plug sequencing may experience transient or persistent failures or slots may experience unexpected transient power down events. In certain instances, a cold reset may be needed to fully restore operation.
+Workaround: None identified.
+Status:	For the affected steppings, see the .
+HSE71	Performance Monitor Instructions Retired Event May Not Count Consistently
+Problem:	The Performance Monitor Instructions Retired event (Event C0H; Umask 00H) and the instruction retired fixed counter IA32_FIXED_CTR0 MSR (309H) are used to count the number of instructions retired. Due to this erratum, certain internal conditions may cause the counter(s) to increment when no instruction has retired or to intermittently not increment when instructions have retired.
+Implication:	A performance counter counting instructions retired may over count or under count.
+The count may not be consistent between multiple executions of the same code.
+Workaround: None identified.
+Status:	For the affected steppings, see the .
+HSE72	C/A Parity Error Injection May Cause the System to Hang
+Problem:	When C/A (Command Address) parity error injections are occurring too frequently, the home agent may be prevented from completing memory transactions. This may result in an internal timer error indicated by IA32_MCi_STATUS. MSCOD=0x0080 and IA32_MCi_STATUS. MCACOD=0x0400.
+Implication:	Due to this erratum, the system may hang.
+Workaround: Ensure there is at least 30µs of delay between injections. 
+Status:	For the affected steppings, see the .
+HSE73	Excessive Fan Speed
+Problem:	Due to this erratum, fan speed control does not correctly account for the thermal profile at elevated operating temperatures.
+Implication:	When this erratum occurs, fan speed is higher than required unnecessarily increasing fan power consumption and fan noise.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE74	Disabling PCIe Ports Prevents Package C6 Entry
+Problem:	The processor’s PCIe links can be disabled by setting the Link Disable bit in the Link Control register (LNKCON.link_disable) (Bus 0; Device 0,1,2,3; Function 0,0-1,0-3,0-3; Offset 0xA0; Bit 4) to 1. Due to this erratum, configuring one or more PCIe ports to be disabled prevents the processor from entering package C6 state.
+Implication:	The processor’s inability to reach the Package C6 state will result in increased idle power consumption.
+Workaround: None identified. For an optimal processor power configuration, unused PCIe ports should remain enabled.
+
+
+Status:	For the affected steppings, see the .
+HSE75	The System May Shut Down Unexpectedly During a Warm Reset.
+Problem:	Certain complex internal timing conditions present when a warm reset is requested can prevent the orderly completion of in-flight transactions. It is possible under these conditions that the warm reset will fail and trigger a full system shutdown.
+Implication:	When this erratum occurs, the system will shut down and all machine check error logs will be lost.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE76	Accessing SB01BASE MMIO Space in The Presence of Bi-directional NTB Traffic May Result in a System Hang
+Problem:	While transactions are originating from both sides of the NTB, accessing SB01BASE MMIO space may cause the system to hang. For example, the NTB convention of using SB01BASE MMIO doorbell or scratchpad registers to convey interrupt messages across the NTB may result in a system hang. This erratum does not apply if transactions originate from only one side of the NTB.
+Implication:	Due to this erratum, the system may hang.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. Alternatively, Split- BAR mode can be used to send interrupts between NTB connected systems. Intel has released a new version of its NTB driver that offers support for split-BAR mode.
+Status:	For the affected steppings, see the .
+HSE77	Patrol Scrubbing of Mirrored Memory May Log Spurious Memory Errors
+Problem:	The Patrol scrubber, when mirroring is enabled, may incorrectly identify certain data patterns as poison data or as memory errors.
+Implication:	Spurious memory errors and poisoned data may be logged when mirroring is enabled.
+Workaround: A BIOS code change has been identified and may be implemented as a workaround for this erratum.
+Status:	For the affected steppings, see the .
+HSE78	MSR_TURBO_ACTIVATION_RATIO MSR Cannot be Locked
+Problem:	Setting the TURBO_ACTIVATION_RATIO_LOCK field (bit 31) of the MSR_TURBO_ACTIVATION_RATIO MSR (64CH) has no effect; it does not block future writes to the MSR_TURBO_ACTIVATION_RATIO MSR.
+Implication:	Software cannot rely on locking MSR_TURBO_ACTIVATION_RATIO MSR. 
+Workaround: None identified.
+Status:	For the affected steppings, see the .
+HSE79	Duplicate. Erratum Removed.
+HSE80	An APIC Timer Interrupt During Core C6 Entry May be Lost
+Problem:	Due to this erratum, an APIC timer interrupt coincident with the core entering C6 state may be lost rather than held for servicing later.
+Implication:	A lost APIC timer interrupt may lead to missed deadlines or a system hang. 
+Workaround: It is possible for the BIOS to contain a workaround for this erratum.
+Status:	For the affected steppings, see the .
+
+
+HSE81	DDR4 CLK Signal May Incorrectly Float During Warm Reset or S3 State
+Problem:	The processor may not drive the DDR4 clock signal during warm reset or during S3 State rather than driving the signal low as required by the JEDEC DDR4 specification.
+Implication: The anomalous electrical condition of an undriven clock signal can lead to correctable and uncorrectable memory errors (IA32_MCi_STATUS.MCACOD = 0x009n, where n is the channel number) after a warm reset or when resuming from S3 state.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE82	DDR4 Self Refresh Entry May Result in Memory Read Errors
+Problem:	The processor may violate the JEDEC power down timing tCPDED parameter specification associated with DDR4 self-refresh entry.
+Implication:	Correctable and/or uncorrectable memory read errors may occur.
+Workaround: A BIOS code change has been identified. Please refer to latest revision of Grantley-EP Platform Reference Code.A BIOS code change has been identified and may be implemented as a workaround for this erratum.
+Status:	For the affected steppings, see the .
+HSE83	VT-d Memory Check Error on an Intel® QuickData Technology Channel May Cause All Other Channels to Master Abort
+Problem:	An Intel® QuickData Technology DMA access to Intel® VT-d protected memory that results in a protected memory check error may cause master abort completions on all other Intel® QuickData Technology DMA channels.
+Implication:	Due to this erratum, an error during Intel® QuickData Technology DMA access to an Intel® VT-d protected memory address may cause a master abort on other
+Intel® QuickData Technology DMA channels.
+Workaround: None identified.
+Status:	For the affected steppings, see the .
+HSE84	Writes To Some Control Register Bits Ignore Byte Enable
+Problem:	Due to this erratum, partial writes to some registers write the full register. The affected registers are:
+SADDBGMM2_CFG (Device 12; Function 0-7; Offset 0xA8 and Device 13; Function 0-6; Offset 0xA8) and
+LLCERRINJ_CFG (Device 12; Function 0-7; Offset 0xFC and Device 13; Function 0-6;
+Implication:	Partial writes of the registers listed above may result in changes to register bytes that were intended to be unmodified.
+Workaround: None identified. Use aligned, full-width DWORD (32-bit) read-modify-write sequencing to change a portion or portions of the registers listed.
+Status:	For the affected steppings, see the .
+HSE85	Invalid Intel® QuickData Technology XOR Descriptor Source Addressing May Lead to Unpredictable System Behavior
+Problem:   Intel® QuickData Technology (that is Crystal Beach DMA v3.2) does not correctly halt and report aborts on illegal source addresses placed in a CBDMA descriptor regardless of type (Legacy or PQ). This abort condition may cause unpredictable system behavior.
+Implication:	This erratum may lead to unpredictable system behavior.
+Workaround: Ensure XOR DMA descriptor source addresses targets valid DRAM memory locations. 
+Status:	For the affected steppings, see the .
+
+
+HSE86	Warm Reset May Cause PCIe Hot-Plug Sequencing Failure
+Problem:	The Integrated I/O unit uses the VPP (Virtual Pin Port) to communicate with power controllers, switches, and LEDs associated with PCIe Hot-Plug sequencing. Due to this erratum, a warm reset occurring when a VPP transaction is in progress may result in an extended VPP stall, termination of the inflight VPP transaction, or a transient power down of slots subject to VPP power control.
+Implication:	During or shortly after a warm reset, when this erratum occurs, PCIe Hot-Plug sequencing may experience transient or persistent failures or slots may experience unexpected transient power down events. In certain instances, a cold reset may be needed to fully restore operation.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE87	PROCHOT# Assertion During Warm Reset May Cause Persistent Performance Reduction
+Problem:	Assertion of PROCHOT# after RESET# deassertion but before BIOS has completed reset initialization (indicated by CPL3) may result in persistent processor throttling. Asserting PROCHOT# during and after RESET# assertion for FRB (Fault Resilient Boot) tri-stating of the processor is not affected by this erratum.
+Implication:	When this erratum occurs, the resultant persistent throttling substantially reduces the processor's performance.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE88	Operand-Size Override Prefix Causes 64-bit Operand Form of MOVBE Instruction to Cause a Problem
+Problem:	Execution of a 64-bit operand MOVBE instruction with an operand-size override instruction prefix (66H) may incorrectly cause an invalid-opcode exception (#UD).
+Implication:	A MOVBE instruction with both REX.W=1 and a 66H prefix will unexpectedly cause an invalid-opcode exception (#UD). Intel has not observed this erratum with any commercially available software.
+Workaround: Do not use a 66H instruction prefix with a 64-bit operand MOVBE instruction. 
+Status:	For the affected steppings, see the .
+HSE89	PECI RdIAMSR Accesses During Boot Or Warm Reset May Cause The Processor to Hang
+Problem:	The processor may hang when PECI RdIAMSR() accesses occur soon after processor power-on or warm reset.
+Implication:	When this erratum occurs, the processor will hang and as a result PECI will be unable to complete reads to the processor's machine check banks.
+Workaround: All PECI RdIAMSR() accesses should be delayed until the CPU microcode update revision is non-zero. CPU microcode update revision can be accessed by PECI RdPkgConfig() with index=0 and parameter=4.
+Status:	For the affected steppings, see the .
+HSE90	DDR4 Rank Aliasing With Heavy Memory Traffic May Lead to a System Hang
+Problem:	Under complex conditions, DDR4 rank aliasing during extended periods of heavy memory traffic may lead to a system hang with IA32_MC{17-19}_STATUS.MSCOD = 0x000C.
+Implication:	DDR4 rank aliasing may affect the reliability of a highly utilized system.
+
+
+Workaround: A BIOS code change has been identified and may be implemented as a workaround for this erratum.
+Status:	For the affected steppings, see the .
+HSE91	Early Thermal Throttling May Occur
+Problem:	Systems engineered to published thermal specifications and requirements may throttle early due to insufficient thermal margin on the processor.
+Implication:	When this erratum occurs, the thermal throttling may begin as much as 2 °C early. 
+Workaround: It is possible for the BIOS to contain a workaround for this erratum.
+Status:	For the affected steppings, see the .
+HSE92	Intel® QPI Link Re-training After a Warm Reset or L1 Exit May be Unsuccessful
+Problem:	After a warm reset or an L1 exit, the Intel® QPI links may not train successfully.
+Implication:	A failed Intel® QPI link can lead to reduced system performance or an inoperable system.
+Workaround: It is possible for BIOS to contain processor configuration data and code changes as a workaround for this erratum.
+Status:	For the affected steppings, see the .
+HSE93	PCIe* Header of a Malformed TLP is Logged Incorrectly
+Problem:	If a PCIe port receives a malformed TLP (Transaction Layer Packet), an error is logged in the UNCERRSTS register (Device 0; Function 0; Offset 14CH and Device 2-3; Function 0-3; Offset 14CH). Due to this erratum, the header of the malformed TLP is logged incorrectly in the HDRLOG register (Device 0; Function 0; Offset 164H and Device 2-3; Function 0-3; Offset 164H).
+Implication:	The PCIe header of a malformed TLP is not logged correctly. 
+Workaround: None identified.
+Status:	For the affected steppings, see the .
+HSE94	Attempting to Enter ADR May Lead to Unpredictable System Behavior
+Problem:	Due to this erratum, an attempt to transition the memory subsystem to ADR (Asynchronous DRAM Self Refresh) mode may fail.
+Implication:	This erratum may lead to unpredictable system behavior. 
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE95	PECI Commands During Warm Reset May Lead to an Undefined Machine Check Error
+Problem:	After a warm reset request is made, generally by BIOS or in response to a processor error, the processor is not able to accept PECI commands until the subsequent RESET# signal assertion ends. A PECI command during this interval will log an undefined model specific error code of 0x26 in bits[31:24] of the IA32_MCi_STATUS MSR (411H).
+Implication:	Due to this erratum, attempts to issue PECI commands to the processor while RESET# is asserted may result in an unexpected error.
+Workaround: An external agent that is able to issue PECI commands must not issue PECI commands during the interval from warm reset request to RESET# deassertion.
+Status:	For the affected steppings, see the .
+
+
+HSE96	Spurious Corrected Errors May be Reported
+Problem:	Due this erratum, spurious corrected errors may be logged in the IA32_MC0_STATUS register with the valid field (bit 63) set, the uncorrected error field (bit 61) not set, a Model Specific Error Code (bits [31:16]) of 0x000F, and an MCA Error Code (bits [15:0]) of 0x0005. If CMCI is enabled, these spurious corrected errors also signal interrupts.
+Implication:	When this erratum occurs, software may see corrected errors that are benign. These corrected errors may be safely ignored.
+Workaround: None identified.
+Status:	For the affected steppings, see the .
+HSE97	System Hang May Occur During Warm Reset Due to SMBUS Activity
+Problem:	SMBUS activity during warm reset may lead to a system hang.
+Implication:	Due to this erratum, a system hang may occur during warm reset if activity on the SMBUS is present.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE98	PECI PCS Package Identifier Command Operates Incorrectly on Certain SKUs
+Problem:	The Max Thread ID value returned via PECI PCS (Package Config Space) command, Package Identifier Service (Index 00), Parameter Value 0x0003, may be incorrect on E5-2643V3 and E5-2637V3 SKUs.
+Implication:	A PECI agent may be given an incorrect count of logical processors. 
+Workaround: It is possible for BIOS to contain a workaround for this erratum.
+Status:	For the affected steppings, see the .
+HSE99	Intel® Trusted Execution Technology Uses Incorrect TPM 2.0 NV Space Index Handles
+Problem:	Intel® TXT (Trusted Execution Technology) uses TPM (Trusted Platform Module) 2.0 draft specification handles (indices) AUX 01800003, PS 01800001, and PO 01400003. Those handles conflict with the released TCG (Trusted Computing Group) “Registry of reserved TPM 2.0 handles and localities”, version 1.0, revision 1.
+Implication:	Intel TXT TPM 2.0 handles may conflict with platform manufacturer or owner usage of TPM NV space. Intel has not identified any functional impact due to this erratum.
+Workaround: None identified.
+Status:	For the affected steppings, see the .
+HSE100	Surprise Down Error Status is Not Set Correctly on DMI Port
+Problem:	Due to this erratum, the Surprise_down_error_status (UNCERRSTS Device 0; Function 0; Offset 0x14C; bit 5) is not set to 1 when DMI port detects a surprise down error.
+Implication:	Surprise down errors will not be logged for the DMI port. Software that relies on this status bit may not behave as expected.
+Workaround: None identified.
+Status:	For the affected steppings, see the .
+
+
+HSE101	Erratum removed
+HSE102		Performance Monitoring OFFCORE_RESPOSE_{1,2} Events May Miscount L3_MISS_REMOTE_HOP
+Problem:	When a Performance Monitoring counter is configured to count OFF_CORE_RESPONSE_{1,2} (Events B7H and B8H), data obtained for remote DRAM may be attributed to L3_MISS_REMOTE_HOP0 (as programmed by MSR_OFFCORE_RSP_{1,2} (MSRs 1A6H, 1A7H) bit 27) instead of L3_MISS_REMOTE_HOP1 (bit 28) or L3_MISS_REMOTE_HOP2P (bit 29). Data provided from remote caching agent associated with remote DRAM is unaffected.
+Implication:	L3_MISS_REMOTE_HOP0 may over count, while L3_MISS_REMOTE_HOP1 and L3_MISS_REMOTE_HOP2P may undercount.
+Workaround: None identified. Set all three configuration bits (L3_MISS_REMOTE_HOP0, L3_MISS_REMOTE_HOP1, L3_MISS_REMOTE_HOP2P) to obtain the total count of data supplied by remote agents.
+Status:	For the affected steppings, see the .
+HSE103		Memory Power Consumption Reading May Not Be Accurate When Memory Channels Share a VR
+Problem:	When a single VR (voltage regulator) is used by more than one populated memory channel, power readings of these memory channels may not be accurate.
+Implication:	RAPL (running average power limit) memory power regulation may not behave as expected.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE104	A P-State or C-State Transition May Lead to a System Hang
+Problem:	For a small subset of parts under elevated die temperature conditions, a P-state or C- state transition may result in a system timeout or system shutdown.
+Implication:	When this erratum occurs, the system may shutdown or report a timeout error; Intel has observed transaction completion timeouts and other internal timeouts.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE105		An IRET Instruction That Results in a Task Switch Does Not Serialize The Processor
+Problem:	An IRET instruction that results in a task switch by returning from a nested task does not serialize the processor (contrary to the Software Developer's Manual Vol. 3 section titled “Serializing Instructions”).
+Implication:	Software which depends on the serialization property of IRET during task switching may not behave as expected. Intel has not observed this erratum to impact the operation of any commercially available software.
+Workaround: None identified. Software can execute an MFENCE instruction immediately prior to the IRET instruction if serialization is needed.
+Status:	For the affected steppings, see the .
+HSE106		Loading a Microcode Update May Result in Higher Than Expected Idle Power
+Problem:	A microcode update loaded by the operating system or virtual machine monitor may change the power management configuration previously established by the BIOS.
+Implication:	Loading a microcode update after BIOS initialization completes may cause higher than expected idle power.
+
+
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected steppings, see the .
+HSE107	A Spurious Patrol Scrub Error May be Logged
+Problem:	When a memory ECC error occurs, a spurious patrol scrub error may also be logged on another memory channel.
+Implication:	A patrol scrub correctable error may be incorrectly logged.
+Workaround: None identified. The Home Agent error registers and correctable error count registers (Bus 1; Device 20; Function 2; Offset 104-110) provides accurate error information.
+Status:	For the affected steppings, see the .
+HSE108	Some OFFCORE_RESPONSE Performance Monitoring Events May Undercount
+Problem:	The performance monitoring events OFFCORE_RESPONSE (Events B7H and BBH) should count uncore responses matching the request-response configuration specified in MSR_OFFCORE_RSPs (1A6H and 1A7H, respectively) for core-originated requests. However due to this erratum, COREWB (bit 3), PF_L3_DATA_RD (bit 7), PF_L3_RFO (bit 8), PR_L3_CODE_RD (bit 9), SPLIT_LOCK_UC_LOCK (bit 10), and STREAMING_STORES (bit 11) request types may undercount.
+Implication:	These performance monitoring events may not produce reliable results for the listed request types.
+Workaround: None identified
+Status:	For the affected steppings, see the .
+HSE109	Enabling ADR with UDIMMs May Result in Unpredictable System Behavior
+Problem:	When ADR (Asynchronous DIMM self-Refresh) is enabled during an S3 resume, the processor may cause the UDIMM to prematurely exit self refresh.
+Implication:	Due to this erratum, unpredictable system behavior may occur when ADR is enabled. 
+Workaround: None identified.
+Status:	For the affected steppings, see the .
+HSE110	MTF VM Exit on XBEGIN Instruction May Save State Incorrectly
+Problem:	Execution of an XBEGIN instruction while the “monitor trap flag” VM-execution control is 1 will be immediately followed by an MTF VM exit. If advanced debugging of RTM transactional regions has been enabled, the VM exit will erroneously save the address of the XBEGIN instruction as the instruction pointer (instead of the fallback instruction address specified by the XBEGIN instruction). In addition, it will erroneously set bit 16 of the pending-debug-exceptions field in the VMCS indicating that a debug exception or a breakpoint exception occurred.
+Implication:	Software using the monitor trap flag to debug or trace transactional regions may not operate properly. Intel has not observed this erratum with any commercially available software.
+Workaround: None identified.
+Status:	For the affected steppings, see the .
+HSE111	PEBS Record May Be Generated After Being Disabled
+Problem:	A performance monitoring counter may generate a PEBS (Precise Event Based Sampling) record after disabling PEBS or the performance monitoring counter by clearing the corresponding enable bit in IA32_PEBS_ENABLE MSR (3F1H) or IA32_PERF_GLOBAL_CTRL MSR (38FH).
+
+
+Implication:	A PEBS record generated after a VMX transition will store into memory according to the post-transition DS (Debug Store) configuration. These stores may be unexpected if PEBS is not enabled following the transition.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. A software workaround is possible through disallowing PEBS during VMX non-root operation and disabling PEBS prior to VM entry.
+Status:	For the affected steppings, see the .
+HSE112	MOVNTDQA From WC Memory May Pass Earlier Locked Instructions
+Problem:	An execution of (V)MOVNTDQA (streaming load instruction) that loads from WC (write combining) memory may appear to pass an earlier locked instruction that accesses a different cache line.
+Implication:	Software that expects a lock to fence subsequent (V)MOVNTDQA instructions may not operate properly.
+Workaround: None identified. Software that relies on a locked instruction to fence subsequent executions of (V)MOVNTDQA should insert an MFENCE instruction between the locked instruction and subsequent (V)MOVNTDQA instruction.
+Status:	For the affected steppings, see the .
+HSE113	Data Breakpoint Coincident With a Machine Check Exception May be Lost
+Problem:	If a data breakpoint occurs coincident with a machine check exception, then the data breakpoint may be lost.
+Implication:	Due to this erratum, a valid data breakpoint may be lost. 
+Workaround: None identified.
+Status:	For the affected steppings, see the .
+HSE114		Some DRAM And L3 Cache Performance Monitoring Events May Undercount
+Problem:	Due to this erratum, the supplier may be misattributed to unknown, and the following events may undercount
+MEM_LOAD_UOPS_RETIRED.L3_HIT (Event D1H Umask 04H) MEM_LOAD_UOPS_RETIRED.L3_MISS (Event D1H Umask 20H) MEM_LOAD_UOPS_L3_HIT_RETIRED.XSNP_MISS (Event D2H Umask 01H) MEM_LOAD_UOPS_L3_HIT_RETIRED.XSNP_HIT (Event D2H Umask 02H) MEM_LOAD_UOPS_L3_HIT_RETIRED.XSNP_HITM (Event D2H Umask 04H) MEM_LOAD_UOPS_L3_HIT_RETIRED.XSNP_NONE (Event D2H Umask 08H) MEM_LOAD_UOPS_L3_MISS_RETIRED.LOCAL_DRAM (Event D3H Umask 01H) MEM_TRANS_RETIRED.LOAD_LATENCY (Event CDH Umask 01H)
+Implication:	The affected events may undercount, resulting in inaccurate memory profiles. For the affected events that are precise, PEBS records may be generated at incorrect points. Intel has observed incorrect counts by as much as 20%.
+Workaround: None Identified.
+Status:	For the affected steppings, see the .
+
+
+HSE115	An x87 Store Instruction Which Pends #PE While EPT is Enabled May Lead to an Unexpected Machine Check and/or Incorrect x87 State Information
+Problem:	The execution of an x87 store instruction which causes a #PE (Precision Exception) to be pended and also causes a VM-exit due to an EPT violation or misconfiguration may lead the VMM logging a machine check exception with a cache hierarchy error (IA32_MCi_STATUS.MCACOD = 0150H and IA32_MCi_STATUS.MSCOD = 000FH).
+Additionally, FSW.PE and FSW.ES (bits 5 and 7 of the FPU Status Word) may be incorrectly set to 1, and the x87 Last Instruction Opcode (FOP) may be incorrect.
+Implication:	When this erratum occurs, the VMM may receive an unexpected machine check exception and software attempting to handle the #PE may not behave as expected.
+Workaround: None identified.
+Status:	For the affected stepping, see the .
+HSE116	Interrupt Remapping May Lead to a System Hang
+Problem:	Under complex micro-architectural conditions, back-to-back interrupt requests when interrupt remapping is enabled may lead to a system hang.
+Implication:	When this erratum occurs, the system hang may be associated with a queued invalidation of the IOAPIC that does not complete.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected stepping, see the .
+HSE117	Writing MSR_LASTBRANCH_x_FROM_IP May #GP When Intel® TSX is Not Supported.
+Problem:	Due to this erratum, on processors that do not support Intel TSX (Intel® Transactional Synchronization Extensions) (CPUID.07H.EBX bits 4 and 11 are both zero), writes to MSR_LASTBRANCH_x_FROM_IP (MSR 680H to 68FH) may #GP unless bits[62:61] are equal to bit[47].
+Implication:	The value read from MSR_LASTBRANCH_x_FROM_IP is unaffected by this erratum; bits [62:61] contain IN_TSX and TSX_ABORT information respectively. Software restoring these MSRs from saved values are subject to this erratum.
+Workaround: Before writing MSR_LASTBRANCH_x_FROM_IP, ensure the value being written has bit[47] replicated in bits[62:61]. This is most easily accomplished by sign extending from bit[47] to bits[62:48].
+Status:	For the affected stepping, see the .
+HSE118	JTAG Boundary Scan For Intel QPI And PCIe* Lanes May Report Incorrect Stuck at 1 Errors.
+Problem:	Boundary Scan testing of the Intel QPI and PCIe interfaces may incorrectly report a recurring stuck at 1 failure on Intel QPI and PCIe receiver lanes. This erratum only affects Boundary Scan testing and does not affect functional operation of the Intel QPI and PCIe interfaces.
+Implication:	This erratum may result in Boundary Scan test failures reported on one or more of the Intel QPI and PCIe lanes.
+Workaround: None identified.
+Status:	For the affected stepping, see the .
+
+
+HSE119	APIC Timer Interrupt May Not be Generated at The Correct Time In TSC-Deadline Mode.
+Problem:	After writing to the IA32_TSC_ADJUST MSR (3BH), any subsequent write to the IA32_TSC_DEADLINE MSR (6E0H) may incorrectly process the desired deadline. When this erratum occurs, the resulting timer interrupt may be generated at the incorrect time.
+Implication:	When the local APIC (Advanced Programmable Interrupt Controller) timer is configured for TSC-Deadline mode, a timer interrupt may be generated much earlier than expected or much later than expected. Intel has not observed this erratum with most commercially available software.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the affected stepping, see the .

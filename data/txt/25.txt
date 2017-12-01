@@ -1,0 +1,230 @@
+KNL1.	Cacheable MMIO requests may block PCIe* memory requests in SMM mode
+Problem:	When operating in SMM mode, cacheable MMIO requests may prevent PCIe memory requests from completing.
+Implication:	If PCIe memory requests are blocked by cacheable MMIO requests, the system may hang.
+Workaround: Do not issue cacheable MMIO request during SMM mode. 
+Status:	No Fix
+KNL2.	DdrCrClkTraining CSR Cannot Be Read
+Problem:      Due to this erratum, two fields in DdrCrClkTraining CSR (Bus: 2; Device:17; Function: 5; Offset: A1Ch), that should have been read-write, VmseLogicDelay0 (bit 29) and VmseLogicDelay2 (bit 30), are write-only; reading the CSR always returns 0s for these fields.
+Implication:	Data read from this register is not reliable. Intel has not observed this erratum to affect processor functionality.
+Workaround: None identified. 
+Status:	No Fix
+KNL3.	Performance Monitoring Event NO_ALLOC_CYCLES Counts Incorrectly on Logical Processors 2 and 3
+Problem: Due to this erratum, all sub-events of  performance  monitoring  event  NO_ALLOC_CYCLES (Event CAH) will be incorrect on logical processors 2 and 3. Logical processors 0 and 1 are not affected by this erratum.
+Implication:	Using the NO_ALLOC_CYCLES performance monitoring event on logical processors 2 or 3 will not provide reliable results.
+Workaround: Use the results of the NO_ALLOC_CYCLES performance monitoring event only when running the workload on logical processors 0 and/or 1.
+Status:	No Fix
+KNL4.	A and/or D Bit May Be Set on a Paging-Structure Entry That is Not Present or Has Reserved Bit Set
+Problem: The A (Accessed, bit 5) and/or D (Dirty, bit 6) bits in a paging-structure entry (e.g., a Page-Table Entry) may be set to 1 even when that entry has its Present bit cleared or has a reserved bit set. This can only occur when one logical processor has cleared the Present bit or set a reserved bit in a paging-structure entry, while at the same time another logical processor accesses the contents of a linear address mapped by that entry.
+Implication:	Software that does not expect hardware to modify a paging-structure entry when it is marked not present, or has a reserved bit set, may behave unexpectedly.
+Workaround: Operating systems can take steps to ensure they are not exposed to this erratum.
+Contact your Intel representative for further information.
+Status:	No Fix
+
+
+
+
+
+
+
+
+Intel® Xeon Phi™ Processor x200 Product Family
+
+
+
+KNL5.	PCI Express Inbound Memory Write With RO and NS Attributes Set Will Cause the Processor to Hang
+Problem:    Inbound memory writes with the RO (Relaxed Ordering) and NS (No Snoop) attributes set in the TLP will cause the processor to hang.
+Implication:	When this erratum occurs, the system will experience a hang. 
+Workaround: BIOS should disable relaxed ordering for inbound transactions. 
+Status:	No Fix
+KNL6.	CLTT PECI Pass-Through Mode Does Not Work
+Problem: When CLTT (Closed Loop Thermal Throttling) PECI Pass-through mode is enabled, PECI thermal update messages are dropped.
+Implication: Integrated Memory Controller does not receive thermal data from the PECI update messages.
+Workaround: Do not use CLTT PECI Pass-through mode for DDR throttling. 
+Status:	No Fix
+KNL7.	Uncorrectable Memory Machine Check May Not Set IA32_MC3_STATUS.EN
+Problem: When an uncorrectable memory error follows a correctable memory error,  the error  logged may not set the EN field (bit 60) in the IA32_MC3_STATUS MSR (40CH).
+Implication: An uncorrectable machine check may be logged with EN incorrectly set to 0, possibly leading to unexpected machine check handler behavior.
+Workaround: None Identified. 
+Status:	No Fix
+KNL8.	Package C6 May Cause Incorrect APIC Timer Value
+Problem: The APIC timer CCR (Current Count Register)  may be too  high after waking from  package C6. The next timer interrupt will be delivered at the correct time. However, in Periodic mode, the reload of the APIC timer may be delayed.
+Implication: When this erratum occurs, CCR reads may be too high and in Periodic mode an APIC timer interrupt may occur later than expected.
+Workaround: None Identified. 
+Status:	No Fix
+KNL9.	Unsynchronized Cross-Modifying Code Operations Can Cause Unexpected Instruction Execution Results
+Problem: The act of one processor or system bus master writing data into a currently executing  code segment of a second processor with the intent of having the second processor execute that data as code is called cross-modifying code (XMC). XMC that does not force the second processor to execute a synchronizing instruction prior to execution of the new code is called unsynchronized XMC. Software using unsynchronized XMC to modify the instruction byte stream of a processor can see unexpected or unpredictable execution behavior from the processor that is executing the modified code.
+Implication: In this case the phrase “unexpected or unpredictable execution behavior” encompasses the generation of most of the exceptions listed in the Intel Architecture Software Developer's Manual Volume 3: System Programming Guide including a General Protection Fault (GPF) or other unexpected behaviors. In the event that unpredictable execution causes a GPF the application executing the unsynchronized XMC operation would be terminated by the operating system.
+
+
+
+
+
+Workaround: In order to avoid this erratum programmers should use the XMC synchronization algorithm as detailed in the Intel Architecture Software Developer's Manual Volume 3: System Programming Guide, Section: Handling Self- and Cross-Modifying Code.
+Status:	No Fix
+KNL10.	Upper 48 Bits of the Scatter/Gather Mask Register do Not Function as Expected
+Problem:   When one element of a scatter or gather instruction faults, the upper 48 bits of the   mask register will be cleared. Ideally, only bits corresponding to completed operations should be cleared.
+Implication: Intel® Advanced Vector Extensions 512 (Intel® AVX-512)  instructions supported by  KNL use only the lower 16 bits of these mask registers. Intel has not observed this erratum to affect commercially available software.
+Workaround: None Identified 
+Status:	No Fix
+KNL11.	DR6 May be Zero After Data Breakpoint on Gather, Scatter or VRSQRT14 Instructions
+Problem: If gather, scatter or VRSQRT14 instructions trigger a data breakpoint, the Debug Status Register (DR6) may be cleared.
+Implication: Software will see a breakpoint trap but with no indication of which data breakpoint register was triggered.
+Workaround: None Identified. 
+Status:	No Fix
+KNL12.	Performance Monitoring Event CPU_CLK_UNHALTED.THREAD_P Counts Incorrectly on Counter 1 If AnyThread Bit is Set For Counter 0
+Problem: Due to this erratum, GP (general-purpose) counter 1 may overcount CPU_CLK_UNHALTED.THREAD_P (Event 3CH Umask 00H) if
+IA32_PERFEVTSEL0.AnyThread (MSR 186H, bit 21) is set.
+Implication:	CPU_CLK_UNHALTED.THREAD_P event should not be relied upon on GP counter 1. 
+Workaround: Use only GP counter 0 or fixed counter 1 for unhalted core cycles.
+Status:	No Fix
+KNL13.	An Instruction With7or More Prefixes May Cause a Spurious #PF or Spuriously Read UC Memory
+Problem:   An instruction with 7 or more prefixes can result in a spurious code fetch that may   signal a #PF (Page Fault) or read UC (un-cacheable) memory.
+Implication:	A spurious UC memory access may result in unexpected and undesired side effect(s).
+The OS may mishandle a spurious #PF due to there being no reason for the #PF
+Workaround: Avoid using 7 or more prefixes on an instruction. If limiting the number of prefixes is not feasible then marking MMIO (memory mapped I/O) as XD (execute disable) in the page tables will prevent speculative reads from UC MMIO.
+Status:	No Fix
+
+
+
+
+
+
+
+
+
+Intel® Xeon Phi™ Processor x200 Product Family
+
+
+
+KNL14.	Machine Check Exception MSCOD is Incorrect For Poisoned Case
+Problem: When poisoned data is received at the EDC, MSCOD should be logged as a data error (encoding = 0x2). Instead, the encoding is set for an uncorrectable error (0x40). The effected machine check bank registers are IA32_MC7_STATUS through IA32_MC14_STATUS.
+Implication:	Error reporting for poisoned data is incorrectly reported as an uncorrected error and not a data error. The error flow will be incorrect for poisoned data.
+Workaround: None Identified. 
+Status:	No Fix
+KNL15.	POC_RESET_STRAPS CSR Does Not Report Correct Values
+Problem:	The POC_RESET_STRAPS CSR (Bus: 1; Device 30; Function 1; Offset: A0H) does not correctly report the strap settings.
+Implication:	The register cannot be used to check the strap settings.
+Workaround: A BIOS workaround has been identified. Contact Intel representative for more information.
+Status:	No Fix
+KNL16.	Invalid VEX Instructions May Not Signal a #GP
+Problem:	Under certain conditions, invalid VEX instructions with prefixes may not signal a #GP. Implication:	Processor may not operate as expected with invalid VEX instructions.
+Workaround: None Identified.
+Status:	No Fix
+KNL17.	Performance Monitoring OvfUncore Capability is Not Functional
+Problem: Due to this erratum, IA32_PERF_GLOBAL_STATUS.OvfUncore (MSR 38EH, bit[61]) is always 0 and writing 1 to IA32_PERF_GLOBAL_OVF_CTRL.ClrOvfUncore (MSR 390H, bit[61]) signals #GP.
+Implication:	Software attempting to use OvfUncore capability may not function as expected. 
+Workaround: None identified.
+Status:	No Fix
+KNL18.	PECI PCS (Package Configuration Space) Read For Max Thread ID is Incorrect
+Problem:	The PECI command RdPkgConfig (Index 0) with Data Max Thread ID always returns a value of 0x12F regardless of the number of tiles enabled.
+Implication:	This PECI command does not report an accurate Max Thread ID.
+Workaround: It is possible for BIOS to contain processor configuration data and code changes as a workaround for this erratum.
+Status:	No Fix
+KNL19.	BIST Results Always Indicate BIST Failure
+Problem:	BIST results in BIST_RESULTS_CFG_2 (Bus 0, Device 8, Function1, Offset 0xB8, bits [5:0]) returns 0 regardless of actual BIST status.
+Implication:	BIST results in BIST_RESULTS_CFG_2 are incorrect.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	No Fix
+
+
+
+
+Intel® Xeon Phi™ Processor x200 Product Family
+
+
+
+KNL20.	Incorrect Linear-Address Translation May Be Used for Instruction Fetch
+Problem: Under complex micro-architectural conditions when MT  is active,  operations  which  should invalidate instruction TLB entries may fail to do so. This may lead a later instruction fetch using a stale linear address translation.
+Implication:	When this erratum occurs, the processor may use incorrect translations, This may result in unexpected faults or other unpredictable system behavior.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	No Fix
+KNL21.	Accesses Between TOHM and 2^45 - 1 May Lead to Unpredictable System Behavior
+Problem:     A CPU access to addresses at or above TOHM (Top  of High Memory) as configured in  the TOHM CSR (Bus: 0; Device: 5; Function: 0; Offset: D8h) and below 2^45 may lead to unpredictable system behavior when the L1 data prefetcher is enabled.
+Implication:	Unpredictable system behavior may occur.
+Workaround: This address range inclusively between TOHM and 2^45 - 1 should be marked as not present in page or EPT tables and not used. Alternatively, MSR_MISC_FEATURE_CONTROL.L1_DATA_PREFETCH_DISABLE (MSR 01A4H, bit 0)
+can be set to 1 to disable the L1 data prefetcher.
+Status:	No Fix
+KNL22.	System May Hang When Loading a Second Microcode Update
+Problem:	System may hang during warm reset with a PCU_MC_STATUS.MCCOD = 0x0402 and PCU_MC_STATUS. MSEC_FW = 0x9C or 0x9E.
+Implication:	When this erratum occurs, the system may hang during a warm reset. 
+Workaround: It is possible for BIOS to contain a workaround for this erratum.
+Status:	No Fix
+KNL23.	Programmatic and PECI SMBus Access May Not Work as Intended
+Problem:    When BIOS locks access to SMBCNTL_0 (Bus 1; Device 30; Function 0; Offset 108H)  and SMBCNTL_1 (Bus 1; Device 30; Function; Offset 108H), programmatic access outside SMM and PECI access may not be able to select their intended SMBus devices.
+Implication:	SMBus transactions will reference the previously addressed devices.
+Workaround: It is possible for BIOS to contain a partial mitigation for this erratum that enables PECI access to change the unlocked portions of SMBCNTL_0 and SMBCNTL_1.
+Status:	No Fix
+KNL24.	System May Hang During Warm Reset
+Problem:	System may hang during warm reset with a PCU_MC_STATUS.MCCOD = 0x0402 and PCU_MC_STATUS. MSEC_FW = 0x9C or 0x9E.
+Implication:	When this erratum occurs, the system may hang during a warm reset. 
+Workaround: It is possible for the BIOS to contain a workaround for this erratum.
+Status:	No Fix
+
+
+
+
+
+
+
+
+Intel® Xeon Phi™ Processor x200 Product Family
+
+
+
+KNL25.	Operating With DDR4-2400 Memory May Cause Unpredictable System Behavior
+Problem: Operating the processor with DDR4 memory configured to operate at 2400 MT/s may cause unpredictable system behavior.
+Implication:	When the erratum occurs, the system will exhibit unpredictable system behavior. 
+Workaround: It is possible for BIOS to contain a workaround for this erratum.
+Status:	No Fix
+KNL26.	Enabling DDR Opportunistic Self Refresh May Lead to Memory Errors
+Problem: Correctable and uncorrectable memory errors may occur when DDR opportunistic self- refresh is enabled.
+Implication: The system may experience a higher rate of memory errors when DDR opportunistic self-refresh is enabled, potentially leading to a system crash.
+Workaround: It is possible for BIOS to contain code changes to work around this erratum. 
+Status:	No Fix
+KNL27.	Certain Memory Controller Uncorrectable Errors Do Not Signal a Machine Check
+Problem:    Uncorrectable errors logged into the IA32_MCi_STATUS registers for bank 7 to bank 16 do not signal a machine check exception if the error cause was CA Parity, Data Parity, or Byte En Parity (MSCOD value of 0001H, 0002H, or 0004H, respectively).
+Implication: The system may continue execution after encountering an uncorrectable error instead  of responding to a machine check exception. Uncorrectable errors may lead to unpredictable system behavior.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. Implementing this workaround will cause signaling of IERR# instead of MCERR# when this uncorrectable error occurs. There may be an increased delay in error reporting.
+Status:	No Fix
+KNL28.	PCC is Not Set For Certain Memory Controller Uncorrectable Errors When Poison is Enabled
+Problem: PCC field (bit[57]) of IA32_MCi_STATUS registers for bank 7 to bank 16 is not set as expected for a CA Parity error (MSCOD value of 0001H) when Poison is enabled.
+Implication: The machine check handlers incorrectly log the error as an Uncorrectable Error with No Action, instead of logging an Uncorrectable Error and signaling a machine check exception.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. Implementing this workaround will cause signaling of IERR# when this uncorrectable error type occurs, in addition to the machine check exception. There may be an increased delay in error reporting.
+Status:	No Fix
+
+
+
+
+
+
+
+
+
+
+
+
+Intel® Xeon Phi™ Processor x200 Product Family
+
+
+
+KNL29.	Memory Controller Machine Check Errors May be Incorrectly Logged
+Problem:	UC (Uncorrectable) errors logged into the IA32_MCi_STATUS registers for bank 7 to bank 16 will not indicate PCC=1 (Processor Context Corrupt, bit 57) and OVER=1 (bit
+62) if the error is overwriting a previous UCNA (Uncorrected No Action Required) error.
+Implication:  The system may continue execution after encountering an uncorrectable error instead of responding to a machine check exception. Uncorrectable errors may lead to unpredictable system behavior.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. Implementing this workaround will cause signaling of IERR# instead of MCERR# when this uncorrectable error occurs. There may be an increased delay in error reporting.
+Status:	No Fix
+KNL30.	Complex Set of Conditions May Result in Unpredictable System Behavior
+Problem:	A complex set of micro-architectural conditions may result in unpredictable system behavior.
+Implication:	When this erratum occurs, the system may exhibit unpredictable system behavior.
+Workaround: It is possible for BIOS to contain processor configuration data and code changes as a workaround for this erratum.
+Status:	No Fix
+KNL31.	Processor May Hang and Machine Check
+Problem:	Under complex micro-architectural conditions, the processor may hang, resulting in an Internal Timer Error Machine Check (IA32_MCi_STATUS.MCACOD=400H; bits [15:0]).
+Implication:	When this erratum occurs, the system may hang.
+Workaround: It is possible for BIOS to contain a workaround for this erratum. 
+Status:	No Fix
+KNL32.	Unpredictable System Behavior May Occur With MCDRAM Scrubbing Enabled
+Problem: When the MCDRAM controller is configured in a Cache or Hybrid mode  and error  scrubbing is enabled, a complex set of micro-architectural conditions may lead to unpredictable system behavior.
+Implication:	When this erratum occurs, unpredictable system behavior may occur.
+Workaround: BIOS code change has been identified and may be implemented as a workaround for this erratum.
+Status:	No Fix

@@ -1,0 +1,356 @@
+A CAP Error While Entering Package C6 Might Cause DRAM to Fail to Enter Self-Refresh (Intel® Xeon® Processor Scalable Family)
+Problem: A Command/Address Parity (CAP) error that occurs on the command to direct DRAM to enter self-refresh might cause the DRAM to fail to enter self-refresh although the processor enters Package-C6
+Implication:	Due to this erratum, DRAM might fail to be refreshed, which might result in uncorrected errors being reported from the DRAM.
+Workaround: None.
+Status:	No Fix.
+PCIe* Lane Error Status Register Might Log False Correctable Error (Intel® Xeon® Processor SP)
+Problem:	Due to this erratum, PCIe LNERRSTS (Device 0; Function 0; Offset 258h; bits [3:0]) might log false lane-based correctable errors.
+Implication:	Diagnostics cannot reliably use LNERRSTS to report correctable errors. Workaround: None.
+Status:	No Fix.
+In Memory Mirror Mode, DataErrorChunk Field Might be Incorrect (Intel® Xeon® Processor SP)
+Problem:	Inn Memory Mirror Mode, DataErrorChunk bits (IA32_MC7_MISC register MSR(41FH) bits [61:60]) might not correctly report the chunk containing an error.
+Implication:	Due to this erratum, this field is not accurate when Memory Mirror Mode is enabled. Workaround: None.
+Status:	No Fix.
+Intel® Resource Director Technology (Intel® RDT) MBM Does Not Accurately Track Write Bandwidth (Intel® Xeon® Processor SP)
+Problem:    Intel® Resource Director Technology (RDT) Memory Bandwidth Monitoring (MBM) does not count cacheable write-back traffic to local memory. This results in the RDT MBM feature under counting total bandwidth consumed.
+Implication:	Applications using this feature might report incorrect memory bandwidth. Workaround: None.
+Status:	No Fix.
+Intel UPI Initialization Aborts Might be Logged (Intel® Xeon® Processor SP)
+Problem:	If Intel® Ultra Path Interconnect (Intel® UPI) is configured for slow mode operation, initialization aborts might occur.
+Implication:	Unexpected initialization aborts might be logged in the ktireut_ph_ctr1 register (Bus: 3; Device: 16-14; Function 1; Offset 12h; Bit 4).
+Workaround: None.
+Status:	No Fix.
+
+
+PCIe Port Might Incorrectly Log Malformed_TLP Error (Intel® Xeon® Processor SP)
+Problem:  If the PCIe port receives a TLP that triggers both a Malformed_TLP error and an  ECRC_TLP error, the processor should only log an ECRC_TLP error. However, the processor logs both errors.
+Implication:	Due to this erratum, the processor may incorrectly log Malformed_TLP errors. Workaround: None.
+Status:	No Fix.
+CMCI Might Not be Signaled for Corrected Error (Intel® Xeon® Processor Scalable Family)
+Problem: Machine check banks 9, 10, and 11 might not signal Corrected Machine Check Interrupt (CMCI) after the first corrected error is reported in the bank even if the MCi_STATUS register has been cleared.
+Implication: After the first corrected error is reported in one of the affected machine check banks, subsequent errors will be logged but may not result in a CMCI.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. Status:	No Fix.
+Intel® CAT/CDP Might Not Restrict Cacheline Allocation Under Certain Conditions (Intel® Xeon® Processor Scalable Family)
+Problem: Under certain microarchitectural conditions involving heavy memory traffic, cache lines might fill outside the allocated L3 capacity bitmask (CBM) associated with the current Class of Service (CLOS).
+Implication: Cache Allocation Technology/Code and Data Prioritization (CAT/CDP) might see performance side effects and a reduction in the effectiveness of the CAT feature for certain classes of applications, including cache-sensitive workloads than seen on previous platforms.
+Workaround: None identified. Contact your Intel representative for details of possible mitigations.None identified.
+Status:	No Fix.
+Credits Not Returned For PCIe Packets That Fail ECRC Check Problem (Intel® Xeon® Processor SP)
+Problem:  The processor's IIO does not return credits back to the PCIe link in case of end-to-end CRC (ECRC) errors.
+Implication: Due to this erratum, the link might experience degraded performance or might eventually fail due to a loss of credits.
+Workaround: For processors that support Live Error Recovery (LER) the link would be reset and credits would be restored. Processors that do not support LER should configure ECRC errors to be fatal.
+Status:	No Fix.
+PCIe Link Might Fail to Train (Intel® Xeon® Processor SP)
+Problem: When a pin on a PCIe lane is not connected to the link partner, the PCIe port's LTSSM might hang in the detect state.
+Implication: When this erratum occurs, the PCIe link fails to train and the corresponding link partner(s) are not enumerated.
+Workaround: None. Status:	No Fix.
+
+
+Intel UPI CRC32 Rolling Mode is Not Functional (Intel® Xeon® Processor SP)
+Problem:	With UPI CRC32 Rolling Mode enabled, UPI Rx CRC errors might be seen.
+Implication:	Due to this erratum, when UPI CRC32 Rolling Mode is enabled, UPI Rx CRC errors might be seen.
+Workaround: None. Do not enable UPI CRC32 setting in BIOS. Status:	No Fix
+IODC Entry 0 Cannot be Masked (Intel® Xeon® Processor SP)
+Problem: The individual I/O Directory Cache (IODC) Entry 0 cannot be masked using HA_COH_CFG_1, (Bus 1; Devices 11-8; Functions 7-0, Offset 0x11C, bit 0) therefore Entry 0 is always allocated.
+Implication:	No functional implications. Workaround: None.
+Status:	No Fix.
+With eMCA2 Enabled a 3-Strike Might Cause an Unnecessary CATERR# Instead of Only MSMI (Intel® Xeon® Processor SP)
+Problem:	When eMCA2 is enabled to cause an MSMI due to a 3-strike event, a pulsed CATERR# and MSMI# event might both be observed on the pins.
+Implication:	When this erratum occurs, an unnecessary CATERR# pulse might be observed. Workaround: None.
+Status:	No Fix.
+CMCI May Not be Signaled for Corrected Error (Intel® Xeon® Processor Scalable Family)
+Problem:	Machine check banks 9, 10, and 11 might not signal CMCI after the first corrected error is reported in the bank even if the MCi_STATUS register has been cleared.
+Implication:	After the first corrected error is reported in one of the affected machine check banks, subsequent errors are logged but might not result in a CMCI.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. Status:	No Fix.
+CSRs SVID and SDID Are Not Implemented For Some DDRIO and PCU Devices (Intel® Xeon® Processor SP)
+Problem:	The DDRIO (Bus: 3; Device {19,22}; Function {6,7} and Bus: 0; Device: {20,23};
+Function: {4,5,6,7};) and PCU (Bus: 3; Device 31; Functions {0,2}) do not implement the SVID (Offset 0x2C) and SDID (Offset 0x2E) CSRs. Read accesses to these register locations return all zeros.
+Implication:	Software relying on DDRIO and PCU SVID and SDID CSR support might not function correctly.
+Workaround: None identified. Do not use SVID and SDID for these devices and functions. Status:	No Fix.
+
+
+Register Broadcast Read From DDRIO May Return a Zero Value (Intel® Xeon® Processor SP)
+Problem: When performing a BIOS broadcast register read to DDRIO a value of zero is always returned.
+Implication: When this erratum occurs, BIOS might not be able to proceed due to always reading a value of zero.
+Workaround: None. Use unicast register read for each instance instead of broadcast register read for all instances at once.
+Status:	No Fix.
+Intel® CMT Counters May Not Count Accurately (Intel® Xeon® Processor SP)
+Problem: Under complex micro-architectural conditions, the Cache Monitoring Technology (CMT) counters might over-count.
+Implication: Software relying on CMT registers to enable resource allocation might not operate correctly. This can lead to reporting of more cachelines used than the cache supports or the counter wrapping and returning a too small value. WBINVD might not result in the CMT counters being zeroed. Intel has not observed this erratum in commercially available software.
+Workaround: None. Status:	No Fix.
+Intel® CAT Might Not Restrict Cacheline Allocation Under Certain Conditions (Intel® Xeon® Processor Scalable Family)
+Problem: Under certain micro-architectural conditions involving heavy memory traffic, cachelines might fill outside the allocated L3 capacity bit-mask (CBM) associated with the current Class of Service (CLOS).
+Implication: CAT might appear less effective at protecting certain classes of applications, including cache-sensitive workloads than on previous platforms.
+Workaround: None identified. Contact your Intel representative for details of possible mitigations. Status:	No Fix.
+Intel® PCIe* Corrected Error Threshold Does Not Consider Overflow Count When Incrementing Error Counter (Intel® Xeon® Processor SP)
+Problem:	The PCIe corrected error counter feature does not take the overflow bit in the count (bit
+15 of XPCORERRCOUNTER (Bus; RootBus Device; 0 Function; 0 Offset; 4D0h)) into account when comparing the count to the threshold in XPCORERRTHRESHOLD. ERROR_THRESHOLD. Therefore, users end up with another interrupt once the counter has rolled over and hit the threshold + 0x8000.
+Implication: Due to this erratum, the PCIe corrected error signaling might occur even after the error count has exceeded the corrected error count threshold, not just a single time when reaching the threshold. Intel has not observed this erratum with any commercially available system.
+Workaround: None identified. Status:	No Fix.
+
+
+IIO RAS VPP Hangs During The Warm Reset Test (Intel® Xeon® Processor SP)
+Problem: When VPPCL bit 0 of VPP_reset_Mode (Bus 1; Device 30; Function 5; Offset 0xF0) bit is set to 0, and the CPU is undergoing reset flow while PCIe hot-plug operation is in process, the Virtual Pin Port (VPP) hot-plug commands might stop responding.
+Implication:	Due to this erratum, during CPU reset hot-plug commands might not complete. Workaround: None. Do not set VPP reset mode to zero.
+Status:	No Fix.
+Intel UPI CRC Errors and PHY Init Aborts May Be Seen During UPI Slow Mode Training
+Problem:	During a normal cold boot or cold reset, UPI CRC errors and PHY init aborts may be seen due to a random miscalculation of UPI lane skewing during training
+Implication:	Intel UPI CRC errors and PHY init aborts may be seen during boot or reset Workaround: PLR3 contains a workaround for this issue. Details can be found in the BIOS release
+notes.
+Status:	No Fix
+A Core 3-Strike Event May Be Seen Under Certain Test Conditions
+Problem:	When running some stress tests and/or related applications, a core 3-strike event may be seen. This similar 3-strike event may also occur when system is at idle.
+Implication:	A core 3-strike event may be seen resulting in a system hang and/or a shutdown. Workaround:It is possible for the BIOS to contain a workaround for this erratum
+Status:	No fix.
+DDR4 Memory Bandwidth May Be Lower Than Expected at 2133 and 1866 Speeds
+Problem: In some DDR4 memory configurations running 2133 or 1866, lower than expected  memory bandwidth may be seen. When running at these speeds, there may also be a possibility of seeing socket-to-socket variation in performance as well.
+Implication:	DDR4 Memory Bandwidth may be lower than expected at 2133 and 1866 speeds. Workaround: Under Investigation.
+Status:	Under Investigation.
+Lower Than Expected Performance May Be Seen Under Certain Intel AVX2 and Intel AVX-512 Workloads
+Problem: A workload balancing mechanism in Intel Xeon processor scalable family CPU may have the potential to incorrectly apply a larger than expected weighting value to some Intel AVX2 and Intel AVX-512 workloads. This may cause a lower than expected frequency drop to occur, potentially affecting CPU performance under these workloads.
+Implication:	Lower than expected performance may be seen under certain Intel AVX2 and Intel AVX- 512 workloads.
+Workaround: Under investigation. Status:	Under investigation.
+A System Hang May Be Seen With Some 8S + XNC Type Platform Configurations
+Problem:	A KTI write back credit starvation event may occur in some 8S + XNC platform configurations leading to a CHA deadlock. This may eventually cause a system hang.
+Implication:	A system hang may occur in some 8S + XNC platform configurations.
+
+
+Workaround: A future BIOS workaround is in development. Status:	No Fix.
+Sparing Per-Rank Error Masking Does Not Mask Correctable Errors
+Problem: The IMC (Integrated Memory Controller) Sparing PREM (Per-Rank Error  Masking) capability does not mask off correctable error logging and signaling as expected.
+Implication: Due to this erratum, errors will continue to be logged and signaled despite per-rank error masking. Per-rank error counters are still masked.
+Workaround: None Identified Status:	No Fix
+PCIe* Root Port Electromechanical Interlock Control Register Can Be Written
+Problem:     Electromechanical Interlock Control (bit 11) in the Slot Control register (B: Root Port;  D: 0-3; F: 0 bits offset 0x18) in the PCIe* Capability table should be read-only and always return 0. Due to this erratum, this register can be written.
+Implication: Writes to this bit can cause later reads to return the written value. However, this has no other effect on functionality.
+Workaround:	None Identified.
+Status:	No Fix
+Live Error Recovery Feature Being Disabled is not Getting Reflected in PXP2CAP Value
+Problem: When Live Error Recovery (LER) feature is disabled, the LER capability register still  remains in the PCIe* extended header space and is linked to pxp2cap. This register will indicate that LER feature is available when it is not.
+Implication: Due to this erratum, Xeon-SP 4100 series and 3100 series CPU SKUs with standard RAS features that have LER disabled may not correctly indicate the status of this feature to software which may indicate the LER capability still exists. Software may incorrectly assume that uncorrectable errors will be downgraded to correctable errors.
+Workaround: None Identified. Status:	No Fix
+Performance Monitoring M2MEM Counters For Memory Controller Reads/Writes Are Not Counting Read/Write Retries
+Problem: PMON M2MEM counters for read and write events do not account for scrub reads and  scrub writes during the error flow.
+Implication: Due to this erratum, a mismatch in the counters for Read/Write retries in M2MEM and iMC (integrated memory controller) may be observed.
+Workaround: When doing error injection testing, counting reads and writes in the presence of ECC errors will only be precise using the iMC counter, not the M2MEM counter
+Status:	No Fix
+System Hangs May Occur When IPQ and IRQ Requests Happen at The Same Time
+Problem:   When IPQ and IRQ requests happen at the same time, and the IPQ request is starved  due to PAMatch/NotAllowSnoop on a TORID (Table of Request ID) then the IRQ request that is waiting for the TORID's SF/LLC may become invalid.
+Implication: Due to this erratum, if IPQ and IRQ requests do not need to snoop any cores, then IPQ requests may block IRQ requests resulting in a system hang. Intel has only observed this erratum in a synthetic test environment.
+
+
+Workaround: None identified. Status:	No Fix
+Two Intel® UPI Reads From XNC May Lead to a System Hang
+Problem:    If Intel® UPI non-snoop reads are targeted to the prefetchable memory region, then  two outstanding reads to the same system address can merge into the same prefetch request.
+Implication: Due to this erratum, an eXternal Node Controller (XNC) issuing non-snoop reads to the prefetchable memory region may result in one of the read’s completions being dropped leading to a system hang.
+Workaround: XNCs should not target the prefetchable memory region with UPI non-snoop reads. Status:	No Fix
+IIO VPP May Hang During Warm Reset
+Problem:    When VPP_Reset_Mode bit 0 of VPPCTL (Bus 1; Device 30; Function 5; Offset 0xF0) is set to 0, and there is a PCIe hot-plug event in progress, if the processor performs a warm reset, the Virtual Pin Port hot-plug flow may hang.
+Implication:	Due to this erratum, the Virtual Pin Port may hang.
+Workaround:	Do not set VPP_Reset_Mode to 0.
+Status:	No Fix.
+Machine Check Events may be logged in banks 9, 10 and 11 that do not represent actual errors
+Problem:     In some previous CPU Microcode + BIOS code combinations MCEs in banks 9, 10 and  11 may be seen. These do not represent actual errors and normally are processed out by early BIOS execution.
+Implication: MCEs may be seen on banks 9, 10 and 11 that represent incorrect error data. These MCEs have the potential to be forwarded to the OS & may be end-user visible while not representing actual errors.
+Workaround: Please contact your Intel representative for additional information regarding this issue. Status:	No Fix.
+Advanced RAS Dynamic Link Width Reduction may not resize the Intel UPI link
+Problem: The Advanced RAS Dynamic Link Width  Reduction  feature  may  not  be  properly detected and enabled prior to UPI initialization.
+Implication: Due to this erratum, if there is a hard failure of an Intel UPI lane at boot time, the Advanced RAS Dynamic Link Width Reduction feature may not function.
+Workaround: None identified. Status:	No Fix.
+Lower than expected performance may be seen with some Intel AVX workloads due to incorrect uncore frequency scaling
+Problem: Due to a problem with UFS (Uncore Frequency Scaling), lower  than  expected  performance may be seen with some Intel AVX workloads. The CPU may not ramp uncore frequency when running some Intel AVX workloads depending on the number of active cores.
+Implication: Lower than expected performance may be seen with some Intel AVX workloads due to incorrect uncore frequency scaling.
+Workaround: Contact your Intel representative for additional information regarding this issue.
+
+
+Status:	No Fix.
+Unexpected DDR ECC Errors May be Seen
+Problem:	The processor may incorrectly configure the processor’s Vccp rail voltage. Implication:	Due to this erratum, unexpected DDR4 ECC errors may occur Workaround: It is possible for the BIOS to contain a workaround for this erratum.
+Status:	No Fix.
+Spurious Corrected Errors May be Reported
+Problem:	Due to this erratum, spurious corrected errors may be logged in the IA32_MC0_STATUS MSR (401H) register with the valid field (bit 63) set, the uncorrected error field bit (bit
+61) not set, a Model Specific Error Code (bits [31:16]) of 0x0001, and an MCA Error Code (bits [15:0]) of 0x0005. If CMCI is enabled, these spurious corrected errors also signal interrupts.
+Implication: When this erratum occurs, software may see an unusually high rate of reported corrected errors. As it is not possible to distinguish between spurious and non-spurious errors, this erratum may interfere with reporting non-spurious corrected errors.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. Status:	No Fix.
+Dynamic Link Width Reduction May Not Resize the Intel UPI Link
+Problem:	The Advanced RAS Dynamic Link Width Reduction feature may not be properly detected and enabled prior to UPI initialization.
+Implication: If there is a hard failure of a UPI lane at boot time, then due to this erratum, the Advanced RAS Dynamic Link Width Reduction feature may not function, allowing the system to hang.
+Workaround: None identified. Status:	No Fix.
+Writing to LT_LOCK_MEMORY and LT_UNLOCK_MEMORY MSRs Simultaneously May Have Inconsistent Results
+Problem: Writing to LT_LOCK_MEMORY MSR (2e7H) and to LT_UNLOCK_MEMORY MSR (2e6H) simultaneously from different physical cores may have inconsistent results. Some of the memory ranges may get locked as requested by the write to LT_LOCK_MEMORY MSR while some may get unlocked as requested by the write to LT_UNLOCK_MEMORY MSR.
+Implication: Writing to LT_LOCK_MEMORY MSR and to LT_UNLOCK_MEMORY MSRs may not operate as expected if they are done on different cores simultaneously. Intel has not observed this erratum in any commercially available system.
+Workaround: None identified. Software (BIOS) should write to these MSRs only on the BSP (boot strap processor).
+Status:	No Fix.
+
+
+Masked Bytes in a Vector Masked Store Instructions May Cause Write Back of a Cache Line
+Problem:   Vector masked store instructions to WB (write-back) memory-type that cross cache    lines may lead to CPU writing back cached data even for cache lines where all of the bytes are masked.
+Implication:	The processor may generate writes of un-modified data. This can affect Memory Mapped I/O (MMIO) or non-coherent agents in the following ways:
+For MMIO range that is mapped as WB memory type, this erratum may lead to Machine Check Exception (MCE) due to writing back data into the MMIO space. This applies only to cross page vector masked stores where one of the pages is in MMIO range.
+If the CPU cached data is stale, for example in the case of memory written directly by a non-coherent agent (agent that uses non-coherent writes), this erratum may lead to writing back stale cached data even if these bytes are masked.
+Workaround: Platforms should not map MMIO memory space or non-coherent device memory space as WB memory. If WB is used for MMIO range, software or VMM should not map such MMIO page adjacent to a regular WB page (adjacent on the linear address space, before or after the I/O page). Memory that may be written by non-coherent agents should be separated by at least 64 bytes from regular memory used for other purposes (on the linear address space).
+Status:	No Fix.
+ERROR_N[2:0] Pins May Not be Cleared After a Warm Reset
+Problem:	The processor’s ERROR_N[2:0] pins may not be cleared after a warm reset.
+Implication:	Due to this erratum, the ERROR_N[2:0] pins may incorrectly indicate a pending error after a warm reset.
+Workaround: The BIOS can contain code changes to work around this erratum. Status:	No Fix.
+CRC Store Operation Corner Case May Result in Hang
+Problem:   Intel® QuickData Technology Local and Remote CRC Store operations may result in a  DMA channel hang when the CRC Store transfer size is less than 32 bytes and the destination offset is not DWORD-aligned.
+Implication:	Due to this erratum, the processor may hang.
+Workaround: Software must configure Intel QuickData Technology Local and Remote CRC Store operations to have descriptor destination offset addresses DWORD-aligned.
+Status:	No Fix.
+Atomicity May Not be Preserved When Executing With RTM Enabled
+Problem:  In multi-socket platforms, in very rare situations, when a thread is executing an  Restricted Transactional Memory (RTM) transaction, the processor may allow a different socket’s thread to write to an address used by the RTM transaction, without causing the first thread to abort its transaction. This prevents the first thread’s transaction from completing atomically.
+Implication:	Loss of atomicity may occur when using RTM.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. Status:	No Fix.
+
+
+Intel PCIe Slot Presence Detect and Presence Detect Changed Logic Not PCIe Specification Compliant
+Problem: When Hot-Plug Surprise is set in the Slot Capabilities register (Bus: RootBus, Dev: 1-3, Function: 0, Offset: A4h, Bit: 5), the Presence Detect State and Presence Detect Change in the Slot Status register (Bus: RootBus, Dev: 1-3, Function: 0, Offset: A2h), incorrectly ignores the out-of-band presence detect mechanism and only reflects the Physical Layer in-band presence detect mechanism.
+Implication: Due to this erratum, if the Hot-Plug Surprise bit is set in the Slot Capabilities register, software will not be able to detect the presence of an adapter inserted while a slot is powered down. Therefore, Hot-Plug Surprise must only be set in configurations where the slot power is always enabled.
+Workaround: None Identified. Status:	No Fix.
+In Patrol Scrub System Address Mode, Address is Not Loaded from CSRs After Re-enable
+Problem: The patrol scrub starting address registers [scrubaddresshi (Bus 2; Devices 12, 10; Function 0; Offset 910) and scrubaddresslo Bus 2; Devices 12, 10; Function 0; Offset 90c] should indicate when the first memory address from which patrol logic should start scrubs [when scrubctl.startscrub (Bus 2; Devices 12, 10; Function 0; Offset 914; Bit 24) is set]. Due to this erratum, after patrol is disabled, if the patrol scrub engine is re-enabled in System Address Mode with scrubctl.startscrub set, the patrol scrubbing engine may ignore the starting address registers. Re-enabling patrol after S3 exit or other warm reset event is not impacted by this.
+Implication: Due to this erratum, when configured in system address mode, Patrol scrubs will not start from the address specified in the starting address registers. This may cause certain memory lines to be scrubbed more or less frequently than expected. Intel has not seen this erratum to affect the operation of any commercially available software.
+Workaround: None identified. Contact your Intel representative for details of possible mitigations. Status:	No Fix.
+Intel® Processor Trace (Intel® PT) TIP.PGD May Not Have Target IP Payload
+Problem: When Intel PT is enabled and a direct unconditional branch clears IA32_RTIT_STATUS.FilterEn (MSR 571H, bit 0), due to this erratum, the resulting TIP.PGD (Target IP Packet, Packet Generation Disable) may not have an IP payload with the target IP.
+Implication: It may not be possible to tell which instruction in the flow caused the TIP.PGD using  only the information in trace packets when this erratum occurs.
+Workaround: The Intel PT trace decoder can compare direct unconditional branch targets in the source with the FilterEn address range(s) to determine which branch cleared FilterEn.
+Status:	No Fix.
+The Corrected Error Count Overflow Bit in IA32_ MC0_STATUS is Not Updated When The UC Bit is Set
+Problem: After a UC (uncorrected) error is logged in  the  IA32_MC0_STATUS  MSR  (401H), corrected errors will continue to be counted in the lower 14 bits (bits 51:38) of the Corrected Error Count. Due to this erratum, the sticky count overflow bit (bit 52) of the Corrected Error Count will not get updated when the UC bit (bit 61) is set to 1.
+Implication: The Corrected Error Count Overflow indication will be lost if the overflow occurs after an uncorrectable error has been logged.
+Workaround: None identified.
+
+
+Status:	No Fix.
+SMRAM State-Save Area Above the 4 GB Boundary May Cause Unpredictable System Behavior
+Problem: If BIOS uses the RSM instruction to load the SMBASE register with a value that would cause any part of the SMRAM state-save area to have an address above 4-GBytes, subsequent transitions into and out of System-Management Mode (SMM) might save and restore processor state from incorrect addresses.
+Implication:	This erratum may cause unpredictable system behavior. Intel has not observed this erratum with any commercially available system.
+Workaround: Ensure that the SMRAM state-save area is located entirely below the 4 GB address boundary.
+Status:	No Fix.
+POPCNT Instruction May Take Longer to Execute Than Expected
+Problem:	POPCNT instruction execution with a 32 or 64 bit operand may be delayed until previous non-dependent instructions have executed.
+Implication:	Software using the POPCNT instruction may experience lower performance than expected.
+Workaround: None identified. Status:	No Fix.
+Load Latency Performance Monitoring Facility May Stop Counting
+Problem: The performance monitoring events MEM_TRANS_RETIRED.LOAD_LATENCY_* (Event  CDH; UMask 01H; any latency) count load instructions whose latency exceed a predefined threshold, where the loads are randomly selected using the Load Latency facility (PEBS extension). However due to this erratum, load latency facility may stop counting load instructions when Intel® Hyper-Threading Technology (Intel® HT Technology) is enabled.
+Implication:	Counters programmed with the affected events stop incrementing and do not generate PEBS records.
+Workaround: None identified. Status:	No Fix.
+Intel® PT PSB+ Packets May Contain Unexpected Packets
+Problem: Some Intel Processor Trace packets should be issued only between TIP.PGE (Target IP Packet.Packet Generation Enable) and TIP.PGD (Target IP Packet.Packet Generation Disable) packets. Due to this erratum, when a TIP.PGE packet is generated it may be preceded by a PSB+ (Packet Stream Boundary) that incorrectly includes Flow Update Packet (FUP) and MODE.Exec packets.
+Implication:	Due to this erratum, FUP and MODE.Exec may be generated unexpectedly. Workaround: Decoders should ignore FUP and MODE.Exec packets that are not between TIP.PGE and
+TIP.PGD packets.
+Status:	No Fix.
+
+
+Performance Monitoring Counters May Undercount When Using CPL Filtering
+Problem: Performance Monitoring counters configured to count only OS or only USR events (by setting only one of bits 16 or 17 in IA32_PERFEVTSELx) may undercount for a short cycle period of typically less than 100 processor clock cycles after the processor transitions to a new CPL. Events affected may include those counting CPL transitions (by additionally setting the edge-detect bit 18 in IA32_PERFEVTSELx).
+Implication: Due to this erratum, Performance Monitoring counters may report counts lower than expected.
+Workaround: None identified. Status:	No Fix.
+Intel® PT ToPA PMI Does Not Freeze Performance Monitoring Counters
+Problem:	Due to this erratum, if IA32_DEBUGCTL.FREEZE_PERFMON_ON_PMI (MSR 1D9H, bit
+12) is set to 1 when Intel PT triggers a Table of Physical Addresses (ToPA) PerfMon Interrupt (PMI), performance monitoring counters are not frozen as expected.
+Implication: Performance monitoring counters will continue to count for events that occur during  PMI handler execution.
+Workaround: PMI handler software can programmatically stop performance monitoring counters upon entry.
+Status:	No Fix.
+Incorrect Branch Predicted Bit in BTS/BTM Branch Records
+Problem: Branch Trace Store (BTS) and Branch Trace Message (BTM) send branch records to the Debug Store management area and system bus, respectively. The Branch Predicted bit (bit 4 of eighth byte in BTS/BTM records) should report whether the most recent branch was predicted correctly. Due to this erratum, the Branch Predicted bit may be incorrect.
+Implication:	BTS and BTM cannot be used to determine the accuracy of branch prediction. Workaround: None identified.
+Status:	No Fix.
+DR6.B0-B3 May Not Report All Breakpoints Matched When a MOV/POP SS is Followed by a Store or an MMX Instruction
+Problem:  Normally, data breakpoints matches that occur on a MOV SS, r/m or POP SS will not  cause a debug exception immediately after MOV/POP SS but will be delayed until the instruction boundary following the next instruction is reached. After the debug exception occurs, DR6.B0-B3 bits will contain information about data breakpoints matched during the MOV/POP SS as well as breakpoints detected by the following instruction. Due to this erratum, DR6.B0-B3 bits may not contain information about data breakpoints matched during the MOV/POP SS when the following instruction is either an MMX instruction that uses a memory addressing mode with an index or a store instruction.
+Implication: When this erratum occurs, DR6 may not contain information about all breakpoints matched. This erratum will not be observed under the recommended usage of the MOV SS,r/m or POP SS instructions (i.e., following them only with an instruction that writes (E/R)SP).
+Workaround: None identified. Status:	No Fix.
+
+
+Performance Monitoring Load Latency Events May Be Inaccurate For Gather Instructions
+Problem: The performance monitoring events MEM_TRANS_RETIRED.LOAD_LATENCY_* (Event  CDH; UMask 01H; any latency) count load instructions whose latency exceed a predefined threshold, where the loads are randomly selected using the load latency facility (an extension of PEBS). However, due to this erratum, these events may count incorrectly for VGATHER*/VPGATHER* instructions.
+Implication: The Load Latency Performance Monitoring events may be Inaccurate for Gather instructions.
+Workaround: None identified. Status:	No Fix.
+VM Exit May Set IA32_EFER.NXE When IA32_MISC_ENABLE Bit 34 is Set to 1
+Problem:  When "XD Bit Disable" in the IA32_MISC_ENABLE MSR (1A0H) bit 34 is set to 1, it   should not be possible to enable the "execute disable" feature by setting IA32_EFER.NXE. Due to this erratum, a VM exit that occurs with the 1-setting of the "load IA32_EFER" VM-exit control may set IA32_EFER.NXE even if IA32_MISC_ENABLE bit 34 is set to 1. This erratum can occur only if IA32_MISC_ENABLE bit 34 was set by guest software in VMX non-root operation.
+Implication: Software in VMX root operation may execute with the "execute disable" feature enabled despite the fact that the feature should be disabled by the IA32_MISC_ENABLE MSR. Intel has not observed this erratum with any commercially available software.
+Workaround: A virtual-machine monitor should not allow guest software to write to the IA32_MISC_ENABLE MSR.
+Status:	No Fix.
+x87 FPU Exception (#MF) May be Signaled Earlier Than Expected
+Problem:   x87 instructions that trigger #MF normally service interrupts before the #MF.  Due to   this erratum, if an instruction that triggers #MF is executing when an Enhanced Intel SpeedStep® Technology transitions, an Intel® Turbo Boost Technology transitions, or a Thermal Monitor events occurs, the #MF may be taken before pending interrupts are serviced.
+Implication:	Software may observe #MF being signaled before pending interrupts are serviced. Workaround: None identified.
+Status:	No Fix.
+CPUID TLB Associativity Information is Inaccurate
+Problem: CPUID leaf 2 (EAX=02H) TLB information inaccurately reports that the shared second- Level TLB is 6-way set associative (value C3H), although it is 12-way set associative. Other information reported by CPUID leaf 2 is accurate.
+Implication: Software that uses CPUID shared second-level TLB associativity information for value C3H may operate incorrectly. Intel has not observed this erratum to impact the operation of any commercially available software.
+Workaround: None identified. Software should ignore the shared second-Level TLB associativity information reported by CPUID for the affected processors.
+Status:	No Fix.
+
+
+Vector Masked Store Instructions May Cause Write Back of Cache Line Where Bytes Are Masked
+Problem:   Vector  masked store instructions to write-back (WB) memory-type that cross cache   lines may lead to CPU writing back cached data even for cache lines where all of the bytes are masked.
+This can affect Memory Mapped I/O (MMIO) or non-coherent agents in the following ways:
+For MMIO range that is mapped as WB memory type, this erratum may lead to Machine Check Exception (MCE) due to writing back data into the MMIO space. This applies only to cross page vector masked stores where one of the pages is in MMIO range.
+If the CPU cached data is stale, for example in the case of memory written directly by a non-coherent agent (agent that uses non-coherent writes), this erratum may lead to writing back stale cached data even if these bytes are masked.
+Implication: CPU may generate writes into MMIO space which lead to MCE, or may write stale data into memory also written by non-coherent agents.
+Workaround: It is recommended not to map MMIO range as WB. If WB is used for MMIO range, OS or VMM should not map such MMIO page adjacent to a regular WB page (adjacent on the linear address space, before or after the I/O page). Memory that may be written by non-coherent agents should be separated by at least 64 bytes from regular memory used for other purposes (on the linear address space).
+Status:	No Fix.
+Incorrect FROM_IP Value For an RTM Abort in BTM or BTS May be Observed
+Problem: During Restricted Transactional Memory (RTM)  operation  when  branch  tracing  is enabled using Branch Trace Message (BTM) or Branch Trace Store (BTS), the incorrect EIP value (From_IP pointer) may be observed for an RTM abort.
+Implication: Due to this erratum, the From_IP pointer may be the same as that of the immediately preceding taken branch.
+Workaround: None identified. Status:	No Fix.
+MOVNTDQA From WC Memory May Pass Earlier Locked Instructions
+Problem: An execution of (V)MOVNTDQA (streaming load instruction) that loads from Write Combining (WC) memory may appear to pass an earlier locked instruction to a different cache line.
+Implication: Software that expects a lock to fence subsequent (V)MOVNTDQA instructions may not operate properly.
+Workaround: Software should not rely on a locked instruction to fence subsequent executions of MOVNTDQA. Software should insert an MFENCE instruction if it needs to preserve order between streaming loads and other memory operations.
+Status:	No Fix.
+#GP on Segment Selector Descriptor that Straddles Canonical Boundary May Not Provide Correct Exception Error Code
+Problem:  During a #GP (General Protection Exception), the processor pushes an error code on to the exception handler’s stack. If the segment selector descriptor straddles the canonical boundary, the error code pushed onto the stack may be incorrect.
+Implication: An incorrect error code may be pushed onto the stack. Intel has not observed this erratum with any commercially available software.
+Workaround: None identified.
+
+
+Status:	No Fix.
+Intel® PT OVF Packet May be Lost if Immediately Preceding a TraceStop
+Problem: If an Intel PT internal buffer overflow occurs immediately before software executes a  taken branch or event that enters an Intel PT TraceStop region, the OVF (Overflow) packet may be lost.
+Implication: The trace decoder will not see the OVF packet, nor any subsequent packets (e.g., TraceStop) that were lost due to overflow.
+Workaround: None identified. Status:	No Fix.
+The Intel PT CR3 Filter is Not Re-evaluated on VM Entry
+Problem: On a VMRESUME or VMLAUNCH with both  TraceEn[0]  and  CR3Filter[7]  in IA32_RTIT_CTL (MSR 0570H) set to 1 both before the VM Entry and after, the new value of CR3 is not compared with IA32_RTIT_CR3_MATCH (MSR 0572H).
+Implication: The Intel PT CR3 filtering mechanism may continue to generate packets despite a mismatching CR3 value, or may fail to generate packets despite a matching CR3, as a result of an incorrect value of IA32_RTIT_STATUS.ContextEn[1] (MSR 0571H) that results from the failure to re-evaluate the CR3 match on VM entry.
+Workaround: None identified. Status:	No Fix.
+BNDLDX and BNDSTX May Not Signal #GP on Non-Canonical Bound Directory Access
+Problem:   BNDLDX and BNDSTX instructions access the bound’s directory and table to load or   store bounds. These accesses should signal #GP (general protection exception) when the address is not canonical (i.e., bits 48 to 63 are not the sign extension of bit 47). Due to this erratum, #GP may not be generated by the processor when a non-canonical address is used by BNDLDX or BNDSTX for their bound directory memory access.
+Implication:	Intel has not observed this erratum with any commercially available software. Workaround: Software should use canonical addresses for bound directory accesses.
+Status:	No Fix.
+Performance Monitor Event For Outstanding Offcore Requests and Snoop Requests May be Incorrect
+Problem: The performance monitor event OFFCORE_REQUESTS_OUTSTANDING (Event 60H, any Umask Value) should count the number of offcore outstanding transactions each cycle. Due to this erratum, the counts may be higher or lower than expected.
+Implication: The performance monitor event OFFCORE_REQUESTS_OUTSTANDING may reflect an incorrect count.
+Workaround: None identified. Status:	No Fix.
+Branch Instructions May Initialize MPX Bound Registers Incorrectly
+Problem: Depending on the current Intel® Memory Protection Extensions (Intel® MPX)  configuration, execution of certain branch instructions (near CALL, near RET, near JMP, and Jcc instructions) without a BND prefix (F2H) initialize the MPX bound registers. Due to this erratum, execution of such a branch instruction on a user-mode page may not use the MPX configuration register appropriate to the current privilege level (BNDCFGU for CPL 3 or BNDCFGS otherwise) for determining whether to initialize the bound
+
+
+registers; it may thus initialize the bound registers when it should not, or fail to initialize them when it should.
+Implication: After a branch instruction on a user-mode page has executed, a #BR (bound-range) exception may occur when it should not have or a #BR may not occur when one should have.
+Workaround: If supervisor software is not expected to execute instructions on user-mode pages, software can avoid this erratum by setting CR4.SMEP[bit 20] to enable supervisor- mode execution prevention (SMEP). If SMEP is not available or if supervisor software is expected to execute instructions on user-mode pages, no workaround is identified.
+Status:	No Fix.
+A Spurious APIC Timer Interrupt May Occur After Timed MWAIT
+Problem: Due to this erratum, a Timed MWAIT that completes for a reason other than the Timestamp Counter reaching the target value may be followed by a spurious APIC timer interrupt. This erratum can occur only if the APIC timer is in TSC-deadline mode and only if the mask bit is clear in the LVT Timer Register.
+Implication: Spurious APIC timer interrupts may occur when the APIC timer is in TSC-deadline mode.
+Workaround: TSC-deadline timer interrupt service routines should detect and deal with spurious interrupts.
+Status:	No Fix.
+Writing a Non-Canonical Value to an LBR MSR Does Not Signal a #GP When Intel® PT is Enabled
+Problem: If Intel PT (Intel Processor Trace) is enabled, WRMSR will  not  cause  a  general- protection exception (#GP) on an attempt to write a non-canonical value to any of the following MSRs:
+MSR_LASTBRANCH_{0 - 31}_FROM_IP (680H - 69FH)
+MSR_LASTBRANCH_{0 - 31}_TO_IP (6C0H - 6DFH)
+MSR_LASTBRANCH_FROM_IP (1DBH)
+MSR_LASTBRANCH_TO_IP (1DCH)
+MSR_LASTINT_FROM_IP (1DDH)
+MSR_LASTINT_TO_IP (1DEH)
+Instead the same behavior will occur as if a canonical value had been written. Specifically, the WRMSR will be dropped and the MSR value will not be changed.
+Implication:	Due to this erratum, an expected #GP may not be signaled. Workaround: None identified.
+Status:	No Fix.
+VM Entry That Clears TraceEn May Generate a FUP
+Problem:     If VM entry clears Intel® PT IA32_RTIT_CTL.TraceEn (MSR 570H, bit 0) while PacketEn is 1 then a Flow Update Packet (FUP) will precede the TIP.PGD (Target IP Packet, Packet Generation Disable). VM entry can clear TraceEn if the VM-entry MSR-load area includes an entry for the IA32_RTIT_CTL MSR.
+Implication: When this erratum occurs, an unexpected FUP may be generated that creates the appearance of an asynchronous event taking place immediately before or during the VM entry.
+Workaround: The Intel PT trace decoder may opt to ignore any FUP whose IP matches that of a VM entry instruction.
+Status:	No Fix.

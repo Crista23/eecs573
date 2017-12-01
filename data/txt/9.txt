@@ -1,0 +1,982 @@
+E1.	FP Data Operand Pointer May Be Incorrectly Calculated After FP Access Which Wraps 64 Kbyte Boundary in 16 Bit Code
+Problem:   The  FP Data Operand Pointer is the  effective  address of the operand associated with the last non-control floating-point instruction executed by the machine. If an 80-bit floating-point access (load or store) occurs in a 16-bit mode other than protected mode (in which case the access will produce a segment limit violation), the memory access wraps a 64-Kbyte boundary, and the floating-point environment is subsequently saved, the value contained in the FP Data Operand Pointer may be incorrect.
+Implication: A 32-bit operating system running 16-bit floating-point code may encounter this erratum, under the following conditions:
+The operating system is using a segment greater than 64 Kbytes in size.
+An application is running in a 16-bit mode other than protected mode.
+An 80-bit floating-point load or store which wraps the 64-Kbyte boundary is executed.
+The	operating	system	performs	a	floating-point	environment	store (FSAVE/FNSAVE/FSTENV/FNSTENV) after the above memory access.
+The operating system uses the value contained in the FP Data Operand Pointer.
+Wrapping an 80 bit floating-point load around a segment boundary in this way is not  a normal programming practice. Intel has not currently identified any software which exhibits this behavior.
+Workaround: If the FP Data  Operand  Pointer  is used in an OS which may run 16-bit floating- point code, care must be taken to ensure that no 80-bit floating-point accesses are wrapped around a 64-Kbyte boundary
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E2.	Differences Exist in Debug Exception Reporting
+Problem: There exist some differences in the reporting of code and data breakpoint matches between that specified by previous Intel processor specifications and the behavior of the processor, as described below:
+Case 1: The first case is for a breakpoint set on a MOVSS or POPSS instruction, when the instruction following it causes a debug register protection fault (DR7.gd  is already set, enabling the fault). The processor reports delayed data breakpoint matches from the MOVSS or POPSS instructions by setting the matching DR6.bi bits, along with the debug register protection fault
+
+
+(DR6.bd). If additional breakpoint faults are matched during the call of the debug fault handler,  the  processor sets the breakpoint match bits (DR6.bi) to reflect the breakpoints matched by both the MOVSS or POPSS breakpoint and the debug fault handler call. The processor only sets DR6.bd in either situation, and does not set any of the DR6.bi bits.
+Case 2: In the second breakpoint reporting failure case, if a MOVSS or POPSS instruction with a data breakpoint is followed by a store to memory which:
+crosses a 4-Kbyte page boundary, OR
+causes the page table Access or Dirty (A/D) bits to be modified,
+the breakpoint information for the MOVSS or POPSS will be lost. Previous processors retain this information under these boundary conditions.
+Case 3: If they occur after a MOVSS or POPSS instruction, the INTn, INTO, and INT3 instructions zero the DR6.bi bits (bits B0 through B3), clearing pending breakpoint information, unlike previous processors.
+Case 4: If a data breakpoint and an SMI (System Management Interrupt) occur simultaneously, the SMI will be serviced via a call to the SMM handler, and the pending breakpoint will be lost.
+Case 5: When an instruction that accesses a debug register is executed, and a breakpoint is encountered on the instruction, the breakpoint is reported twice.
+Case 6: Unlike previous versions of Intel Architecture processors, P6 family  processors will not set the Bi bits for a matching disabled breakpoint unless at least one other breakpoint is enabled.
+Implication: When debugging or when developing debuggers for a P6 family processor-based system, this behavior should be noted. Normal usage of the MOVSS or POPSS instructions (i.e., following them with a MOV ESP) will not exhibit the behavior of cases 1-3. Debugging in conjunction with SMM will be limited by case 4.
+Workaround: Following MOVSS and POPSS instructions with a MOV ESP instruction when using breakpoints will avoid the first three cases of this erratum. No workaround has been identified for cases 4, 5, or 6.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E3.	FLUSH# Servicing Delayed While Waiting for STARTUP_IPI in 2 way MP Systems
+Problem: In a 2-way MP system, if an application processor is waiting  for a  startup  inter- processor interrupt (STARTUP_IPI), then it will not service a FLUSH# pin assertion until it has received the STARTUP_IPI.
+Implication: After the 2-way MP initialization protocol, only one processor becomes the bootstrap processor (BSP). The other processor becomes a slave application processor (AP).
+
+
+After losing the BSP arbitration, the AP goes into a wait loop, waiting for a STARTUP_IPI.
+The BSP can wake up the AP to perform some tasks with a STARTUP_IPI, and  then put it back to sleep with an initialization inter-processor interrupt (INIT_IPI, which  has the same effect as asserting INIT#), which returns it to a wait loop. The result is  a possible loss of cache coherency if the off-line processor is intended to service a FLUSH# assertion at this point. The FLUSH# will be serviced as soon as the processor is awakened by a STARTUP_IPI, before any other instructions are executed. Intel has not encountered any operating systems that are affected by this erratum.
+Workaround: Operating system developers should take care to execute a WBINVD instruction before the AP is taken off-line using an INIT_IPI
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E4.	Code Fetch Matching Disabled Debug Register May Cause Debug Exception
+Problem: The bits L0 3 and G0 3 enable breakpoints local to a task and global to all tasks, respectively. If one of these bits is set, a breakpoint is enabled, corresponding to the addresses in the debug registers DR0-DR3. If at least one of these breakpoints is enabled, any of these registers are disabled (i.e., Ln and Gn are 0), and RWn for the disabled register is 00 (indicating a breakpoint on instruction execution), normally an instruction fetch will not cause an instruction-breakpoint fault based on a match with the address in the disabled register(s). However, if the address in a disabled register matches the address of a code fetch which also results in a page fault, an instruction- breakpoint fault will occur.
+Implication: The bits L0 3 and G0 3 enable breakpoints local to a task and global to all tasks, respectively. If one of these bits is set, a breakpoint is enabled, corresponding to the addresses in the debug registers DR0-DR3. If at least one of these breakpoints is enabled, any of these registers are disabled (i.e., Ln and Gn are 0), and RWn for the disabled register is 00 (indicating a breakpoint on instruction execution), normally an instruction fetch will not cause an instruction-breakpoint fault based on a match with the address in the disabled register(s). However, if the address in a disabled register matches the address of a code fetch which also results in a page fault, an instruction- breakpoint fault will occur.
+Implication: While debugging software, extraneous instruction-breakpoint faults may be encountered if breakpoint registers are not cleared when they are disabled. Debug software which does not implement a code breakpoint handler will fail, if this occurs.  If a handler is present, the fault will be serviced. Mixing data and code may exacerbate this  problem by allowing disabled data breakpoint registers to break on  an instruction fetch.
+Workaround:	The debug handler should clear breakpoint registers before they become disabled
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E5.	Double ECC Error on Read May Result in BINIT#
+
+
+Problem:	For this erratum to occur, the following conditions must be met:
+Machine Check Exceptions (MCEs) must be enabled.
+A dataless transaction (such as a write invalidate) must be occurring simultaneously with a transaction which returns data (a normal read).
+The read data must contain a double-bit uncorrectable ECC error.
+If these conditions are met, the Pentium III processor will not be able to determine which transaction was erroneous, and instead  of generating  an MCE, it will generate a BINIT#.
+Implication: The bus will be reinitialized in this case. However, since a double-bit uncorrectable  ECC error occurred on the read, the MCE handler (which is normally reached on a double-bit uncorrectable ECC error for a read) would most likely cause the same BINIT# event.
+Workaround: Though the ability to drive BINIT# can be disabled in the Pentium III processor,  which would prevent the effects of this erratum, overall system behavior would not improve, since the error which would normally cause a BINIT# would instead cause the machine to shut down. No other workaround has been identified.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this   section
+
+E6.	FP Inexact-Result Exception Flag May Not Be Set
+Problem: When the result of a floating-point operation is not exactly representable  in the destination format (1/3 in binary form, for example), an inexact-result (precision) exception occurs. When this occurs, the PE bit (bit 5 of the FPU status word) is normally set by the processor. Under certain rare conditions, this bit may not be set when this rounding occurs. However, other actions taken by the processor (invoking the software exception handler if the exception is unmasked) are not affected. This erratum can only occur if the floating-point operation which causes the precision exception is immediately followed by one of the following instructions:
+FST m32real
+FST m64real
+FSTP m32real
+FSTP m64real
+FSTP m80real
+FIST m16int
+FIST m32int
+FISTP m16int
+FISTP m32int
+FISTP m64int
+
+
+Note that even if this combination of instructions is encountered, there is also a dependency on the internal pipelining and execution state of both instructions in the processor.
+Implication: Inexact-result exceptions are commonly masked or ignored by applications, as it happens frequently, and produces a rounded result acceptable to most applications. The PE bit of the FPU status word may not always be set upon receiving an inexact- result exception. Thus, if these exceptions are unmasked, a floating-point error exception handler may not recognize that a precision exception occurred. Note that this is a “sticky” bit, i.e., once set by an inexact-result condition, it remains set until cleared by software.
+Workaround: This condition can be avoided by inserting two NOP instructions between the two floating-point instructions.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E7.	BTM for SMI Will Contain Incorrect FROM EIP
+Problem: A system management interrupt (SMI) will produce a Branch Trace Message (BTM), if BTMs are enabled. However, the FROM EIP field of the BTM (used to determine the address of the instruction which was being executed when the SMI was serviced) will not have been updated for the SMI, so the field will report the same FROM EIP as the previous BTM.
+Implication: A BTM which is issued for an SMI will not contain the correct FROM EIP, limiting the usefulness of BTMs for debugging software in conjunction with System Management Mode (SMM).
+Workaround:	None identified.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E8.	I/O Restart in SMM May Fail After Simultaneous MCE
+Problem:   If an I/O instruction (IN, INS, REP INS, OUT, OUTS, or REP OUTS) is being executed,  and if the data for this instruction becomes corrupted, the Pentium III processor will signal a machine check exception (MCE). If the instruction is directed at a device which is powered down, the processor may also receive an assertion of SMI#. Since MCEs have higher priority, the processor will call the MCE handler, and the SMI# assertion will remain pending. However, upon attempting to execute the first instruction of the MCE handler, the SMI# will be recognized and the processor will attempt to execute the SMM handler. If the SMM handler is completed successfully, it will attempt to restart the I/O instruction, but will not have the correct machine state, due to the call to the MCE handler.
+Implication: A simultaneous MCE and SMI# assertion may occur for one of the I/O instructions above. The SMM handler may attempt to restart such an I/O instruction, but will have corrupted state due to the MCE handler call, leading to failure of the restart and shutdown of the processor.
+
+
+Workaround: If a system implementation must support both SMM and MCEs, the first thing the SMM handler code (when an I/O restart is to be performed) should do is check for a pending MCE. If there is  an MCE pending, the SMM handler should immediately exit via an RSM instruction and allow the machine check exception handler to execute. If there is not, the SMM handler may proceed with its normal operation.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E9.	Branch Traps Do Not Function If BTMs Are Also Enabled
+Problem: If branch traps or branch trace messages (BTMs) are enabled alone, both function as expected. However, if both are enabled, only the BTMs will function, and the branch traps will be ignored.
+Implication: The branch traps and branch trace message debugging features cannot be used together.
+Workaround:	If branch trap functionality is desired, BTMs must be disabled.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E10.	Checker BIST Failure in FRC Mode Not Signaled
+Problem: If a system is running in  functional  redundancy  checking  (FRC)  mode,  and  the checker of the master-checker pair encounters a hard failure while running the built- in self test (BIST), the checker will tri-state all outputs without signaling an IERR#.
+Implication: Assuming the master passes BIST successfully, it will continue execution unchecked, operating without functional redundancy. However, the necessary pull-up on the FRCERR pin will cause an FRCERR to be signaled. The operation of the  master depends on the implementation of FRCERR.
+Workaround: For successful detection of BIST failure in the checker of an FRC pair, use the  FRCERR signal, instead of IERR#.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E11.	BINIT# Assertion Causes FRCERR Assertion in FRC Mode
+Problem: If a pair  of  Pentium  III processors  are  running  in functional redundancy checking (FRC) mode, and a catastrophic error condition causes BINIT# to be asserted, the checker in the master-checker pair will enter shutdown. The next bus  transaction from the master will then result in the assertion of FRCERR.
+Implication: Bus initialization via an assertion of BINIT# occurs as the result of a catastrophic   error condition which precludes the continuing reliable execution of  the  system. Under normal circumstances, the master-checker pair would remain synchronized in the execution of the BINIT# handler. However, due to this erratum, an FRCERR will  be signaled. System behavior then depends on the system specific error recovery mechanisms.
+
+
+Workaround:	None identified.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E12.	Machine Check Exception Handler May Not Always Execute Successfully
+Problem: An  asynchronous  machine  check exception (MCE), such as a BINIT# event, which  occurs during an access that splits a 4 Kbyte  page boundary, may leave some  internal registers in an indeterminate state. Thus, the MCE handler code may not always run successfully if an asynchronous MCE has occurred previously.
+Implication: An MCE may not always result in the successful execution of the MCE handler. However, asynchronous MCEs usually occur upon detection of a catastrophic system condition that would also hang the processor. Leaving MCEs disabled will result in the condition which caused the asynchronous MCE instead causing the processor to enter shutdown. Therefore, leaving MCEs disabled may not improve overall system behavior.
+Workaround:  No workaround  which would  guarantee  successful MCE handler execution under this condition has been identified.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E13.	MCE Due to L2 Parity Error Gives L1 MCACOD.LL
+Problem: If a Cache Reply Parity (CRP) error, Cache Address Parity (CAP) error, or Cache Synchronous Error (CSER) occurs on an access to the Pentium III processor’s L2 cache, the resulting Machine Check Architectural Error Code (MCACOD) will be logged with ‘01’ in the LL field. This value indicates an L1 cache error; the value should be ‘10’, indicating an L2 cache error. Note that L2 ECC errors have the correct value of ‘10’ logged.
+Implication: An L2 cache access error, other than an ECC error, will be improperly logged as an L1 cache error in MCACOD.LL.
+Workaround:	None identified.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E14.	LBER May Be Corrupted After Some Events
+Problem:    The last branch record (LBR) and the last branch before exception record (LBER) can   be used to determine the source and destination information for previous branches or exceptions. The LBR contains the source and destination addresses for  the  last branch or exception, and the LBER contains similar information for the last branch taken before the last exception. This information is typically used to determine the location of a branch which leads to execution of code which causes an exception. However, after a catastrophic bus condition which results in an assertion of BINIT# and the re-initialization of the buses, the value in the LBER may be corrupted. Also,
+
+
+after either a CALL which results in a fault or a software interrupt, the LBER and LBR will be updated to the same value, when the LBER should not have been updated.
+Implication: The LBER and LBR registers are used only for debugging purposes.  When  this erratum occurs, the LBER will not contain reliable address information. The value of LBER should be used with caution when debugging branching code; if the values in  the LBR and LBER are the same, then the LBER value is incorrect. Also, the value in the LBER should not be relied upon after a BINIT# event.
+Workaround:	None identified.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E15.	BTMs May Be Corrupted During Simultaneous L1 Cache Line Replacement
+Problem:   When Branch Trace Messages (BTMs) are enabled and such a message is generated,   the BTM may be corrupted when issued to the bus by the L1 cache if a new line of data is brought into the L1 data cache simultaneously. Though the new line being stored in the L1 cache is stored correctly, and no corruption occurs in the data, the information in the BTM may be incorrect due to the internal collision of the data line and the BTM.
+Implication: Although BTMs may not be entirely reliable due to this erratum, the conditions necessary for this boundary condition to occur have only been exhibited during focused simulation testing. Intel has currently not observed this erratum in a system level validation environment.
+Workaround:	None identified.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E16.	EFLAGS Discrepancy on a Page Fault After a Multiprocessor TLB Shootdown
+Problem: This erratum may occur when the Pentium III processor executes one of the following read-modify-write arithmetic instructions and a page fault occurs during the store of the memory operand: ADD, AND, BTC, BTR, BTS, CMPXCHG, DEC, INC, NEG, NOT, OR, ROL/ROR, SAL/SAR/SHL/SHR, SHLD, SHRD, SUB, XOR, and XADD. In this case,
+the EFLAGS value pushed onto the stack of the page fault handler may reflect the status of the register after the instruction would have completed execution rather  than before it. The following conditions are required for the store to generate a page fault and call the operating system page fault handler:
+The store address entry must be evicted from the DTLB by speculative loads from other instructions that hit the same way of the DTLB before the store has completed. DTLB eviction requires at least three-load operations that have linear address  bits 15:12 equal to each other and address bits 31:16 different from  each other in close physical proximity to the arithmetic operation.
+The page table entry for the store address must have its permissions tightened during the very small window of time between the DTLB eviction and execution of
+
+
+the store. Examples of page permission tightening include from Present to Not Present or from Read/Write to Read Only, etc.
+Another processor, without corresponding synchronization and TLB flush, must cause the permission change.
+Implication: This scenario may only occur on a multiprocessor platform running an operating system that performs “lazy” TLB shootdowns. The memory image of the EFLAGS register on the page fault handler’s stack prematurely contains the  final arithmetic flag values although the instruction has not yet completed. Intel has not identified  any operating systems that inspect the arithmetic portion of the EFLAGS register during a page fault nor observed this erratum in laboratory testing of software applications.
+Workaround: No workaround is needed upon normal restart  of  the  instruction,  since  this erratum is transparent to the faulting code and results in correct instruction behavior. Operating systems may ensure that no processor is currently accessing a page that is scheduled to have its page permissions tightened or have a page fault handler that ignores any incorrect state.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E17.	Near CALL to ESP Creates Unexpected EIP Address
+Problem: As documented, the CALL instruction saves procedure linking information  in  the procedure stack and jumps to the called procedure specified with the destination (target) operand. The target operand specifies the address of the first instruction in the called procedure. This operand can be an immediate value, a general-purpose register, or a memory location. When accessing an absolute address indirectly using the  stack pointer (ESP) as a base register, the base value used is the value in the  ESP register before the instruction executes. However, when accessing an absolute address directly using ESP as the base register, the base value used is the value of ESP after the return value is pushed on the stack, not the value in the ESP register before the instruction executed.
+Implication: Due to this erratum, the processor may transfer control to an unintended address. Results are unpredictable, depending on the particular application, and can range  from no effect to the unexpected termination of the application due to an exception. Intel has observed this erratum only in a focused testing environment. Intel has not observed any commercially available operating system, application, or compiler that makes use of or generates this instruction.
+Workaround: If the other seven general-purpose registers are unavailable for use, and it is necessary to do a CALL via the ESP register, first push ESP onto the stack, then perform an indirect call using ESP (e.g., CALL [ESP]). The saved version  of ESP should be popped off the stack after the call returns.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E18.	Memory Type Undefined for Nonmemory Operations
+
+
+Problem:    The Memory Type field for nonmemory transactions such as I/O and Special Cycles    are undefined. Although the Memory Type attribute for nonmemory operations logically should (and usually does) manifest itself as UC, this feature is not designed into the implementation and is therefore inconsistent.
+Implication: Bus agents may decode a non-UC memory type for nonmemory bus transactions.
+Workaround:	Bus agents must consider transaction type  to  determine  the  validity  of  the Memory Type field for a transaction.
+Status:	For the steppings affected see the Summary of Changes at the beginning of this section.
+
+E19.	Infinite Snoop Stall During L2 Initialization of MP Systems
+Problem:	It is possible for snoop traffic generated on the system bus while a processor is executing its L2 cache initialization routine to cause the initializing processor to hang.
+Implication: A DP (2-way) system which does not suppress snoop traffic while L2 caches are being initialized may hang during this initialization sequence.
+The system BIOS can create an execution environment which allows processors to initialize their L2 caches without the system generating any snoop traffic on the bus.
+Below is a pseudo-code fragment, designed explicitly for a two-processor system,  that uses a serial algorithm to initialize each processor’s L2 cache:
+Suppress_all_I/O_traffic() K = 0;
+while (K <= 1)
+{
+/* Obtain current value of K. This forces both Temp and K into */
+/* the L1 cache. Note that Temp could also be maintained in a */
+/* general purpose register. */
+
+
+Temp = K; Wait_until_all_processors_are_signed_in_at_barrier() if ( logical_proc_APIC_id == K ) {
+{
+wait_10_usecs_delay_loop(); /* this time delay, required */
+/* in the worst case, allows */
+/* the barrier semaphore to */
+
+
+/* settle to shared state. */ Initialize L2 cache
+K++
+}
+else
+while (Temp == K);
+}
+}
+This algorithm prevents bus snoop traffic from the other processors, which would otherwise cause the initializing processor to hang. The algorithm assumes that the L1 cache is enabled (the  Temp and K variables must be cached by each processor).  Also, the Memory Type Range Register (MTRR) for the data segment must be set to WB (writeback) memory type.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E20.	FP Data Operand Pointer May Not Be Zero After Power On or Reset
+Problem: The FP Data Operand Pointer, as specified, should be reset to zero upon power on or  Reset by the processor. Due to this erratum, the FP Data Operand Pointer may be nonzero after power on or Reset.
+Implication: Software which uses the FP Data Operand Pointer and count on its value being zero after power on or Reset without first executing an FINIT/FNINIT instruction will use  an incorrect value, resulting in incorrect behavior of the software.
+Workaround: Software should follow the recommendation in  Section  8.2  of  the  Intel  Architecture Software Developer’s Manual, Volume 3: System Programming Guide (Order Number 243192). This recommendation states that if the FPU will be used, software-initialization code should execute an FINIT/FNINIT instruction following a hardware reset. This will correctly clear the FP Data Operand Pointer to zero.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E21.	MOVD Following Zeroing Instruction Can Cause Incorrect Result
+Problem:	An incorrect result may be calculated after the following circumstances occur:
+A register has been zeroed with either a SUB reg, reg instruction or an XOR reg, reg instruction,
+A value is moved with sign extension into the same register’s lower 16 bits; or a signed integer multiply is performed to the same register’s lower 16 bits,
+This register is then copied to an MMX™ technology register using the MOVD instruction prior to any other operations on the sign-extended value.
+
+
+Specifically, the sign may be incorrectly extended into bits 16-31 of the MMX technology register. Only the MMX technology register is affected by this erratum.
+The erratum only occurs when the three following steps  occur in the  order shown. The erratum may occur with up to 40 intervening instructions that do not modify the sign-extended value between steps 2 and 3.
+XOR EAX,  EAX or SUB EAX, EAX
+MOVSX AX, BL
+or MOVSX AX, byte ptr <memory address> or MOVSX AX, BX
+or MOVSX AX, word ptr <memory address> or IMUL BL (AX implicit, opcode F6
+/5)
+or IMUL byte ptr <memory address> (AX implicit, opcode F6 /5) or IMUL AX, BX (opcode 0F AF /r)
+or IMUL AX, word ptr <memory address> (opcode 0F AF /r) or IMUL AX, BX, 16 (opcode 6B /r ib)
+or IMUL AX, word ptr <memory address>, 16 (opcode 6B /r ib) or IMUL AX, 8 (opcode 6B /r ib)
+or IMUL AX, BX, 1024 (opcode 69 /r iw)
+or IMUL AX, word ptr <memory address>, 1024 (opcode 69 /r iw) or IMUL AX, 1024 (opcode 69 /r iw)
+or CBW
+MOVD MM0, EAX
+Note that the values for immediate byte/words are merely representative (i.e., 8, 16, 1024) and that any value in the range for the size may be affected. Also, note that this erratum may occur with “EAX” replaced with any 32 bit general-purpose register, and “AX” with the corresponding 16-bit version of that replacement. “BL” or “BX” can be replaced with any 8-bit or 16-bit general-purpose register. The CBW and IMUL (opcode F6 /5) instructions are specific to the EAX register only.
+In the example, EAX is forced to contain 0 by the XOR or SUB instructions. Since the four types of the MOVSX or IMUL instructions and the CBW  instruction modify only bits 15:8 of EAX by sign extending the lower 8 bits of EAX, bits 31:16 of EAX should always contain 0. This implies that when MOVD copies EAX to MM0, bits 31:16 of  MM0 should also be 0. Under certain scenarios, bits 31:16 of MM0 are not 0, but are replicas of bit 15 (the 16th bit) of AX. This is noticeable when the value in AX after  the MOVSX, IMUL, or CBW instruction is negative, i.e., bit 15 of AX is a 1.
+When AX is positive (bit 15 of AX is a 0), MOVD will always produce the correct answer. If AX is negative (bit 15 of AX is a 1), MOVD may produce the right answer  or the wrong answer depending on the point in time when the MOVD instruction is executed in relation to the MOVSX, IMUL, or CBW instruction.
+
+
+Implication: The effect of incorrect execution will vary from unnoticeable, due to the code  sequence discarding the incorrect bits, to an application failure. If the MMX technology-enabled application in which MOVD is used to manipulate pixels, it is possible for one or more pixels to exhibit the wrong color or position momentarily. It  is also possible for a computational application that uses the MOVD instruction in the manner described above to produce incorrect data. Note that this data may cause an unexpected page fault or general protection fault
+Workaround:	There are two possible workarounds for this erratum:
+Rather than using the MOVSX-MOVD, IMUL-MOVD, or CBW-MOVD pairing to handle one variable at a time, use the sign extension capabilities (PSRAW, etc.) within MMX technology for operating on multiple variables. This would result in higher performance as well.
+Insert another operation that modifies or copies the sign-extended value between the MOVSX/IMUL/CBW instruction and the MOVD instruction as in the example below:
+XOR EAX, EAX (or SUB EAX, EAX)
+MOVSX AX, BL (or other MOVSX, other IMUL or CBW instruction)
+*MOV EAX, EAX MOVD MM0, EAX
+*Note: MOV EAX, EAX is used here as it is fairly generic. Again, EAX can be any 32- bit register.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E22.	Premature Execution of a Load Operation Prior to Exception Handler Invocation
+Problem:	This erratum can occur with any of the following situations:
+If an instruction that performs a memory load causes a code segment limit violation,
+If a waiting floating-point instruction or MMX™ instruction that performs a memory load has a floating-point exception pending, or
+If an MMX instruction that performs a memory load and has either CR0.EM =1 (Emulation bit set), or a floating-point Top-of-Stack (FP TOS) not equal to 0, or a DNA exception pending.
+If any of the above circumstances occur it is possible that the load portion of the instruction will have executed before the exception handler is entered.
+Implication: In normal code execution where the target of the load operation is to write back memory there is no impact from the load being prematurely executed, nor from the restart and subsequent re-execution of that instruction by the exception handler. If the target of the load is to uncached memory that has a system side-effect,
+
+
+restarting the instruction may cause unexpected system behavior due to  the repetition of the side-effect.
+Workaround: Code which performs loads from memory that has side-effects can effectively workaround this behavior by using simple integer-based load instructions when accessing side-effect memory and by ensuring that all code is written such that a  code segment limit violation cannot occur as a part of reading from side-effect memory.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E23.	Read Portion of RMW Instruction May Execute Twice
+Problem: When the Pentium III processor executes a read-modify-write (RMW) arithmetic instruction, with memory as the destination, it is possible for a page fault to occur during the execution of the store on the memory operand after the read operation  has completed but before the write operation completes.
+If the memory targeted for the instruction is UC (uncached), memory will observe the occurrence of the initial load before the page fault handler and again if the instruction is restarted.
+Implication: This erratum has no effect if the memory targeted for the RMW instruction has no side-effects. If, however, the load targets a memory region that has side-effects, multiple occurrences of the initial load may lead to unpredictable system behavior.
+Workaround: Hardware and software developers who write device drivers for custom hardware  that may have a side-effect style of design should use simple loads and simple stores to transfer data to and from the device. Then, the  memory location will simply be read twice with no additional implications.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E24.	MC2_STATUS MSR Has Model-Specific Error Code and Machine Check Architecture Error Code Reversed
+Problem: The Intel Architecture Software Developer’s Manual, Volume 3: System Programming Guide, documents that for the MCi_STATUS MSR, bits 15:0 contain the MCA (machine-check architecture) error code field, and bits 31:16 contain the model- specific error code field. However, for the MC2_STATUS MSR, these bits have been reversed. For the MC2_STATUS MSR, bits 15:0 contain the model-specific error code field and bits 31:16 contain the MCA error code field.
+Implication: A machine check error may be decoded incorrectly if this erratum on the  MC2_STATUS MSR is not taken into account.
+Workaround:	When decoding the MC2_STATUS MSR, reverse the two error fields.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E25.	Mixed Cacheability of Lock Variables Is Problematic in MP Systems
+
+
+Problem: This errata only affects multiprocessor systems  where  a  lock variable  address is  marked cacheable in one processor and uncacheable in any others. The processors which have it marked uncacheable may stall indefinitely when accessing the lock variable. The stall is only encountered if:
+One processor has the lock variable cached, and is attempting to execute a cache lock.
+If the processor which has that address cached has it cached in its L2 only.
+Other processors, meanwhile, issue back to back accesses to that same address on the bus.
+Implication: MP systems where all processors either use cache locks or consistent locks to uncacheable space will not encounter this problem. If, however, a lock variable’s cacheability varies in different processors, and  several processors are all attempting to perform the lock simultaneously, an indefinite stall may be experienced by the processors which have it marked uncacheable in locking the variable (if the conditions above are satisfied). Intel has only encountered this problem in focus testing with artificially generated external events. Intel has not currently identified  any commercial software which exhibits this problem.
+Workaround: Follow a homogenous model for the memory type  range  registers  (MTRRs), ensuring that all processors have the same cacheability attributes for each region of memory; do not use locks whose memory type is cacheable on one processor, and uncacheable on others. Avoid page table aliasing, which may produce a nonhomogenous memory model.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E26.	MOV With Debug Register Causes Debug Exception
+Problem: When in V86 mode, if a MOV instruction is executed on debug registers, a general- protection exception (#GP) should be generated, as documented in the Intel Architecture Software Developer's Manual, Volume 3: System Programming Guide, Section 14.2. However, in the case when the  general detect enable flag (GD) bit is set, the observed behavior is that a debug exception (#DB) is generated instead.
+Implication: With debug-register protection enabled (i.e., the GD bit set), when attempting to execute a MOV on debug registers in V86 mode, a debug exception will be generated instead of the expected general-protection fault.
+Workaround:  In general, operating systems do not set the GD bit when they are in V86 mode.   The GD bit is generally set and used by debuggers. The debug exception handler should check that the exception did not occur in V86 mode before continuing. If the exception did occur in V86 mode, the exception may be directed to the general- protection exception handler.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E27.	Upper Four PAT Entries Not Usable With Mode B or Mode C Paging
+
+
+Problem:  The  Page  Attribute  Table  (PAT) contains eight entries, which must all be  initialized  and considered when setting up memory types for the Pentium III processor. However, in Mode B or Mode C paging, the upper four entries do not  function correctly for 4-Kbyte pages. Specifically, bit 7 of page table entries that translate addresses to 4-Kbyte pages should be used as the upper bit of a 3-bit index to determine the PAT entry that specifies the memory type for the page. When Mode B (CR4.PSE = 1) and/or Mode C (CR4.PAE) are enabled, the processor forces this bit to zero when determining the memory type regardless of the value in the page table entry. The upper four entries of the PAT function correctly for 2-Mbyte and 4-Mbyte large pages (specified by bit 12 of the page directory entry for those translations).
+Implication: Only the lower four PAT entries are useful for 4-KB translations when Mode B or C paging is used. In Mode A paging (4-Kbyte pages only), all eight entries may be   used. All eight entries may be used for large pages in Mode B or C paging.
+Workaround:	None identified
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E28.	Data Breakpoint Exception in a Displacement Relative Near Call May Corrupt EIP
+Problem: If a misaligned data breakpoint is  programmed  to  the  same  cache  line  as  the memory location where the stack push of a near call is performed and any data breakpoints are enabled, the processor will update the stack and ESP appropriately, but may skip the code at the destination of the call. Hence, program execution will continue with the next instruction immediately following the call, instead of the target of the call.
+Implication: The failure mechanism for this erratum is that the call would not be taken; therefore, instructions in the called subroutine would not be executed. As a result, any code relying on the execution of the subroutine will behave unpredictably.
+Workaround:   Whether  enabled or not, do not program a misaligned data breakpoint to the    same cache line on the stack where the push for the near call is performed.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E29.	RDMSR or WRMSR to Invalid MSR Address May Not Cause GP Fault
+Problem: The RDMSR and WRMSR instructions allow reading or writing of MSRs (Model Specific Registers) based on the index number placed in ECX. The processor should reject access to any reserved or unimplemented MSRs by generating #GP(0). However, there are some invalid MSR addresses for which the processor will not generate
+#GP(0).
+Implication: For RDMSR, undefined values will be read into EDX:EAX. For WRMSR, undefined processor behavior may result.
+Workaround:	Do not use invalid MSR addresses with RDMSR or WRMSR.
+
+
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this   section
+
+
+E31.	PRELOAD Followed by EXTEST Does Not Load Boundary Scan Data
+Problem: According to the IEEE 1149.1 Standard, the EXTEST  instruction  would  use  data “typically loaded onto the latched parallel outputs of boundary-scan shift-register stages using the SAMPLE/PRELOAD instruction prior to the selection of the EXTEST instruction.” As a result of this erratum, this method cannot be used to load the data onto the outputs.
+Implication: Using the PRELOAD instruction prior to the EXTEST instruction will not produce expected data after the completion of EXTEST.
+Workaround:	None identified
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E32.	Far Jump to New TSS With D-bit Cleared May Cause System Hang
+
+
+Problem:  A task switch may be performed by executing a far jump through a task gate or to a   new Task State Segment (TSS) directly. Normally, when such a jump to a new TSS occurs, the D-bit (which indicates that the page referenced by a Page Table Entry (PTE) has been modified) for the PTE which maps the location of the previous TSS will already be set, and the processor will operate as expected. However, if the D-bit is clear at the time of the jump to the new TSS, the processor will hang.
+Implication: If an OS is used which can clear the D-bit for system pages, and which jumps to a  new TSS on a task switch, then a condition may occur which results in a system  hang. Intel has not identified any commercial software which may encounter this condition; this erratum was discovered in a focused testing environment.
+Workaround: Ensure that OS code does  not  clear the  D-bit  for system pages (including any pages that contain a task gate or TSS). Use task gates rather than jumping to a new TSS when performing a task switch.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E33.	INT 1 Instruction Handler Execution Could Generate a Debug Exception
+Problem: If the processor’s general detect enable flag is set and an explicit call is made to the interrupt procedure via the INT 1 instruction, the general detect enable flag should be cleared prior to entering the handler. As a result of this erratum, the flag is not cleared prior to entering the handler. If an access is  made to the debug registers while inside of the handler, the state of the general detect enable flag will cause a second debug exception to be taken. The second debug exception clears the general detect enable flag and returns control to the handler which is now able to access the debug registers.
+Implication: This erratum will generate an unexpected debug exception upon accessing the debug registers while inside of the INT 1 handler.
+Workaround:	Ignore the second debug exception that is taken as a result of this erratum.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E34.	COMISS/UCOMISS May Not Update Eflags Under Certain Conditions
+Problem: COMISS/UCOMISS instructions compare the least significant pairs of packed single- precision floating-point numbers and set the ZF, PF, and CF bits in the EFLAGS register accordingly (the OF, SF, and AF bits are cleared). Under certain conditions when a memory location is loaded into cache, the EFLAGS may not get set.
+Implication: The result of the incorrect status of the EFLAGS may range from no effect to an unexpected application/OS behavior.
+Workaround:	It is possible for BIOS code to contain a workaround for this erratum.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+
+E35.	Transmission Error on Cache Read
+Problem:  During  reads  of the L2 cache, the processor may use certain L2 cache optimizations  that may result in a data transmission error
+Implication: Data corruption caused by this erratum will result in unpredictable system behavior.
+Workaround:	It is possible for BIOS code to contain a workaround for this erratum.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E36.	Potential Loss of Data Coherency During MP Data Ownership Transfer
+Problem:     In  MP  systems,  processors  may be sharing data in different cache lines, referenced as line A and line B in the discussion below. When this erratum occurs (with the following example given for a 2-way MP system with processors noted as ‘P0’ and ‘P1’), P0 contains a shared copy of line B in its L1. P1 has a shared copy of Line A. Each processor must manage the necessary invalidation and snoop cycles before that processor can modify and source the results of any internal writes to the other processor.
+There exists a narrow timing window when, if P1 requests a coy of line B it may be supplied by P0 in an Exclusive state which allows P1 to modify the contents of the line with no further external invalidation cycles. In this narrow window P0 may also retire instructions that use the original data present before P1 performed the modification
+Implication: Multiprocessor or threaded application synchronization, required for low-level data sharing, that is implemented via operating system provided synchronization  constructs are not affected by this erratum. Applications which rely upon the usage of locked semaphores rather than memory ordering are also unaffected. Uniprocessor systems are not affected by this erratum. If the erratum does occur one processor may execute software with the stale data that was present from the previous shared state rather than the data written more recently by another processor.
+Workaround:    Deterministic barriers beyond  which program variables will not be modified can    be achieved via the usage of locked semaphore operations. These should effectively prevent the occurrence of this erratum
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E37.	Misaligned Locked Access to APIC Space Results in Hang
+Problem: When the processor’s APIC space is accessed with a  misaligned locked  access  a  machine check exception is expected. However, the processor’s machine check architecture is unable to handle the misaligned locked access.
+Implication: If this erratum occurs the processor will hang. Typical usage models for the APIC address space do not use locked accesses. This erratum will not affect systems using such a model.
+Workaround:	Ensure that all accesses to APIC space are aligned.
+
+
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E38.	Floating-Point Exception Signal May Be Deferred
+Problem:    A one clock window exists where a pending x87 FP exception that should be signaled   on the execution of a CVTPS2PI, CVTPI2PS, or CVTTPS2PI instruction may be  deferred to the next waiting floating-point instruction or instruction that  would  change MMX™ register state.
+Implication:  If this erratum occurs the floating-point exception will not be handled as expected.
+Workaround: Applications that follow Intel programming  guidelines  (empty all x87  registers before executing MMX technology instructions) will not be affected by this erratum
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this   section
+
+E39.	Memory Ordering Based Synchronization May Cause a Livelock Condition in MP Systems
+Problem: In an MP environment, the following sequence of code  (or similar code) in  two  processors (P0 and P1) may cause them to each enter an infinite loop (livelock condition):
+P0	P1
+MOV [xyz], EAX	(1) wait1:  MOV EBX, [abc]	(2)
+.	CMP EBX, val1 (3)
+.	JNE wait1 (4)
+.
+MOV [abc], val1	(6)		MOV [abc], val2	(5) wait0:   MOV EBX, [abc]	(7)
+CMP EBX, val2 (8)
+JNE wait0 (9)
+
+
+NOTE
+The  EAX and EBX can be any general-purpose register. Addresses [abc] and [xyz]  can be any location in memory and must be in the same bank of the L1 cache. Variables “val1” and “val2” can be any integer.
+The algorithm above involves processors P0 and P1, each of which use loops to keep them synchronized with each other. P1 is looping until instruction (6) in P0 is globally observed. Likewise, P0 will loop until instruction (5) in P1 is globally observed.
+
+
+The P6 architecture  allows for instructions (1) and (7) in P0 to be dispatched to the  L1 cache simultaneously. If the two instructions are accessing the same memory   bank in the L1 cache, the load (7) will be given higher priority and will complete, blocking instruction (1).
+Instructions (8) and (9) may then execute and retire, placing the instruction pointer back to instruction (7). This is due to the condition at the end of the “wait0” loop being false. The livelock scenario can occur if the timing of the wait0 loop execution is such that instruction (7) in P0 is ready for completion every time that instruction (1) tries to complete. Instruction (7) will again have higher priority, preventing the data ([xyz]) in instruction (1) from being written to the L1 cache. This causes instruction
+(6) in P0 to not complete and the sequence “wait0” to loop infinitely in P0.
+A livelock condition also occurs in P1 because instruction (6) in P0 does not complete (blocked by instruction (1) not completing). The problem with this scenario is that P0 should eventually allow for instruction (1) to write its data to the L1 cache. If this occurs, the data in instruction (6) will be written to memory, allowing the conditions  in both loops to be true.
+Implication: Both processors will be  stuck in an infinite loop, leading to a hang condition. Note  that if P0 receives any interrupt, the loop timing will be disrupted such that the livelock will be broken. The system timer, a keystroke, or mouse movement can provide an interrupt that will break the livelock.
+Workaround:  Use  a  LOCK instruction to force  P0 to execute instruction (6) before instruction  (7).
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E40.	System Bus Address Parity Generator May Report False AERR#
+Problem: The processor’s address  parity error detection circuit may fail to meet its frequency  timing specification under certain environmental conditions. At the high end of the temperature specification and/or the low end of the voltage range, the processor may report false address parity errors.
+Implication: If the system has AERR# drive enabled (bit [3] of the EBL_CR_POWERON resister set to ‘1’) spurious address detection and reporting may occur. In some system configurations, BINIT# may be asserted on the system bus. This may cause some systems to generate a machine check exception and in others may cause a reboot.
+Workaround: Disable AERR# drive from the processor.  AERR#  drive  may  be  disabled  by clearing bit [3] in the EBL_CR_POWERON register. In addition, if the chipset allows, AERR# drive should be enabled from the chipset and AERR# observation enabled on the processor. AERR# observation on the processor is enabled by asserting A8# on the active-to-inactive transition of RESET#.
+Status: For the processor  part  numbers  affected  see  the  “Pentium®  III  Processor  Identification and Packaging Information” table in the General Information section.
+
+E41.	System Bus ECC Not Functional With 2:1 Ratio
+
+
+Problem:   If  a processor is underclocked at a core  frequency to system bus frequency ratio of   2:1 and system bus ECC is enabled, the system bus ECC detection and correction will negatively affect internal timing dependencies.
+Implication: If system bus ECC is enabled, and the processor is underclocked at a 2:1 ratio, the system may behave unpredictably due to these timing dependencies.
+Workaround: All bus agents that  support  system bus ECC  must disable it when a 2:1 ratio is used.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E42.	Processor May Assert DRDY# on a Write With No Data
+Problem:   When a MASKMOVQ instruction is misaligned across a chunk boundary in a way that   one chunk has a mask of all 0’s, the processor will initiate two partial write transactions with one having all byte enables deasserted. Under these conditions, the expected behavior of the processor would be to perform both write transactions, but to deassert DRDY# during the transaction which has no byte enables asserted. As a result of this erratum, DRDY# is asserted even though no data is being transferred.
+Implication: The implications of this erratum depend on the bus agent’s ability to handle this erroneous DRDY# assertion. If a bus agent cannot handle a DRDY# assertion in this situation, or attempts to use the invalid data on the bus during this transaction, unpredictable system behavior could result
+Workaround:   A system which can accept a DRDY# assertion during a write with no data will not be affected by this erratum. In addition, this erratum will not occur if the MASKMOVQ is aligned.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E43.	GP# Fault on WRMSR to ROB_CR_BKUPTMPDR6
+Problem:   Writing a ‘1’ to unimplemented bit(s) in the ROB_CR_BKUPTMPDR6 MSR (offset 1E0h) will result in a general protection fault (GP#).
+Implication: The normal process  used to write an MSR is to read the MSR using RDMSR, modify  the bit(s) of interest, and then to write the MSR using WRMSR. Because of this erratum, this process may result in a GP# fault when used to modify the ROB_CR_BKUPTMPDR6 MSR.
+Workaround: When writing to ROB_CR_BKUPTMPDR6 all unimplemented bits must be ‘0.’ Implemented bits may be set as ‘0’ or ‘1’ as desired.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E44.	Machine Check Exception May Occur Due to Improper Line Eviction in the IFU
+
+
+Problem: The Pentium III processor is designed to signal an unrecoverable Machine Check  Exception (MCE) as a consistency checking mechanism. Under a complex set of circumstances involving multiple speculative branches and memory accesses there exists a one cycle long window in which the processor may signal a MCE in the Instruction Fetch Unit (IFU) because instructions previously decoded have been evicted from the IFU. The one cycle long window is opened when an opportunistic fetch receives a partial hit on a previously executed but not as yet completed store resident in the store buffer.  The resulting partial hit erroneously causes the eviction  of a line from the IFU at a time when the processor is expecting the line to still be present. If the MCE for this particular IFU event is disabled, execution will continue normally.
+Implication: While this erratum may occur on a system with any number of Pentium  III  processors, the probability of occurrence increases with the number of processors. If this erratum does occur, a machine check exception will result. Note systems that implement an operating system that does not enable the Machine Check Architecture will be completely unaffected by this erratum (e.g., Windows* 95 and Windows 98).
+Workaround:	It is possible for BIOS code to contain a workaround for this erratum.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E45.	Performance Counters Include Streaming SIMD Extensions L1 Prefetch
+Problem: The processor allows the measurement of the frequency and duration of numerous different internal and bus related events (see Intel Architecture Software Developer's Manual, Volume 3, for more details). The Streaming SIMD Extension (SSE) architecture provides a mechanism to pre-load data into the L1 cache, bypassing the L2 cache. The number of these L1 pre-loads measured by the performance  monitoring logic will incorrectly be included in the count of “L2_LINES_IN” (24H) events and “L2_LINES_OUT” (26H) events.
+Implication: If application software is run which utilizes the SSE L1 prefetch feature, the count of “L2_LINES_IN” (24H) and “L2_LINES_OUT” (26H) will read a value that is greater than the correct value.
+Workaround: The correct value of “L2_LINES_IN” and “L2_LINES_OUT” may be calculated by subtracting the value of the “MMX_PRE_MISS” (4BH) from each of these registers.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E46.	Snoop Request May Cause DBSY# Hang
+Problem:     A small window of time exists in which a snoop request originating from a bus agent   to a processor with one or more outstanding memory transactions may cause the processor to assert DBSY# without issuing a corresponding bus transaction, causing the processor to hang (livelock). The exact circumstances are complex, and include the relative timing of internal processor functions with the snoop request from a bus agent
+
+
+Implication: This erratum may occur on a system with any number of processors. However, the probability of occurrence increases with the number of processors. If this erratum does occur, the system will hang with DBSY# asserted. At this point, the system requires a hard reset.
+Workaround:	It is possible for BIOS code to contain a workaround for this erratum.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E47.	Lower Bits of SMRAM SMBASE Register Cannot Be Written With an ITP
+Problem: The System Management Base  (SMBASE)  register  (7EF8H)  stores  the  starting  address of the System Management RAM (SMRAM). This register is used by the processor when it is in System Management Mode (SMM), and its contents serve as the memory base for code execution and data storage. The 32-bit SMBASE register can normally be programmed to any value. When programmed with an In-Target Probe (ITP), however, any attempt to set the lower 11 bits of SMBASE to anything other than zeros via the WRMSR instruction will cause the attempted write to fail.
+Implication: When set via ITP, any attempt to relocate SMRAM space must be made with 2-KB alignment.
+Workaround:	None identified
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E48.	Task Switch Caused by Page Fault May Cause Wrong PTE and PDE Access Bit to Be Set
+Problem:   If an operating system executes a  task switch via a Task State Segment (TSS), and   the TSS is wholly or partially located within a clean page (A and D bits clear) and the GDT entry for the new TSS is either misaligned across a cache line boundary or is in a clean page, the accessed and dirty bits  for an incorrect page table/directory entry may be set.
+Implication: An operating system which uses hardware task switching (or hardware task management)  may encounter this erratum. The effect of the erratum depends on   the alignment of the TSS and ranges from no anomalous behavior to unexpected errors.
+Workaround:   The operating system could align all TSSs to be within page boundaries and set    the A and D bits for those pages to avoid this erratum. The operating system may alternately use software task management.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E49.	Unsynchronized Cross-Modifying Code Operations Can Cause Unexpected Instruction Execution Results
+
+
+Problem: The act of one processor, or system bus  master,  writing  data  into  a  currently executing code segment of a second processor with the intent of having the second processor execute that data as code is called cross-modifying code (XMC). XMC that does not force the second processor to execute a synchronizing instruction, prior to execution of the new code, is called unsynchronized XMC.
+Software using unsynchronized XMC to modify the instruction byte stream of a processor can see unexpected instruction execution from the processor that is executing the modified code.
+Implication: In this case, the phrase "unexpected execution behavior" encompasses  the  generation of most of the exceptions listed in the Intel Architecture Software Developer's Manual Volume 3: System Programming Guide, including a General Protection Fault (GPF). In the event of a GPF the application executing the unsynchronized XMC operation would be terminated by the operating system.
+Workaround: In order to avoid this erratum, programmers should use the XMC synchronization algorithm  as detailed in the Intel Architecture Software Developer's Manual Volume  3: System Programming Guide, Section 7.1.3.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E50.	Processor Will Erroneously Report a BIST Failure
+Problem: If  the  processor performs  BIST at  power-up,  the  EAX register is  normally cleared  (0H) when the processor passes. The processor will erroneously report a non-zero value (signaling a BIST failure) even if BIST passes.
+Implication: The processor will incorrectly signal an error after BIST is performed.
+Workaround:	The system BIOS should ignore the BIST results in the EAX register.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E51.	Noise Sensitivity Issue on Processor SMI# Pin
+Problem: Post silicon characterization has demonstrated a greater than expected sensitivity to  noise on the processor's SMI# input, which may result in spurious SMI# interrupts.
+Implication: BIOS/SMM code that is capable of handling spurious SMI events will report a spurious SMI#, but should not be negatively impacted by this erratum. Systems whose BIOS code cannot handle spurious SMI events may fail, resulting in a system hang or other anomalous behavior.
+Spurious SMI# interrupts should be controlled on the system board regardless of  BIOS implementation.
+Workaround: Possible workarounds that may reduce  or  eliminate  the  occurrence  of  the  spurious SMI# interrupts include:
+Use a lower effective pull-up resistance on the SMI# pin. This resistor must meet the specifications of the component driving the SMI# signal.
+
+
+Externally condition the SMI# signal prior to providing it to the processor's SMI# pin.
+These workarounds should be evaluated on a design-by-design basis.
+Status:	For the steppings affected see the Summary of Changes at the beginning of this section
+
+E52.	Limitation On Cache Line ECC Detection and Correction
+Problem:   ECC can detect and correct up to four single-bit ECC errors per cache line.  However,   the processor will only detect and correct one single-bit ECC error per cache line. While all ECC errors will be detected, multiple single bit errors will be incorrectly reported as uncorrectable double bit errors, rather than correctable single bit errors.
+Implication: The processor may report fewer single bit ECC errors and more double bit ECC errors than previous processors.
+Workaround:	None identified
+Status:	For the steppings affected see the Summary of Changes at the beginning of this section.
+
+E53.	L2_LD and L2_M_LINES_OUTM Performance-Monitoring Counters Do Not Work
+Problem:   The  L2_LD  (29H) and L2_M_LINES_OUTM (27H) Performance-Monitoring counters    are used to monitor L2 cache line activity. These counters incorrectly count their respective events.
+Implication: These counters will report incorrect data.
+Workaround:	None identified
+Status:	For the steppings affected see the Summary of Changes at the beginning of this section.
+
+E54.	IFU/DCU Deadlock May Cause System Hang
+Problem: An internal deadlock situation may occur in systems with multiple bus agents, with a failure signature such that a processor either asserts DBSY# without issuing the corresponding data, or fails to respond to a snoop request from another bus agent. Should this erratum occur, the affected processor ceases code execution and the system will hang.
+The specific circumstances surrounding the occurrence of this erratum are:
+A locked operation to the Data Cache Unit (DCU) is in process.
+A snoop occurs, but cannot complete due to the ongoing locked operation.
+The presence of the snoop prevents pending Instruction Fetch Unit (IFU) requests from completing.
+
+
+The IFU requests are periodically restarted.
+The continued IFU restart attempts create additional DCU snoops, which prevent the in-process locked operation from completing, keeping the DCU locked.
+Implication: The system may hang
+Workaround:	It is possible for BIOS code to contain a workaround for this erratum.
+Status:	For the steppings affected see the Summary of Changes at the beginning of this section.
+
+E55.	L2_DBUS_BUSY Performance Monitoring Counter Will Not Count Writes
+Problem: The L2_DBUS_BUSY (22H) performance monitoring counter is intended to count the number of cycles during which the L2 data bus is in use. For some steppings of the processor, the L2_DBUS_BUSY counter will not be incremented during write cycles and therefore will only reflect the number of L2 data bus cycles resulting from cache reads
+Implication: The L2_DBUS_BUSY event counts only L2 read cycles.
+Workaround:	None identified
+Status:	For the steppings affected see the Summary of Changes at the beginning of this section.
+
+E56.	Incorrect Sign May Occur On X87 Result Due To Indefinite QNaN Result From Streaming SIMD Extensions Multiply
+Problem:    It is possible that a negative  sign bit may be incorrectly applied to the result of an    X87 floating-point operation if it is closely preceded by a Streaming SIMD Extensions (SSE) multiply operation. In order for this erratum to occur, the Streaming SIMD Extensions multiply operation must result in an Indefinite Quiet Not-a-Number (QNaN). Operations such as multiplying zero by infinity will result in an Indefinite QNaN result.
+Implication: If this erratum occurs, the result of an X87 floating-point instruction, which should be positive, will instead be negative.
+Workaround:	It is possible for BIOS code to contain a workaround for this erratum.
+Status:	For the steppings affected see the Summary of Changes at the beginning of this section.
+
+E57.	Deadlock	May	Occur	Due	To	Illegal-Instruction/Page-Miss Combination
+Problem: Intel's 32-bit Instruction Set Architecture (ISA) utilizes most of the available op-code space; however some byte combinations remain undefined and are considered illegal instructions. Intel processors detect the  attempted execution of illegal instructions and signal an exception. This exception is handled by operating system and/or application software.
+
+
+Under a complex set of internal and external conditions involving illegal instructions,  a deadlock may occur within the processor. The necessary conditions for  the  deadlock involve:
+Execution of the illegal instruction.
+Two-page table walks occur within a narrow timing window coincident with the illegal instruction.
+Implication: The illegal instructions involved in this erratum are unusual and invalid byte combinations that are not useful to application software or operating systems. These combinations are not normally generated in the course of software programming, nor are such sequences known by Intel to be generated in commercially available  software and tools. Development tools (compilers, assemblers) do not generate this type of code sequence, and will normally flag such a sequence as an error. If this erratum occurs, the processor deadlock condition will occur and result in a system hang. Code execution cannot continue without a system RESET.
+Workaround:	None identified
+Status:	For the steppings affected see the Summary of Changes at the beginning of this section
+
+E58.	MASKMOVQ Instruction Interaction with String Operation May Cause Deadlock
+Problem:	Under the following scenario, combined with a specific alignment of internal events, the processor may enter a deadlock condition:
+A store operation completes, leaving a write-combining (WC) buffer  partially filled.
+The target of a subsequent MASKMOVQ instruction is split across a cache line.
+The data in (2) above results in a hit to the data in the WC buffer in (1).
+Implication: If this erratum occurs, the processor deadlock condition will occur and result in a system hang. Code execution cannot continue without a system RESET.
+Workaround:	It is possible for BIOS code to contain a workaround for this erratum.
+Status:	For the steppings affected see the Summary of Changes at the beginning of this section.
+
+E59.	MOVD, CVTSI2SS, or PINSRW Following Zeroing Instruction Can Cause Incorrect Result
+Problem:	An incorrect result may be calculated after the following circumstances occur:
+A register has been zeroed with either a SUB reg, reg instruction, or an XOR reg, reg instruction.
+A value is moved with sign extension into the same register’s lower 16 bits; or a signed integer multiply is performed to the same register’s lower 16 bits.
+
+
+The register is then copied to an MMX™ technology register using the MOVD, or converted to single precision floating-point and moved to an MMX technology register using the CVTSI2SS instruction prior to any other operations on the sign- extended value, or inserted into an MMX™ technology register using the PINSRW instruction.
+
+
+Specifically, the sign may be incorrectly extended into bits 16-31 of the MMX technology register. In the case of the PINSRW instruction, a non-zero value could be loaded into the MMX™ technology register. This erratum only affects the MMX™ technology register.
+
+
+This erratum only occurs when the following three steps occur in the order shown. This erratum may occur with up to 63 (39 for Pre-CPUID 0x6BX) intervening instructions that do not modify the sign-extended value between steps 2 and 3.
+XOR EAX,  EAX or SUB EAX, EAX
+
+MOVSX AX, BL
+or MOVSX AX, byte ptr <memory address> or MOVSX AX, BX
+or MOVSX AX, word ptr <memory address> or IMUL BL (AX implicit, opcode F6
+/5)
+or IMUL byte ptr <memory address> (AX implicit, opcode F6 /5) or IMUL AX, BX (opcode 0F AF /r)
+or IMUL AX, word ptr <memory address> (opcode 0F AF /r) or IMUL AX, BX, 16 (opcode 6B /r ib)
+or IMUL AX, word ptr <memory address>, 16 (opcode 6B /r ib) or IMUL AX, 8 (opcode 6B /r ib)
+or IMUL AX, BX, 1024 (opcode 69 /r iw)
+or IMUL AX, word ptr <memory address>, 1024 (opcode 69 /r iw) or IMUL AX, 1024 (opcode 69 /r iw) or CBW
+
+MOVD MM0, EAX or CVTSI2SS MM0, EAX
+
+
+Note that the values for immediate byte/words are merely representative (i.e., 8, 16, 1024) and that any value in the range for the size is affected. Also, note that this erratum may occur with “EAX” replaced with any 32-bit general-purpose register, and “AX” with the corresponding 16-bit version of that replacement. “BL” or “BX” can be
+
+
+replaced with any 8-bit or 16-bit general-purpose register. The CBW and IMUL (opcode F6 /5) instructions are specific to the EAX register only.
+
+
+In the above example, EAX is forced to contain 0 by the XOR or SUB instructions. Since the four types of the MOVSX or IMUL instructions and the CBW instruction only modify bits 15:8 of EAX by sign extending the lower 8 bits of EAX, bits 31:16 of EAX should always contain 0. This implies that when MOVD or CVTSI2SS copies EAX to MM0, bits 31:16 of MM0 should also be 0. In certain scenarios, bits 31:16 of MM0 are not 0, but are replicas of bit 15 (the 16th bit) of AX. This is noticeable when the value in AX after the MOVSX, IMUL or CBW instruction is negative (i.e., bit 15 of AX is a 1).
+
+
+When AX is positive (bit 15 of AX is 0), MOVD or CVTSI2SS will produce the correct answer. If AX is negative (bit 15 of AX is 1), MOVD or CVTSI2SS may produce the right answer or the wrong answer, depending on the point in time when the MOVD or CVTSI2SS instruction is executed in relation to the MOVSX, IMUL or CBW instruction.
+The PINSRW instruction can fail to correctly load a zero when used with a partial register zeroing instruction (SUB or XOR):
+mov di, 0FFFF8914h
+xor eax, eax
+add ax, di
+xor ah, ah
+pinsrw mm1, eax, 00h
+In this case, the programmer expects mm1 to contain 0014h in it’s least significant word. This erratum would cause MM1 to contain 8914h. The number of intervening instructions between steps 4 and 5 is the same as noted in the sign extension  example above between steps 2 and 3.
+Implication: The effect of incorrect execution will vary from unnoticeable, due to the code  sequence discarding the incorrect bits, to an application failure.
+Workaround:	There are two possible workarounds for this erratum:
+
+
+Rather than using the MOVSX-MOVD/CVTSI2SS, IMUL-MOVD/CVTSI2SS or CBW- MOVD/CVTSI2SS pairing to handle one variable at a time, use the sign extension capabilities (PSRAW, etc.) within MMX technology for operating on multiple variables. This will also result in higher performance.
+
+
+Insert another operation that modifies or copies the sign-extended value between the MOVSX/IMUL/CBW instruction and the MOVD or CVTSI2SS instruction as in the example below:
+XOR EAX, EAX (or SUB EAX, EAX)
+
+
+MOVSX AX, BL (or other MOVSX, other IMUL or CBW instruction)
+*MOV EAX, EAX
+MOVD MM0, EAX or CVTSI2SS MM0, EAX
+
+
+Avoid using a sub or xor to zero a partial register prior to the use of any of these three instructions. Instead, use a mov immediate (e.g. “mov ah, 0h”).
+
+
+*Note: MOV EAX, EAX is used here in a generic sense. Again, EAX can be substituted with any 32-bit register.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E60.	FLUSH# Assertion Following STPCLK# May Prevent CPU Clocks From Stopping
+Problem: If FLUSH# is  asserted after STPCLK# is asserted, the  cache  flush operation will not occur until after STPCLK# is de-asserted. Furthermore, the pending  flush  will  prevent the processor from entering the Sleep state, since the flush operation must complete prior to the processor entering the Sleep state.
+Implication: Following SLP# assertion, processor power dissipation may be higher than expected. Furthermore, if the source to the processor’s input bus clock (BCLK) is removed, normally resulting in a transition to the Deep Sleep state, the processor may shutdown improperly. The ensuing attempt to wake up the processor will result in unpredictable behavior and may cause the system to hang.
+Workaround: For systems that use the FLUSH# input signal and Deep Sleep state  of  the processor, ensure that FLUSH# is not asserted while STPCLK# is asserted.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E61.	Intermittent Failure to Assert ADS# During Processor Power-On
+Problem: Under a system specific set of initial parametric conditions, a very small number of Pentium® III processors (CPUID 068xh) may be susceptible to entering an internal test mode during processor power-on. The symptom of this test mode is a failure to assert ADS# during a processor power-on.
+Implication: On susceptible platforms, when power is applied to the processor, there  is  a possibility that the processor will occasionally enter the test mode rather than initiate a system boot sequence.
+A subsequent processor Power-Off then Power-On cycle should remove the processor from this test mode, allowing normal processor operation to resume. The following workaround also may reduce the occurrence of the failure condition:
+
+
+SC242-based platform designs in which VTT leads the processor input voltage may reduce the occurrence of the erratum by connecting SC242 pin B20 (RESERVED) to pin B9 (VTT).
+PGA370-based platform designs in which VTT leads the processor input voltage can reduce the occurrence of the erratum by connecting pin G37 (RESERVED) to motherboard VTT or short the PGA370 socket pin G37 to AH20 or G35 (both VTT).
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E62.	Floating-Point Exception Condition May be Deferred
+Problem: A floating-point instruction that causes a pending floating-point exception (ES=1) is normally signaled by the processor on the next waiting FP/MMX™ technology instruction. In the following set of circumstances, the exception may be delayed or  the FSW register may contain a wrong value:
+The excepting floating-point instruction is followed by an instruction that accesses memory across a page (4-Kbyte) boundary or its access results in the update of a page table dirty/access bit.
+The memory accessing instruction is immediately followed by a waiting floating- point or MMX technology instruction.
+The waiting floating-point or MMX technology instruction retires during a one- cycle window that coincides with a sequence of internal events related to instruction cache line eviction.
+Implication: The floating-point exception will not be signaled until the next waiting floating- point/MMX technology instruction. Alternatively it may be signaled with the wrong  TOS and condition code values. This erratum has not been observed in any commercial software applications.
+Workaround:	None identified
+Status: For the stepping  affected  see  the  Summary of Changes  at  the  beginning  of this  section.
+
+E63.	THERMTRIP# May Not be Asserted as Specified
+Problem:    THERMTRIP# is a signal on the Pentium® III processor that is asserted when the     core reaches a critical temperature during operation as detailed in the processor specification. The Pentium® III processor may not assert THERMTRIP# until a much higher temperature than the one specified is reached.
+Implication: The THERMTRIP# feature is not functional on the Pentium® III processor. Note that this erratum can only occur when the processor is running with a  TPLATE  temperature over the maximum specification of 75° C
+Workaround: Avoid operation of the Pentium III processor outside of the thermal specifications defined by the processor specifications.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+
+E64.	Cache Line Reads May Result in Eviction of Invalid Data
+Problem: A small window  of  time  exists in which internal timing  conditions in the  processor cache logic may result in the eviction of an L2 cache line marked in the invalid state.
+Implication: There are three possible implications of this erratum:
+The processor may provide incorrect L2 cache line data by evicting an invalid line.
+A BNR# (Block Next Request) stall may occur on the system bus.
+Should a snoop request occur to the same cache line in a small window of time  the processor may incorrectly assert HITM#. It is then possible for an infinite snoop stall to occur should another processor respond (correctly) to the snoop request with HIT#. In order for this infinite snoop stall to occur, at least three agents must be present, and the probability of occurrence increases with the number of processors. Should 2 or 3 occur, the processor will eventually assert BINIT# (if enabled) with an MCA error code indicating a ROB time-out. At this point, the system requires a hard reset.
+Workaround:	It is possible for BIOS code to contain a workaround for this erratum.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this   section
+
+E65.	Snoop probe during FLUSH# could cause L2 to be left in shared state
+Problem: During a L2 FLUSH operation using the FLUSH# pin, it is possible that a read request  from a bus agent or other processor to a valid line will leave the line in the Shared state (S) instead of the Invalid state (I) as expected after flush operation. Before the FLUSH operation is completed, another snoop request to invalidate the line from another agent or processor could be ignored, again leaving the line in the Shared state.
+Implication: Current desktop and mid range server systems  have no mechanism to assert the  flush pin and hence are not affected by this erratum. A high-end server system that does not suppress snoop traffic before the assertion of the FLUSH# pin may cause a line to be left in an incorrect cache state.
+Workaround:  Affected  systems (those capable of asserting the FLUSH# pin) should prevent   snoop activity on the front side bus until invalidation is completed after asserting FLUSH#, or use a WBINVD instruction instead of asserting the FLUSH# pin in order   to flush the cache.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+
+E67.	Selector for the LTR/LLDT Register May Get Corrupted
+Problem:      The internal selector portion of the respective register (TR, LDTR) may get corrupted,  if during a small window of LTR or LLDT system instruction execution, the following sequence of events occur:
+Speculative write to a segment register that might follow the LTR or LLDT instruction
+The read segment descriptor of LTR/LLDT operation spans a page (4 Kbytes) boundary; or causes a page fault
+Implication: Incorrect selector for LTR, LLDT instruction could be used after a task switch.
+Workaround:	Software can insert a serializing  instruction  between  the  LTR or LLDT instruction and the segment register write.
+Status:	For the steppings affected see the Summary of Changes at the beginning of this section.
+
+E68.	INIT Does Not Clear Global Entries in the TLB
+Problem:	INIT may not flush a TLB entry when:
+The processor is in protected mode with paging enabled and the page global enable flag is set (PGE bit of CR4 register)
+G bit for the page table entry is set
+TLB entry is present in TLB when INIT occurs
+Implication: Software  may encounter unexpected page fault or incorrect address translation due  to a TLB entry erroneously left in TLB after INIT.
+Workaround:	Write to CR3, CR4  or  CR0  registers  before  writing  to memory early in BIOS code to clear all the global entries from TLB.
+Status:	For the steppings affected see the Summary of Changes at the beginning of this section
+
+E69.	VM Bit will be Cleared on a Double Fault Handler
+Problem: Following a task switch to a Double Fault  Handler  that  was  initiated  while  the processor was in virtual-8086 (VM86) mode, the VM bit will be incorrectly cleared in EFLAGS.
+
+
+Implication: When the OS recovers from the double fault handler, the processor will no longer be  in VM86 mode
+Workaround:	None identified
+Status:	For the steppings affected see the Summary of Errata at the beginning of this section
+
+E70.	Memory Aliasing with Inconsistent A and D Bits may Cause Processor Deadlock
+Problem: In the event that software implements memory aliasing by having two Page Directory Entries (PDEs) point to a common Page Table Entry (PTE) and the Accessed and Dirty bits for the two PDEs are allowed to become inconsistent the processor may become deadlocked
+Implication: This erratum has not been observed with commercially available software
+Workaround:    Software that needs to implement memory aliasing in this way should manage    the consistency of the Accessed and Dirty bits.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this   section
+
+E71.	Use of Memory Aliasing with Inconsistent Memory Type May Cause System Hang
+Problem: Software that implements memory aliasing by having more than one linear addresses mapped to the same physical page with different cache types may cause the system to hang. This would occur if one of the addresses is non-cacheable used in code segment and  the other a cacheable address.  If the cacheable address finds its way  in instruction cache, and non-cacheable address is fetched in IFU, the processor may invalidate the non-cacheable address from the fetch unit. Any micro-architectural event that causes instruction restart will expect this instruction to still be in fetch unit and lack of it will cause system hang
+Implication: This erratum has not been observed with commercially available software
+Workaround:  Although it is  possible to have a single physical page mapped by two different   linear addresses with different memory types, Intel has strongly discouraged this practice as it may lead to undefined results. Software that needs to implement memory aliasing should manage the memory type consistency
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E72.	Processor may Report Invalid TSS Fault Instead of Double Fault During Mode C Paging
+Problem:   When an operating  system executes  a  task switch via a Task State Segment (TSS)   the CR3 register is always updated from the new task TSS. In the mode C paging, once the CR3 is changed the processor will attempt to load the PDPTRs. If the CR3 from the target task TSS or task switch handler TSS is not valid then the new PDPTR
+
+
+will not be loaded. This will lead to the reporting of invalid TSS fault instead of the expected Double fault
+Implication: Operating systems that access an invalid TSS may get invalid TSS fault instead of a Double fault.
+Workaround:	Software needs to ensure any accessed TSS is valid.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E73.	Machine Check Exception May Occur When Interleaving Code Between Different Memory Types
+Problem: A small window of opportunity  exists  where  code  fetches  interleaved  between  different memory types may cause a machine check exception. A complex set of micro-architectural boundary conditions is required to expose this window.
+Implication: Interleaved instruction fetches between different memory types may result in a machine check exception. The system may hang if machine check exceptions are disabled. Intel has not observed the occurrence of this erratum while running commercially available applications or operating systems.
+Workaround: Software can avoid this erratum by placing a serializing instruction between code fetches between different memory types.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this   section
+
+E74.	Wrong ESP Register Values During a Fault in VM86 Mode
+Problem:    At the beginning of the IRET instruction execution in VM86 mode, the lower 16 bits of the ESP register are saved as the old stack value. When a fault occurs, these 16 bits are moved into the 32-bit ESP, effectively clearing the upper 16 bits of the ESP.
+Implication: This erratum has not been observed to cause any problems with commercially available software.
+Workaround:	None identified
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E75.	APIC ICR Write May Cause Interrupt Not to be Sent When ICR Delivery Bit Pending
+Problem: If the APIC ICR (Interrupt Control Register) is written with a new interrupt command  while the Delivery Status bit from a previous interrupt command is set to '1' (Send Pending), the interrupt message may not be sent out by the processor.
+Implication: This erratum will cause an interrupt message not to be sent, potentially resulting in system hang.
+
+
+Workaround: Software  should always poll the  Delivery Status bit in the  APIC  ICR and ensure  that it is '0' (Idle) before writing a new value to the ICR.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this   section
+
+E76.	High Temperature and Low Supply Voltage Operation May Result in Incorrect Processor Operation
+Problem: When operating at the high temperature, low supply voltage corner of the processor specification, if there is a store pending in the processor’s fill buffer, and simultaneously a load operation misses the L1 cache but results in a hit to the L2 cache, then it is possible that incorrect data may be returned to satisfy the load operation.
+Implication: When this erratum is encountered, unpredictable software behavior may occur. It can be seen from the table of affected steppings that this erratum is constrained to a single stepping and is only possible in processors operating at frequencies of 933MHz and above and is not present in all of those processors. Application of the workaround will prevent occurrence of the erratum in all processors of that stepping.
+Workaround:	It is possible for BIOS code to contain a workaround for this erratum.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this   section
+
+E77.	During Boundary Scan, BCLK not Sampled High When SLP# is Asserted Low
+Problem:	During boundary scan, BCLK is not sampled high when SLP# is asserted low.
+Implication: Boundary scan results may be incorrect when SLP# is asserted low.
+Workaround:	Do not use boundary scan when SLP# is asserted low.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E78.	Incorrect Assertion of THERMTRIP# Signal
+Problem: The internal control register bit responsible for operation of the Thermtrip circuit functionality may power up in a non-initialized state. As a result, THERMTRIP# may  be incorrectly asserted during de-assertion of RESET# at nominal operating temperatures. When THERMTRIP# is asserted as a result of this erratum, the processor may shut down internally and stop execution but in few cases continue to execute.
+Implication:  This issue can lead to intermittent system power-on boot failures.  The occurrence  and repeatability of failures is system dependent, however all systems  and  processors are susceptible to failure. In addition, the processor may fail to stop execution during the event of a valid THERMTRIP# assertion resulting in the potential for permanent processor damage
+
+
+Workaround: To prevent the risk of power-on boot failures or catastrophic thermal failures, a platform workaround is required. The system must provide a rising edge on the TCK signal during the power-on sequence that meets all of the following requirements:
+Rising edge occurs after Vcc_core is valid and stable
+Rising edge occurs before or at the de-assertion of RESET#
+Rising edge occurs after all Vref input signals are at valid voltage levels
+TCK input meets the Vih min and max spec as mentioned in EMTS
+Specific   workaround   implementations   may  be platform  specific.	The following examples have been tested as acceptable workaround implementations.
+In addition, the example workaround circuits shown do not support production baseboard test methodologies that require the use of the processor JTAG/TAP port. Alternative workaround solutions must be found if such test capability is required.
+Pentium® III Processor with 512KB L2 Cache Platforms Workaround
+
+
+
+
+
+
+
+
+
+2.5V
+
+
+
+Assumes the inputs to the CPU_PWRGD are open collector signals that are Wire-ANDed together
+
+
+The example workaround circuit assumes that the PWRGD inputs into the processors are open collector. Tying the PWRGD inputs together in a Wired-AND fashion allows each processor to receive PWRGD at the same time but at the  latter of the 2 separate PWRGD assertions. If separation of the PWRGD inputs to each processor is required, extra circuitry will be required.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E79.	Processor Might not Exit Sleep State Properly Upon De-assertion of CPUSLP# Signal
+Problem: If the  processor enters  a  sleep  state  upon assertion of CPUSLP# signal,  and  if the core to system bus multiplier is an odd bus fraction, then the processor may not resume from the CPU sleep state upon the de-assertion of CPUSLP# signal.
+Implication: This erratum may result in a system hang during a resume from CPU sleep state.
+Workaround: It is possible to workaround this in BIOS by not asserting CPUSLP# for power management purposes
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E80.	The Instruction Fetch Unit (IFU) May Fetch Instructions Based Upon Stale CR3 Data after a Write to CR3 Register
+Problem:     Under a complex set of conditions, there exists a one-clock window following a write   to the CR3 register wherein it is possible for the iTLB fill buffer to obtain a stale page translation based on the stale CR3 data. This stale translation will persist until the  next write to the CR3 register, the next page fault or execution of a certain class of instructions including CPUID or IRETD with privilege level change.
+Implication: The wrong page translation could be used leading to erroneous software behavior.
+Workaround:   Operating  systems  that  are potentially affected can add a second write to the   CR3 register.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E81.	Under Some Complex Conditions, the Instructions in the Shadow of a JMP FAR may be Unintentionally Executed and Retired
+Problem: If all of the following events happen in sequence it is possible for the system or  application to hang or to execute with incorrect data.
+The execution of an instruction, with an OPCODE that requires the processor to stall the issue of micro-instructions in the flow from the microcode sequence logic block to the instruction decode block. (a StallMS condition)
+Less than 63 (39 for Pre-CPUID 0x6BX) micro-instructions later, the execution of a mispredictable branch instruction. (Jcc, LOOPcc, RET Near,  CALL Near Indirect, JMP ECX=0, or JMP Near Indirect)
+
+
+The conditional branch in event (2) is mispredicted, and furthermore the mispredicted path of execution must result in either an ITLB miss, or an  Instruction Cache miss. This needs to briefly stall the issue of micro-instructions again immediately after the conditional branch until that branch prediction is corrected by the jump execution block. (a 2nd StallMS condition)
+Along the correct path of execution, the next instruction must contain a 3rd StallMS condition at a precisely aligned point in the execution of the instruction. ( CLTS, POPSS, LSS, or MOV to SS)
+A JMP FAR instruction must execute within the next 63 micro-instructions (39 Pre- CPUID 0x6BX) The intervening micro-instructions must not have any events or faults.
+When the instruction from event (2) retires, the StallMS condition within the event
+(5) instruction fails to operate correctly, and instructions in the shadow of the JMP  FAR instruction could be unintentionally executed.
+Implication: Occurrence of this erratum could lead to erroneous software behavior. Intel has not identified any commercially available software which may encounter this condition; this erratum was discovered in a focused test environment. One of the four instructions that are required to trigger this erratum, CLTS, is a privileged instruction that is only executed by an operating system or driver code. The remaining three instructions, POPSS, LSS, and MOV to SS, are executed infrequently in modern 32-bit application code.
+Workaround:	None identified at this time
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this   section
+
+E82.	Processor Does not Flag #GP on Non-zero Write to Certain MSRs
+Problem: When a non-zero write occurs to the upper 32 bits of SYSENTER_EIP_MSR or SYSENTER_ESP_MSR, the processor should indicate a general protection fault by flagging #GP. Due to this erratum, the processor does not flag #GP.
+Implication: The processor unexpectedly does not flag #GP on a non-zero write to the upper 32  bits of SYSENTER_EIP_MSR or SYSENTER_ESP_MSR. No known commercially  available operating system has been identified to be affected by this erratum.
+Workaround:	None identified.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E83.	IFU/BSU Deadlock May Cause System Hang
+Problem: A lockable instruction with memory operand that spans across two pages may, given  some rare internal conditions, hang the system.
+Implication: When this erratum occurs, the system may hang. Intel has not observed this erratum with any commercially available software or system.
+Workaround:	Lockable data should always be contained in a single page.
+
+
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E84.	REP MOVS Operation in Fast String Mode Continues in That Mode When Crossing into a Page with a Different Memory Type
+Problem: A fast “REP MOVS” operation will continue to be handled in fast mode when the string operation crosses a page boundary into an Uncacheable (UC) memory type. Also if  the fast string operation crosses a page boundary into a WC memory region, the processor will not self snoop the WC memory region. This may eventually result in incorrect data for the WC portion of the operation if those cache lines were previously cached as WB (through aliasing) and modified.
+Implication: String elements should be handled by the processor at the native operand size in UC memory. In the event that the WB to WC aliasing case occurs and incorrect data is written to memory, the end result would vary from benign to operating system or application failure. Intel has not observed either aspects of this erratum in commercially available software.
+Workaround: Software operating within Intel’s recommendation will not require WB and WC memory aliased to the same physical address.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+E85.	The FXSAVE, STOS or MOVS Instructions May Cause a Store Ordering Violation When Data Crosses a Page with a UC Memory Type
+Problem:   If the data from an FXSAVE, STOS or MOVS instruction crosses a page boundary from WB to UC memory type and this instruction is immediately followed by a second instruction that also issues a store to memory, the final data stores from both instructions may occur in the wrong order
+Implication: The impact of this store ordering behavior may vary from normal software execution  to potential software failure. Intel has not observed this erratum in commercially available software.
+Workaround:  FXSAVE,  STOS or MOVS data must not cross page boundary from WB to UC  memory type.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+E86.	POPF and POPFD Instructions that Set the Trap Flag Bit May Cause Unpredictable Processor Behavior
+Problem:    In some rare  cases, POPF and POPFD instructions that set the Trap Flag (TF) bit in    the EFLAGS register (causing the processor to enter Single-Step mode) may cause unpredictable processor behavior.
+Implication: Single step operation is typically enabled during software debug activities, not during normal system operation
+
+
+Workaround: There is no workaround for single step operation  in  commercially  available  software. For debug activities on custom software, the POPF and POPFD instructions could be immediately followed by a NOP instruction to facilitate correct execution.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+E87.	Code Segment Limit Violation May Occur on 4 Gigabyte Limit Check
+Problem: Code Segment limit violation  may occur on 4 Gigabyte  limit check when the  code  stream wraps around in a way that one instruction ends at the last byte of the segment and the next instruction begins at 0x0.
+Implication: This is a rare condition that may result in a system hang. Intel has not observed this erratum with any commercially available software, or system.
+Workaround:	Avoid code that wraps around segment limit.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+E88.	FST Instruction with Numeric and Null Segment Exceptions May Cause General Protection Faults to be Missed and FP Linear Address (FLA) Mismatch
+Problem:	FST instruction combined with numeric and null segment exceptions may cause General Protection Faults to be missed and FP Linear Address (FLA) mismatch.
+Implication: This is a rare condition that may result in a system hang. Intel has not observed this erratum with any commercially available software, or system.
+Workaround:	None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+E89.	Code Segment (CS) is incorrect on SMM Handler when SMBASE is not Aligned
+Problem:	With SMBASE being relocated to a non-aligned address, during SMM entry the CS can be improperly updated which can lead to an incorrect SMM handler.
+Implication: This is a rare condition that may result in a system hang. Intel has not observed this erratum with any commercially available software, or system.
+Workaround:	Align SMBASE to 32K byte.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+E90.	Page with PAT (Page Attribute Table) Set to USWC (Uncacheable Speculative Write Combine) While Associated MTRR (Memory Type Range Register) is UC (Uncacheable) May Consolidate to UC
+Problem:   A page  whose  PAT memory type  is USWC  while the relevant MTRR memory type is  UC, the consolidated memory type may be treated as UC (rather than WC  as  specified in IA-32 Intel® Architecture Software Developer's Manual).
+
+
+Implication: When this erratum occurs, the memory page may be as UC (rather than WC). This may have a negative performance impact.
+Workaround:	None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+E91.	Under Certain Conditions LTR (Load Task Register) Instruction May Result in System Hang
+Problem:	An LTR instruction may result in a system hang if all the following conditions are met:
+Invalid data selector of the TR (Task Register) resulting with either #GP (General Protection Fault) or #NP (Segment Not Present Fault).
+GDT (Global Descriptor Table) is not 8-Bytes aligned. GDT (Global Descriptor Table) is not 8-Bytes aligned.
+Data BP (breakpoint) is set on cache line containing the descriptor data.
+Implication: This erratum may result in system hang if all conditions  have  been  met.  This erratum has not been observed in commercial operating systems or software. For performance reasons, GDT is typically aligned to 8-Bytes.
+Workaround:	Software should align GDT to 8-Bytes.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+E92.	Loading from Memory Type USWC (Uncacheable Speculative Write Combine) May Get Its Data Internally Forwarded From a Previous Pending Store
+Problem: A load from memory type USWC  may  get  its  data  internally  forwarded  from  a pending store. As a result, the expected load may never be issued to the external  bus.
+Implication: When this erratum occurs, a USWC Load request may be satisfied without being observed on the external bus. There are no known usage models where this behavior results in any negative side-effects.
+Workaround:	Do not use memory type USWC for memory that has read side effects.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+E93.	FXSAVE after FNINIT Without an Intervening FP (Floating Point) Instruction May Save Uninitialized Values for FDP (x87 FPU Instruction Operand (Data) Pointer Offset) and FDS (x87 FPU Instruction Operand (Data) Pointer Selector)
+Problem: An FXSAVE after FNINIT without an intervening FP instruction may save uninitialized values for FDP and FDS.
+Implication: When this erratum occurs, the values for FDP/FDS in the FXSAVE structure may  appear to be random values. These values will be initialized by the first FP
+
+
+instruction executed after the FXRSTOR that restore the saved floating point state. Any FP instruction with memory operand will initialize FDP/FDS. Intel has  not observed this erratum with any commercially available software.
+Workaround: After an FINIT, do not expect the  FXSAVE memory image  to be  correct, until at least one FP instruction with a memory operand has been executed.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+E94.	FSTP (Floating Point Store) Instruction Under Certain Conditions May Result In Erroneously Setting a Valid Bit on an FP (Floating Point) Stack Register
+Problem: An FSTP instruction with an PDE/PTE (Page Directory Entry/Page Table Entry) A/D bit update followed by user mode access fault due to a code fetch to a page that has supervisor only access permission may result in erroneously setting a valid bit of an  FP stack register. The FP top of stack pointer is unchanged.
+Implication: This erratum may cause an unexpected stack overflow
+Workaround:   User mode  code  should not count on being able to recover from illegal accesses   to memory regions protected with supervisor only access when using FP instructions.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+E95.	Invalid Entries in Page-Directory-Pointer-Table Register  (PDPTR) May Cause General Protection (#GP)  Exception  if  the  Reserved  Bits are Set to One
+Problem: Invalid entries in the Page-Directory-Pointer-Table Register (PDPTR) that have the reserved bits set to one may cause a General Protection (#GP) exception.
+Implication: Intel has not observed this erratum with any commercially available software.
+Workaround:	Do not set the reserved bits to one when PDPTR entries are invalid.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E96.	Writing the Local Vector Table (LVT) when an Interrupt is Pending May Cause an Unexpected Interrupt
+Problem:  If  a  local  interrupt is pending  when the  LVT entry is written, an interrupt may be  taken on the new interrupt vector even if the mask bit is set.
+Implication: An interrupt may immediately be generated with the new vector when a LVT entry is written, even if the new LVT entry has the mask bit set. If there is no Interrupt Service Routine (ISR) set up for that vector the system will GP fault. If the ISR does not do an End of Interrupt (EOI) the bit for the vector will be left set in the in-service register and mask all interrupts at the same or lower priority.
+Workaround:  Any vector programmed into an LVT entry must have  an ISR associated with it,  even if that vector was programmed as masked. This ISR routine must do an EOI to
+
+
+clear any unexpected interrupts that may occur. The ISR associated with  the  spurious vector does not generate an EOI, therefore the spurious vector should not  be used when writing the LVT
+Status:	For the steppings affected, see the Summary Tables of Changes.
+
+E97.	The Processor May Report a #TS Instead of a #GP Fault
+Problem:	A jump to a busy TSS (Task-State Segment) may cause a #TS (invalid TSS  exception) instead of a #GP fault (general protection exception).
+Implication: Operation systems that access a busy TSS may get invalid TSS fault instead of a #GP fault. Intel has not observed this erratum with any commercially available software.
+Workaround:	None identified.
+Status:	For the steppings affected, see the Summary Tables of Changes.
+
+E98.	A Write to an APIC Register Sometimes May Appear to Have Not Occurred
+Problem: With respect to  the  retirement  of instructions, stores to the uncacheable memory-  based APIC register space are handled in a non-synchronized way. For example if an instruction that masks the interrupt flag, e.g. CLI, is executed soon after an uncacheable write to the Task Priority Register (TPR) that lowers the APIC priority,  the interrupt masking operation may take effect before the actual priority has been lowered. This may cause interrupts whose priority is lower than the initial TPR, but higher than the final TPR, to not be serviced until the interrupt enabled flag is finally set, i.e. by STI instruction. Interrupts will remain pending and are not lost.
+Implication: In this example the processor may allow interrupts to be accepted but may delay   their service.
+Workaround:  This non-synchronization can be  avoided  by issuing  an APIC register read after   the APIC register write. This will force the store to the APIC register before any subsequent instructions are executed. No commercial operating system is known to  be impacted by this erratum..
+Status:	For the steppings affected, see the Summary Tables of Changes.
+
+E99.	Using 2M/4M Pages When A20M# Is Asserted May Result in  Incorrect Address Translations
+Problem:     An external A20M# pin if enabled forces address bit 20 to be masked (forced to zero)  to emulates real-address mode address wraparound at 1 megabyte. However, if all of the following conditions are met, address bit 20 may not be masked.
+paging is enabled
+a linear address has bit 20 set
+the address references a large page
+A20M# is enabled
+
+
+Implication: When A20M# is enabled and an address references a large page the resulting translated physical address may be incorrect. This erratum has not been observed with any commercially available operating system.
+Workaround: Operating systems should not allow A20M#  to  be  enabled  if the  masking of address bit 20 could be applied to an address that references a large page.  A20M#   is normally only used with the first megabyte of memory
+Status:	For the steppings affected, see the Summary Tables of Change.
+
+E100.	Values for LBR/BTS/BTM will be Incorrect after an Exit from SMM
+Problem:   After a return from SMM (System Management Mode), the CPU will incorrectly update the LBR (Last Branch Record) and the BTS (Branch Trace Store), hence rendering  their data invalid. The corresponding data if sent out as a BTM on the system bus will also be incorrect. Note: This issue would only occur when one of the 3 above mentioned debug support facilities are used.
+Implication: The value of the LBR, BTS, and BTM immediately after an RSM operation should not  be used.
+Workaround:	None identified.
+Status:	For the steppings affected, see the Summary Tables of Change.
+
+E101.	INIT Does Not Clear Global Entries in the TLB
+Problem:	INIT may not flush a TLB entry when:
+
+
+The processor is in protected mode with paging enabled and the page global enable flag is set (PGE bit of CR4 register)
+G bit for the page table entry is set
+TLB entry is present in TLB when INIT occurs.
+Implication: Software  may encounter unexpected page fault or incorrect address translation due  to a TLB entry erroneously left in TLB after INIT.
+Workaround: Write to CR3, CR4 (setting bits PSE, PGE or PAE) or CR0 (setting bits PG or PE) registers before writing to memory early in BIOS code to clear all the global entries from TLB.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+
+E103.	The BS Flag in DR6 May be Set for Non-Single-Step #DB Exception
+Problem:	DR6 BS (Single Step, bit 14) flag may be incorrectly set when the TF (Trap Flag, bit
+8) of the EFLAGS Register is set, and a #DB (Debug Exception) occurs due to one of the following:
+DR7 GD (General Detect, bit 13) being bit set;
+INT1 instruction;
+Code breakpoint
+the DR6 BS (Single Step, bit 14) flag may be incorrectly set.
+Implication: The BS flag may be incorrectly set for non-single-step #DB exception.
+Workaround:	None identified.
+Status:	For the steppings affected, see the Summary Tables of Changes
+
+E104.	Fault on  ENTER  Instruction  May  Result  in  Unexpected  Values  on Stack Frame
+Problem: The ENTER instruction is used to create  a  procedure  stack  frame.  Due  to  this erratum, if execution of the ENTER instruction results in a fault, the dynamic storage area of the resultant stack frame may contain unexpected values (i.e. residual stack data as a result of processing the fault).
+Implication: Data in the created stack frame may be altered following a fault on the ENTER instruction. Please refer to "Procedure Calls  For Block-Structured Languages" in IA- 32 Intel® Architecture Software Developer’s Manual, Vol. 1, Basic Architecture, for information on the usage of the ENTER instructions. This erratum is not expected to occur in ring 3. Faults are usually processed in ring 0 and stack switch occurs when
+
+
+transferring  to ring 0.	Intel has not observed this erratum on any commercially available software.
+Workaround:	None identified.
+Status:	For the steppings affected, see the Summary Tables of Changes
+
+E105.	Unaligned Accesses to Paging Structures May Cause the Processor to Hang
+Problem:	when an unaligned access is performed on paging structure entries, accessing a portion of two different entries simultaneously, the processor may live lock.
+Implication: When this erratum occurs, the processor may live lock causing a system hang.
+Workaround:	Do not perform unaligned accesses on paging structure entries.
+Status:	For the steppings affected see the Summary of Changes at the beginning of this section.
+
+E106.	INVLPG Operation for Large (2M/4M) Pages May be Incomplete under Certain Conditions
+Problem:	The INVLPG instruction may not completely invalidate Translation Look-aside Buffer (TLB) entries for large pages (2M/4M) when both of the following conditions exist:
+Address range of the page being invalidated spans several Memory Type Range Registers (MTRRs) with different memory types specified
+INVLPG operation is preceded by a Page Assist Event (Page Fault (#PF) or an access that results in either A or D bits being set in a Page Table Entry (PTE))
+Implication: Stale translations may remain valid in TLB after a PTE update resulting in  unpredictable system behavior. Intel has not observed this erratum with any commercially available software.
+Workaround:	Software should ensure that the memory type specified in the MTRRs is the same    for the entire address range of the large page.
+Status:	For the steppings affected see the Summary of Changes at the beginning of this section.
+
+E107.	Page Access Bit May be Set Prior to Signaling a Code Segment Limit Fault
+Problem:  If code segment limit is set close to the end of a code page, then due to this erratum   the memory page Access bit (A bit) may be set for the subsequent page prior to general protection fault on code segment limit.
+Implication: When this erratum occurs, a non-accessed page which is present in memory and follows a page that contains the code segment limit may be tagged as accessed
+
+
+Workaround: Erratum can be avoided by placing a guard page (non-present or non-executable page) as the last page of the segment or after the page that includes the code segment limit.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this   section
+
+E108.	EFLAGS, CR0, CR4 and the EXF4  Signal  May  be  Incorrect  after  Shutdown
+Problem: When the processor is going into shutdown due  to an RSM  inconsistency failure,  EFLAGS, CR0 and CR4 may be incorrect. In addition the EXF4 signal may still be asserted. This may be observed if the processor is taken out of shutdown by NMI#.
+Implication: A processor that has been taken  out  of shutdown  may have an incorrect EFLAGS, CR0 and CR4. In addition the EXF4 signal may still be asserted.
+Workaround:	None identified
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+
+E109.	Performance  Monitoring  Event  FP_MMX_TRANS_TO_MMX  May  Not Count Some Transitions
+Problem: Performance Monitor  Event  FP_MMX_TRANS_TO_MMX  (Event  CCH,  Umask  01H) counts transitions from x87 Floating Point (FP) to MMX™ instructions. Due to this erratum, if only a small number of MMX instructions (including EMMS) are executed immediately after the last FP instruction, an FP to MMX transition may not  be counted.
+Implication: The count value for Performance Monitoring Event FP_MMX_TRANS_TO_MMX may be lower than expected. The degree of undercounting is dependent on the occurrences   of the erratum condition while the counter is active. Intel has not observed this erratum with any commercially available software.
+Workaround:	None identified.
+Status:  For the  steppings  affected  see  the  Summary of Changes at the beginning of this  section.
+

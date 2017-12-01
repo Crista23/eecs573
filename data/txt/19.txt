@@ -1,0 +1,870 @@
+SKW1.	Reported Memory Type May Not Be Used to Access the VMCS and Referenced Data Structures
+Problem:	Bits 53:50 of the IA32_VMX_BASIC MSR report the memory type that the processor uses to access the VMCS and data structures referenced by pointers in the VMCS. Due to this erratum, a VMX access to the VMCS or referenced data structures will instead use the memory type that the MTRRs (memory-type range registers) specify for the physical address of the access.
+Implication:	Bits 53:50 of the IA32_VMX_BASIC MSR report that the WB (write-back) memory type will be used but the processor may use a different memory type.
+Workaround: Software should ensure that the VMCS and referenced data structures are located at physical addresses that are mapped to WB memory type by the MTRRs.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW2.	Erratum has been Removed
+SKW3.	Execution of VAESIMC or VAESKEYGENASSIST With An Illegal Value for VEX.vvvv May Produce a #NM Exception
+Problem:	The VAESIMC and VAESKEYGENASSIST instructions should produce a #UD (Invalid- Opcode) exception if the value of the vvvv field in the VEX prefix is not 1111b. Due to this erratum, if CR0.TS is “1”, the processor may instead produce a #NM (Device-Not- Available) exception.
+Implication:	Due to this erratum, some undefined instruction encodings may produce a #NM instead of a #UD exception.
+Workaround: Software should always set the vvvv field of the VEX prefix to 1111b for instances of the VAESIMC and VAESKEYGENASSIST instructions.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+SKW4.	The Corrected Error Count Overflow Bit in IA32_ MC0_STATUS is Not Updated When The UC Bit is Set
+Problem:	After a UC (uncorrected) error is logged in the IA32_MC0_STATUS MSR (401H), corrected errors will continue to be counted in the lower 14 bits (bits 51:38) of the Corrected Error Count. Due to this erratum, the sticky count overflow bit (bit 52) of the Corrected Error Count will not get updated when the UC bit (bit 61) is set to 1.
+Implication:	The Corrected Error Count Overflow indication will be lost if the overflow occurs after an uncorrectable error has been logged.
+Workaround: None identified
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW5.	VM Exit May Set IA32_EFER.NXE When IA32_MISC_ENABLE Bit 34 is
+Set to 1
+Problem:	When “XD Bit Disable” in the IA32_MISC_ENABLE MSR (1A0H) bit 34 is set to 1, it should not be possible to enable the “execute disable” feature by setting IA32_EFER.NXE. Due to this erratum, a VM exit that occurs with the 1-setting of the “load IA32_EFER” VM-exit control may set IA32_EFER.NXE even if IA32_MISC_ENABLE
+
+
+bit 34 is set to 1. This erratum can occur only if IA32_MISC_ENABLE bit 34 was set by guest software in VMX non-root operation.
+Implication:	Software in VMX root operation may execute with the “execute disable” feature enabled despite the fact that the feature should be disabled by the IA32_MISC_ENABLE MSR. Intel has not observed this erratum with any commercially available software.
+Workaround: A virtual-machine monitor should not allow guest software to write to the IA32_MISC_ENABLE MSR
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW6.	SMRAM State-Save Area Above the 4 GB Boundary May Cause Unpredictable System Behavior
+Problem:	If BIOS uses the RSM instruction to load the SMBASE register with a value that would cause any part of the SMRAM state-save area to have an address above 4-GBytes, subsequent transitions into and out of SMM (system-management mode) might save and restore processor state from incorrect addresses.
+Implication:	This erratum may cause unpredictable system behavior. Intel has not observed this erratum with any commercially available system.
+Workaround: Ensure that the SMRAM state-save area is located entirely below the 4GB address boundary.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW7.	x87 FPU Exception (#MF) May be Signaled Earlier Than Expected
+Problem:	x87 instructions that trigger #MF normally service interrupts before the #MF. Due to this erratum, if an instruction that triggers #MF is executing when an Enhanced Intel SpeedStep® Technology transitions, an Intel® Turbo Boost Technology transitions, or a Thermal Monitor events occurs, the #MF may be taken before pending interrupts are serviced.
+Implication:	Software may observe #MF being signaled before pending interrupts are serviced. 
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+SKW8.	Incorrect FROM_IP Value For an RTM Abort in BTM or BTS May be Observed
+Problem:	During RTM (Restricted Transactional Memory) operation when branch tracing is enabled using BTM (Branch Trace Message) or BTS (Branch Trace Store), the incorrect EIP value (From_IP pointer) may be observed for an RTM abort.
+Implication:	Due to this erratum, the From_IP pointer may be the same as that of the immediately preceding taken branch.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW9.	DR6 Register May Contain an Incorrect Value When a MOV to SS or POP SS Instruction is Followed by an XBEGIN Instruction
+Problem:	If XBEGIN is executed immediately after an execution of MOV to SS or POP SS, a transactional abort occurs and the logical processor restarts execution from the fallback instruction address. If execution of the instruction at that address causes a debug exception, bits [3:0] of the DR6 register may contain an incorrect value.
+
+
+Implication:	When the instruction at the fallback instruction address causes a debug exception, DR6 may report a breakpoint that was not triggered by that instruction, or it may fail to report a breakpoint that was triggered by the instruction.
+Workaround: Avoid following a MOV SS or POP SS instruction immediately with an XBEGIN instruction.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW10.		Opcode Bytes F3 0F BC May Execute As TZCNT Even When TZCNT Not Enumerated by CPUID
+Problem:	If CPUID.(EAX=07H, ECX=0):EBX.BMI1 (bit 3) is 1 then opcode bytes F3 0F BC should be interpreted as TZCNT otherwise they will be interpreted as REP BSF. Due to this erratum, opcode bytes F3 0F BC may execute as TZCNT even if CPUID.(EAX=07H, ECX=0):EBX.BMI1 (bit 3) is 0.
+Implication:	Software that expects REP prefix before a BSF instruction to be ignored may not operate correctly since there are cases in which BSF and TZCNT differ with regard to the flags that are set and how the destination operand is established.
+Workaround: Software should use the opcode bytes F3 0F BC only if CPUID.(EAX=07H, ECX=0):EBX.BMI1 (bit 3) is 1 and only if the functionality of TZCNT (and not BSF) is desired.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW11.	PCIe* Root-port Initiated Compliance State Transmitter Equalization Settings May be Incorrect
+Problem:	If the processor is directed to enter PCIe Polling.Compliance at 5.0 GT/s or 8.0 GT/s transfer rates, it should use the Link Control 2 Compliance Preset/De-emphasis field (bits [15:12]) to determine the correct de-emphasis level. Due to this erratum, when the processor is directed to enter Polling.Compliance from 2.5 GT/s transfer rate, it retains 2.5 GT/s de-emphasis values.
+Implication:	The processor may operate in Polling.Compliance mode with an incorrect transmitter de-emphasis level.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW12.	The SMSW Instruction May Execute Within an Enclave
+Problem:	The SMSW instruction is illegal within an Intel® Software Guard Extensions (Intel® SGX) enclave, and an attempt to execute it within an enclave should result in a #UD (invalid-opcode exception). Due to this erratum, the instruction executes normally within an enclave and does not cause a #UD.
+Implication:	The SMSW instruction provides access to CR0 bits 15:0 and will provide that information inside an enclave. These bits include NE, ET, TS, EM, MP and PE.
+Workaround: None identified. If SMSW execution inside an enclave is unacceptable, system software should not enable Intel SGX.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+SKW13.	PEBS Record After a WRMSR to IA32_BIOS_UPDT_TRIG May be Incorrect
+Problem:	A PEBS record generated by a WRMSR to IA32_BIOS_UPDT_TRIG MSR (79H) may have an incorrect value in the Eventing EIP field if an instruction prefix was used on the WRMSR.
+
+
+Implication:	The Eventing EIP field of the generated PEBS record may be incorrect. Intel has not observed this erratum with any commercially available software.
+Workaround: Instruction prefixes have no architecturally-defined function for the WRMSR instruction; instruction prefixes should not be used with the WRMSR instruction.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW14.	Intel® Processor Trace (Intel® PT) TIP.PGD May Not Have Target IP Payload
+Problem:	When Intel PT is enabled and a direct unconditional branch clears IA32_RTIT_STATUS.FilterEn (MSR 571H, bit 0), due to this erratum, the resulting TIP.PGD (Target IP Packet, Packet Generation Disable) may not have an IP payload with the target IP.
+Implication:	It may not be possible to tell which instruction in the flow caused the TIP.PGD using only the information in trace packets when this erratum occurs.
+Workaround: The Intel PT trace decoder can compare direct unconditional branch targets in the source with the FilterEn address range(s) to determine which branch cleared FilterEn.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW15.	Operand-Size Override Prefix Causes 64-bit Operand Form of MOVBE Instruction to Cause a #UD
+Problem:	Execution of a 64 bit operand MOVBE instruction with an operand-size override instruction prefix (66H) may incorrectly cause an invalid-opcode exception (#UD).
+Implication:	A MOVBE instruction with both REX.W=1 and a 66H prefix will unexpectedly cause an
+#UD (invalid-opcode exception). Intel has not observed this erratum with any commercially available software.
+Workaround: Do not use a 66H instruction prefix with a 64-bit operand MOVBE instruction. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW16.	Execution of FXSAVE or FXRSTOR With the VEX Prefix May Produce a
+#NM Exception
+Problem: Attempt to use FXSAVE or FXRSTOR with a VEX prefix should produce a #UD (Invalid- Opcode) exception. If either the TS or EM flag bits in CR0 are set, a #NM (device-not- available) exception will be raised instead of #UD exception.
+Implication:	Due to this erratum a #NM exception may be signaled instead of a #UD exception on an FXSAVE or an FXRSTOR with a VEX prefix.
+Workaround: Software should not use FXSAVE or FXRSTOR with the VEX prefix. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW17.	WRMSR May Not Clear The Sticky Count Overflow Bit in The IA32_MCi_STATUS MSRs’ Corrected Error Count Field
+Problem:	The sticky count overflow bit is the most significant bit (bit 52) of the Corrected Error Count Field (bits[52:38]) in IA32_MCi_STATUS MSRs. Once set, the sticky count overflow bit may not be cleared by a WRMSR instruction. When this occurs, that bit can only be cleared by power-on reset.
+Implication:	Software that uses the Corrected Error Count field and expects to be able to clear the sticky count overflow bit may misinterpret the number of corrected errors when the sticky count overflow bit is set. This erratum does not affect threshold-based CMCI (Corrected Machine Check Error Interrupt) signaling.
+
+SKW18.	PEBS Eventing IP Field May be Incorrect After Not-Taken Branch
+Problem:	When a PEBS (Precise-Event-Based-Sampling) record is logged immediately after a not-taken conditional branch (Jcc instruction), the Eventing IP field should contain the address of the first byte of the Jcc instruction. Due to this erratum, it may instead contain the address of the instruction preceding the Jcc instruction.
+Implication:	Performance monitoring software using PEBS may incorrectly attribute PEBS events that occur on a Jcc to the preceding instruction.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW19.	Debug Exceptions May Be Lost or Misreported Following WRMSR to IA32_BIOS_UPDT_TRIG
+Problem:	If the WRMSR instruction writes to the IA32_BIOS_UPDT_TRIG MSR (79H) immediately after an execution of MOV SS or POP SS that generated a debug exception, the processor may fail to deliver the debug exception or, if it does, the DR6 register contents may not correctly reflect the causes of the debug exception.
+Implication:	Debugging software may fail to operate properly if a debug exception is lost or does not report complete information.
+Workaround: Software should avoid using WRMSR instruction immediately after executing MOV SS or POP SS
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW20.	Attempts to Retrain a PCIe* Link May be Ignored
+Problem: A PCIe link should retrain when Retrain Link (bit 5) in the Link Control register (Bus 0; Device 1; Functions 0,1,2; Offset 0xB0) is set. Due to this erratum, if the link is in the L1 state, it may ignore the retrain request.
+Implication:	The PCIe link may not behave as expected.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW21.	Intel® Processor Trace PSB+ Packets May Contain Unexpected Packets
+Problem:	Some Intel Processor Trace packets should be issued only between TIP.PGE (Target IP Packet.Packet Generation Enable) and TIP.PGD (Target IP Packet.Packet Generation Disable) packets. Due to this erratum, when a TIP.PGE packet is generated it may be preceded by a PSB+ (Packet Stream Boundary) that incorrectly includes FUP (Flow Update Packet) and MODE.Exec packets.
+Implication:	Due to this erratum, FUP and MODE.Exec may be generated unexpectedly. 
+Workaround: Decoders should ignore FUP and MODE.Exec packets that are not between TIP.PGE and
+TIP.PGD packets.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+
+SKW22.	An APIC Timer Interrupt During Core C6 Entry May be Lost
+Problem:	Due to this erratum, an APIC timer interrupt coincident with the core entering C6 state may be lost rather than held for servicing later.
+Implication:	A lost APIC timer interrupt may lead to missed deadlines or a system hang. 
+Workaround: It is possible for the BIOS to contain a workaround for this erratum.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW23.	Placing an Intel® PT ToPA in Non-WB Memory or Writing It Within a Transactional Region May Lead to System Instability
+Problem:	If an Intel PT ToPA (Table of Physical Addresses) is not placed in WB (writeback) memory or is written by software executing within an Intel® Transactional Synchronization Extension (Intel® TSX) transactional region, the system may become unstable.
+Implication:	Unusual treatment of the ToPA may lead to system instability.
+Workaround: None identified. Intel PT ToPA should reside in WB memory and should not be written within a Transactional Region.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW24.	VM Entry That Clears TraceEn May Generate a FUP
+Problem:	If VM entry clears Intel® PT (Intel Processor Trace) IA32_RTIT_CTL.TraceEn (MSR 570H, bit 0) while PacketEn is 1 then a FUP (Flow Update Packet) will precede the TIP.PGD (Target IP Packet, Packet Generation Disable). VM entry can clear TraceEn if the VM-entry MSR-load area includes an entry for the IA32_RTIT_CTL MSR.
+Implication:	When this erratum occurs, an unexpected FUP may be generated that creates the appearance of an asynchronous event taking place immediately before or during the VM entry.
+Workaround: The Intel PT trace decoder may opt to ignore any FUP whose IP matches that of a VM entry instruction.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+SKW25.	EDRAM Corrected Error Events May Not be Properly Logged After a Warm Reset
+Problem:	After a warm reset, an EDRAM corrected error may not be logged correctly until the associated machine check register is initialized. This erratum may affect IA32_MC8_STATUS or IA32_MC10_STATUS.
+Implication:	The EDRAM corrected error information may be lost when this erratum occurs.
+Workaround: Data from the affected machine check registers should be read and the registers initialized as soon as practical after a warm reset.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW26.	Performance Monitor Event For Outstanding Offcore Requests And Snoop Requests May be Incorrect
+Problem: The performance monitor event OFFCORE_REQUESTS_OUTSTANDING (Event 60H, any Umask Value) should count the number of offcore outstanding transactions each cycle. Due to this erratum, the counts may be higher or lower than expected.
+Implication:	The performance monitor event OFFCORE_REQUESTS_OUTSTANDING may reflect an incorrect count.
+
+SKW27.	Processor Instability May Occur When Using The PECI RdIAMSR Command
+Problem:	Under certain circumstances, reading a machine check register using the PECI (Platform Environmental Control Interface) RdIAMSR command may result in a machine check, processor hang or shutdown.
+Implication:	Machine check, hang or shutdown may be observed when using the PECI RdIAMSR command.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW28.	ENCLU[EGETKEY] Ignores KEYREQUEST.MISCMASK
+Problem:	The Intel® Software Guard Extensions (Intel® SGX) ENCLU[EGETKEY] instruction ignores the MISCMASK field in KEYREQUEST structure when computing a provisioning key, a provisioning seal key, or a seal key.
+Implication: ENCLU[EGETKEY] will return the same key in response to two requests that differ only in the value of KEYREQUEST.MISCMASK. Intel has not observed this erratum with any commercially available software.
+Workaround: When executing the ENCLU[EGETKEY] instruction, software should ensure the bits set in KEYREQUEST.MISCMASK are a subset of the bits set in the current SECS’ MISCSELECT field.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW29.	POPCNT Instruction May Take Longer to Execute Than Expected
+Problem:	POPCNT instruction execution with a 32 or 64 bit operand may be delayed until previous non-dependent instructions have executed.
+Implication:	Software using the POPCNT instruction may experience lower performance than expected.
+Workaround: None identified
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW30.	ENCLU[EREPORT] May Cause a #GP When TARGETINFO.MISCSELECT
+is Non-Zero
+Problem:	The Intel® SGX (Intel Software Guard extensions) ENCLU[EREPORT] instruction may cause a #GP (general protection fault) if any bit is set in TARGETINFO structure’s MISCSELECT field.
+Implication:	This erratum may cause unexpected general-protection exceptions inside enclaves.
+Workaround: When executing the ENCLU[EREPORT] instruction, software should ensure the bits set in TARGETINFO.MISCSELECT are a subset of the bits set in the current SECS’ MISCSELECT field.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+
+SKW31.	A VMX Transition Attempting to Load a Non-Existent MSR May Result in a Shutdown
+Problem:	A VMX transition may result in a shutdown (without generating a machine-check event) if a non-existent MSR is included in the associated MSR-load area. When such a shutdown occurs, a machine check error will be logged with IA32_MCi_STATUS.MCACOD (bits [15:0]) of 406H, but the processor does not issue the special shutdown cycle. A hardware reset must be used to restart the processor.
+Implication:	Due to this erratum, the hyper-visor may experience an unexpected shutdown. 
+Workaround: Software should not configure VMX transitions to load non-existent MSRs.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW32.	Transitions Out of 64-Bit Mode May Corrupt the x87 FPU Instruction and Data Pointer Registers
+Problem:	A transition from 64-bit mode to compatibility mode may zero bits [63:32] of the x87 FPU instruction pointer offset (FIP) and the x87 FPU data pointer offset (FDP).
+Implication:	A later instruction that saves x87 FPU state will not save bits [63:32] of the instruction and data pointers of the last non-control instruction executed.
+Workaround: 64-bit software should save x87 FPU state before leaving 64-bit mode. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW33.	Intel® PT FUP May be Dropped After OVF
+Problem:	Some Intel PT (Intel Processor Trace) OVF (Overflow) packets may not be followed by a FUP (Flow Update Packet) or TIP.PGE (Target IP Packet, Packet Generation Enable).
+Implication:	When this erratum occurs, an unexpected packet sequence is generated.
+Workaround: When it encounters an OVF without a following FUP or TIP.PGE, the Intel PT trace decoder should scan for the next TIP, TIP.PGE, or PSB+ to resume operation.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW34.	ENCLS[ECREATE] Causes #GP if Enclave Base Address is Not Canonical
+Problem:	The ENCLS[ECREATE] instruction uses an SECS (Intel SGX enclave control structure) referenced by the SRCPAGE pointer in the PAGEINFO structure, which is referenced by the RBX register. Due to this erratum, the instruction causes a #GP (general-protection fault) if the SECS attributes indicate that the enclave should operate in 64-bit mode and the enclave base linear address in the SECS is not canonical.
+Implication:	System software will incur a general-protection fault if it mistakenly programs the SECS with a non-canonical address. Intel has not observed this erratum with any commercially available software.
+Workaround: System software should always specify a canonical address as the base address of the 64-bit mode enclave.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW35.	Data Breakpoint May Not be Detected on a REP MOVS
+Problem:	A REP MOVS instruction that causes an exception or a VM exit may not detect a data breakpoint that occurred on an earlier memory access of that REP MOVS instruction.
+Implication:	A debugger may miss a data read/write access if it is done by a REP MOVS instruction. 
+Workaround: It is possible for the BIOS to contain a workaround for this erratum.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+
+SKW36.	Processor Graphics IOMMU Unit May Report Spurious Faults
+Problem:	The IOMMU unit for Processor Graphics pre-fetches context (or extended-context) entries to improve performance. Due to the erratum, the IOMMU unit may report spurious DMA remapping faults if prefetching encounters a context (or extended- context) entry which is not marked present.
+Implication:	Software may observe spurious DMA remapping faults when the present bit for the context (or extended-context) entry corresponding to the Processor Graphics device (Bus: 0; Device: 2; Function: 0) is cleared. These faults may be reported when the Processor Graphics device is quiescent.
+Workaround: None identified. Instead of marking a context not present, software should mark the context (or extended-context) entry present while using the page table to indicate all the memory pages referenced by the context entry is not present.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW37.	PCIe* and DMI Links With Lane Polarity Inversion May Result in Link Failure
+Problem:	The processor’s PCIe and DMI links may fail after exiting Package C7 or deeper if the platform requires the link to utilize lane polarity inversion.
+Implication:	Due to this erratum, the processor cannot support lane polarity inversion on the PCIe or DMI links when Package C7 or deeper is enabled.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW38.	PCIe* Expansion ROM Base Address Register May be Incorrect
+Problem:	After PCIe 8.0 GT/s Link Equalization on a root port (Bus 0; Device 1; Function 0, 1, 2) has completed, the Expansion ROM Base Address Register (Offset 38H) may be incorrect.
+Implication:	Software that uses this BAR may behave unexpectedly. Intel has not observed this erratum with any commercially available software.
+Workaround: It is possible for the BIOS to contain a partial workaround for this erratum. Software should wait at least 5ms following link equalization before accessing these Expansion ROM Base Address Register.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW39.	PCIe* Perform Equalization May Lead to Link Failure
+Problem:	Due to this erratum, when a processor PCIe port operating at 8.0 GT/s is directed to redo equalization, either via software or from the link partner, incorrect coefficients may be conveyed during Equalization Phase 3.
+Implication:	If the link partner accepts the incorrect coefficients, the link may become unstable.
+Note this affects 8.0 GT/s only.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW40.		Two DIMMs Per Channel 2133 MHz DDR4 SODIMM Daisy-Chain Systems With Different Vendors May Hang
+Problem:	When, on a single memory channel with 2133 MHz DDR4 SODIMMs, mixing different vendors or mixing single rank and dual rank DIMMs, may lead to a higher rate of correctable errors or system hangs.
+
+
+Implication:	Due to this erratum, reported correctable error counts may increase or system may hang.
+Workaround: Use a single vendor for and do not mix single rank and dual rank 2133 MHz DDR4 SODIMM.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW41.	ENCLS[EINIT] Instruction May Unexpectedly #GP
+Problem:   When using Intel® SGX (Software Guard Extensions), the ENCLS[EINIT] instruction will incorrectly cause a #GP (general protection fault) if the MISCSELECT field of the SIGSTRUCT structure is not zero.
+Implication:	This erratum may cause an unexpected #GP, but only if software has set bits in the MISCSELECT field in SIGSTRUCT structure that do not correspond to extended features that can be written to the MISC region of the SSA (State Save Area). Intel has not observed this erratum with any commercially available software.
+Workaround: When executing the ENCLS[EINIT] instruction, software should only set bits in the MISCSELECT field in the SIGSTRUCT structure that are enumerated as 1 by CPUID.(EAX=12H,ECX=0):EBX (the bit vector of extended features that can be written to the MISC region of the SSA).
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+SKW42.	Intel® Processor Trace (Intel® PT) OVF Packet May be Lost if Immediately Preceding a TraceStop
+Problem:	If an Intel PT (Intel® Processor Trace) internal buffer overflow occurs immediately before software executes a taken branch or event that enters an Intel PT TraceStop region, the OVF (Overflow) packet may be lost.
+Implication:	The trace decoder will not see the OVF packet, nor any subsequent packets (e.g., TraceStop) that were lost due to overflow.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+SKW43.	Detecting an Intel® PT Stopped or Error Condition Within an Intel® TSX Region May Result in a System Hang
+Problem: While executing within an Intel TSX (Intel® Transactional Synchronization Extensions) transactional region with Intel PT (Intel® Processor Trace) enabled and an event occurs that causes either the Error bit (bit 4) or Stopped bit (bit 5) in the IA32_RTIT_STATUS MSR (0571H) to be set then, due to this erratum, the system may hang.
+Implication:	A system hang may occur when Intel PT and Intel TSX are used together. 
+Workaround: It is possible for the BIOS to contain a workaround for this erratum.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+SKW44.	WRMSR to IA32_BIOS_UPDT_TRIG May be Counted as Multiple Instructions
+Problem:	When software loads a microcode update by writing to MSR IA32_BIOS_UPDT_TRIG (79H) on multiple logical processors in parallel, a logical processor may, due to this erratum, count the WRMSR instruction as multiple instruction-retired events.
+Implication:	Performance monitoring with the instruction-retired event may over count by up to four extra events per instance of WRMSR which targets the IA32_BIOS_UPDT_TRIG register.
+
+
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW45.	The x87 FIP May be Incorrect
+Problem:	The x87 FPU should update the x87 FIP (FPU instruction pointer) for every non-control x87 instruction executed. Due to this erratum, the FIP is valid only if the last non- control FP instruction had an unmasked exception.
+Implication: When this erratum occurs, an instruction that saves FIP (for example, FSTENV) may save an incorrect value. Software that depends on the FIP value for x87 non-control instructions without unmasked exceptions may not operate as expected.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW46.	Branch Instructions May Initialize Intel® Memory Protection Extensions (Intel® MPX) Bound Registers Incorrectly.
+Problem:	Depending on the current Intel® MPX (Intel Memory Protection Extensions) configuration, execution of certain branch instructions (near CALL, near RET, near JMP, and Jcc instructions) without a BND prefix (F2H) initialize the Intel MPX bound registers. Due to this erratum, execution of such a branch instruction on a user-mode page may not use the Intel MPX configuration register appropriate to the current privilege level (BNDCFGU for CPL 3 or BNDCFGS otherwise) for determining whether to initialize the bound registers; it may thus initialize the bound registers when it should not, or fail to initialize them when it should.
+Implication:	After a branch instruction on a user-mode page has executed, a #BR (bound-range) exception may occur when it should not have or a #BR may not occur when one should have.
+Workaround: If supervisor software is not expected to execute instructions on user-mode pages, software can avoid this erratum by setting CR4.SMEP[bit 20] to enable supervisor- mode execution prevention (SMEP). If SMEP is not available or if supervisor software is expected to execute instructions on user-mode pages, no workaround is identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+SKW47.	Writing a Non-Canonical Value to an LBR MSR Does Not Signal a #GP When Intel® PT is Enabled
+Problem:	If Intel PT (Intel Processor Trace) is enabled, WRMSR will not cause a general- protection exception (#GP) on an attempt to write a non-canonical value to any of the following MSRs:
+•MSR_LASTBRANCH_{0 - 31}_FROM_IP (680H – 69FH)
+•MSR_LASTBRANCH {0 - 31}_TO_IP (6C0H – 6DFH)
+•MSR_LASTBRANCH_FROM_IP (1DBH)
+•MSR_LASTBRANCH_TO_IP (1DCH)
+•MSR_LASTINT_FROM_IP (1DDH)
+•MSR_LASTINT_TO_IP (1DEH)
+Instead the same behavior will occur as if a canonical value had been written. Specifically, the WRMSR will be dropped and the MSR value will not be changed.
+Implication:	Due to this erratum, an expected #GP may not be signaled. 
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+
+SKW48.	Processor May Run Intel® Advanced Vector Extensions (Intel® AVX) Code Much Slower Than Expected
+Problem:	After a C6 state exit, the execution rate of Intel AVX instructions may be reduced. 
+Implication:	Applications using Intel AVX instructions may run slower than expected.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW49.	Intel® PT Buffer Overflow May Result in Incorrect Packets
+Problem:	Under complex micro-architectural conditions, an Intel PT (Processor Trace) OVF (Overflow) packet may be issued after the first byte of a multi-byte CYC (Cycle Count) packet, instead of any remaining bytes of the CYC.
+Implication:	When this erratum occurs, the splicing of the CYC and OVF packets may prevent the Intel PT decoder from recognizing the overflow. The Intel PT decoder may then encounter subsequent packets that are not consistent with expected behavior.
+Workaround: None Identified. The decoder may be able to recognize that this erratum has occurred when a two-byte CYC packet is followed by a single byte CYC, where the latter 2 bytes are 0xf302, and where the CYC packets are followed by a FUP (Flow Update Packet) and a PSB+ (Packet Stream Boundary+). It should then treat the two CYC packets as indicating an overflow.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW50.	Intel® PT PSB+ Packets May be Omitted on a C6 Transition
+Problem:	An Intel PT (Processor Trace) PSB+ (Packet Stream Boundary+) set of packets may not be generated as expected when IA32_RTIT_STATUS.PacketByteCnt[48:32] (MSR 0x571) reaches the PSB threshold and a logical processor C6 entry occurs within the following one KByte of trace output.
+Implication:	After a logical processor enters C6, Intel PT output may be missing PSB+ sets of packets.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW51.	IA32_PERF_GLOBAL_STATUS.TRACE_TOPA_PMI Bit Cannot be Set by Software
+Problem:	A WRMSR that attempts to set Trace_ToPA_PMI (bit 55) in the IA32_PERF_GLOBAL_STATUS MSR (38EH) by writing a ‘1’ to bit 55 in the IA32_PERF_GLOBAL_STATUS_SET (MSR (391H) will cause a #GP fault.
+Implication:	Software cannot set the Trace_ToPA_PMI bit.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW52.	Enabling VMX-Preemption Timer Blocks HDC Operation
+Problem:	HDC (Hardware Duty Cycling) will not put the physical package into the forced idle state while any logical processor is in VMX non-root operation and the “activate VMX- preemption timer” VM-execution control is 1.
+Implication:	HDC will not provide the desired power reduction when the VMX-preemption timer is active in VMX non-root operation.
+Workaround: None identified
+
+
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW53.	ENCLU[EGETKEY] Instruction Ignores MISCMASK Value
+Problem:	The ENCLU[EGETKEY] instruction always generates SEAL, PROVISION, and PROVISION_SEAL keys as if the MISCMASK field in the KEYREQUEST structure is 0.
+Implication:	The ENCLU[EGETKEY] instruction will generate the same keys for different MISCMASK values.
+Workaround: Software should not rely on ENCLU[EGETKEY] to produce different keys by supplying different MISCMASK values. Software should use other KEYREQUEST fields to produce separation of the keys.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW54.	Intel TSX Abort May Result in Unpredictable System Behavior
+Problem:	Certain microarchitectural conditions during an Intel® TSX (Intel® Transactional Synchronization Extensions) abort may result in unpredictable system behavior.
+Implication:	Software using Intel TSX may be unreliable.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW55.	Use of Prefetch Instructions May Lead to a Violation of Memory Ordering
+Problem:	Under certain micro architectural conditions, execution of a PREFETCHh instruction or a PREFETCHW instruction may cause a load from the prefetched cache line to appear to execute before an earlier load from another cache line.
+Implication:	Software that relies on loads executing in program order may not operate correctly. 
+Workaround: It is possible for the BIOS to contain a workaround for this erratum.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW56.	CS Limit Violation May Not be Detected
+Problem:	A CS (code segment) limit reduction may not be properly applied.
+Implication:	Instructions may be executed beyond the CS limit. Intel has not observed this erratum to impact the operation of any commercially available software.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW57.	Last Level Cache Performance Monitoring Events May be Inaccurate
+Problem:	The performance monitoring events LONGEST_LAT_CACHE.REFERENCE (Event 2EH; Umask 4FH) and LONGEST_LAT_CACHE.MISS (Event 2EH; Umask 41H) count requests that reference or miss in the last level cache. However, due to this erratum, the count may be incorrect.
+Implication:	LONGEST_LAT_CACHE events may be incorrect.
+Workaround: None identified. Software may use the following OFFCORE_REQUESTS model-specific sub events that provide related performance monitoring data: DEMAND_DATA_RD, DEMAND_CODE_RD, DEMAND_RFO, ALL_DATA_RD, L3_MISS_DEMAND_DATA_RD, ALL_REQUESTS.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+
+SKW58.	#GP Occurs Rather Than #DB on Code Page Split Inside an Intel® SGX Enclave
+Problem:	When executing within an Intel® SGX (Software Guard Extensions) enclave, a #GP (general-protection exception) may be delivered instead of a #DB (debug exception) when an instruction breakpoint is detected. This occurs when the instruction to be executed spans two pages, the second of which has an entry in the EPCM (enclave page cache map) that is not valid.
+Implication:	Debugging software may not be invoked when an instruction breakpoint is detected.
+Workaround: Software should ensure that all pages containing enclave instructions have valid EPCM entries.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+SKW59.	Execution of VAESENCLAST Instruction May Produce a #NM Exception Instead of a #UD Exception
+Problem:	Execution of VAESENCLAST with VEX.L= 1 should signal a #UD (Invalid Opcode) exception, however, due to the erratum, a #NM (Device Not Available) exception may be signaled.
+Implication:	As a result of this erratum, an operating system may restore Intel AVX and other state unnecessarily.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW60.	Intel® SGX Enclave Accesses to the APIC-Access Page May Cause APIC-Access VM Exits
+Problem:	In VMX non-root operation, Intel SGX (Software Guard Extensions) enclave accesses to the APIC-access page may cause APIC-access VM exits instead of page faults.
+Implication:	A VMM (virtual-machine monitor) may receive a VM exit due to an access that should have caused a page fault, which would be handled by the guest OS (operating system).
+Workaround: A VMM avoids this erratum if it does not map any part of the EPC (Enclave Page Cache) to the guest’s APIC-access address; an operating system avoids this erratum if it does not attempt indirect enclave accesses to the APIC.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+SKW61.	CR3 Filtering Does Not Compare Bits [11:5] of CR3 and IA32_RTIT_CR3_MATCH in PAE Paging Mode
+Problem:	In PAE paging mode, the CR3[11:5] are used to locate the page-directory-pointer table. Due to this erratum, those bits of CR3 are not compared to IA32_RTIT_CR3_MATCH (MSR 572H) when IA32_RTIT_CTL.CR3Filter (MSR 570H, bit
+7) is set.
+Implication:	If multiple page-directory-pointer tables are co-located within a 4KB region, CR3 filtering will not be able to distinguish between them so additional processes may be traced.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+
+SKW62.	Intel® PT PacketEn Change on C-state Wake May Not Generate a TIP Packet
+Problem:	A TIP.PGE (Target IP, Packet Generation Enabled) or TIP.PGD (Target IP, Packet Generation Disabled) packet may not be generated if Intel PT (Processor Trace) PacketEn changes after IA32_RTIT_STATUS.FilterEn (MSR 571H, bit 0) is re-evaluated on wakeup from C6 or deeper sleep state.
+Implication:	When code enters or exits an IP filter region without a taken branch, tracing may begin or cease without proper indication in the trace output. This may affect trace decoder behavior.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW63.	Graphics Configuration May Not be Correctly Restored After a Package C8 Exit
+Problem:	The processor should ensure internal graphics configuration is restored during a Package C8 or deeper exit event. Due to this erratum, some internal graphics configurations may not be correctly restored.
+Implication:	When this erratum occurs, a graphics driver restart may lead to system instability. Such a restart may occur when upgrading the graphics driver.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW64.	x87 FDP Value May be Saved Incorrectly
+Problem: Execution of the FSAVE, FNSAVE, FSTENV, or FNSTENV instructions in real-address mode or virtual-8086 mode may save an incorrect value for the x87 FDP (FPU data pointer). This erratum does not apply if the last non-control x87 instruction had an unmasked exception.
+Implication:	Software operating in real-address mode or virtual-8086 mode that depends on the FDP value for non-control x87 instructions without unmasked exceptions may not operate properly.
+Workaround: None identified. Software should use the FDP value saved by the listed instructions only when the most recent non-control x87 instruction incurred an unmasked exception.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW65.	PECI Frequency Limited to 1 MHz
+Problem:	The PECI (Platform Environmental Control Interface) 3.1 specification’s operating frequency range is 0.2 MHz to 2 MHz. Due to this erratum, PECI may be unreliable when operated above 1 MHz.
+Implication:	Platforms attempting to run PECI above 1 MHz may not behave as expected. 
+Workaround: None identified. Platforms should limit PECI operating frequency to 1 MHz.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW66.	Processor Graphics IOMMU Unit May Not Mask DMA Remapping Faults
+Problem: Intel® Virtualization Technology for Directed I/O specification specifies setting the FPD (Fault Processing Disable) field in the context (or extended-context) entry of IOMMU to mask recording of qualified DMA remapping faults for DMA requests processed through that context entry. Due to this erratum, the IOMMU unit for Processor Graphics device
+
+
+may record DMA remapping faults from Processor Graphics device (Bus: 0; Device: 2; Function: 0) even when the FPD field is set to 1.
+Implication:	Software may continue to observe DMA remapping faults recorded in the IOMMU Fault Recording Register even after setting the FPD field.
+Workaround: None identified. Software may mask the fault reporting event by setting the IM (Interrupt Mask) field in the IOMMU Fault Event Control register (Offset 038H in GFXVTBAR).
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW67.	Processor With Intel® SGX Support May Hang During S3 Wake or Power-On Reset
+Problem:	Processors that support Intel SGX (Intel Software Guard Extensions) may experience hangs when waking from S3 (Standby) system sleep state or during a power-on reset. This erratum may occur even if the Intel SGX feature is not enabled.
+Implication:	Due to this erratum, the system may not wake after entering standby sleep state or may not start up after a power-on reset
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. For systems that do not power gate Vcc Sustain, if the workaround detects this erratum, support for Intel SGX will be removed until platform power is disconnected and reapplied.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+SKW68.	Pending x87 FPU Exceptions (#MF) May be Signaled Earlier Than Expected
+Problem:	x87 instructions that trigger #MF normally service interrupts before the #MF. Due to this erratum, if an instruction that triggers #MF is executed while Enhanced Intel SpeedStep® Technology transitions, Intel® Turbo Boost Technology transitions, or Thermal Monitor events occur, the pending #MF may be signaled before pending interrupts are serviced.
+Implication:	Software may observe #MF being signaled before pending interrupts are serviced. 
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+SKW69.	IA Core Ratio Change Coincident With Outstanding Read to the DE May Cause a System Hang
+Problem:	An outstanding read from an IA core to the DE (Display Engine) that is coincident with an IA core ratio change may.result in a system hang.
+Implication:	Due to this erratum, the system may hang.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW70.	TSC is Not Affected by Warm Reset
+Problem:	The TSC (IA32_TIME_STAMP_COUNTER MSR 10H) should be cleared on reset. Due to this erratum the TSC is not affected by warm reset.
+Implication:	The TSC is not cleared by a warm reset. The TSC is cleared by power-on reset as expected.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+
+SKW71.	Intel® PT Buffer Overflow Indication May be Lost if it Immediately Precedes a TraceStop
+Problem:	If an Intel PT (Processor Trace) internal buffer overflow occurs just before software executes a taken branch or event that enters an Intel PT TraceStop region, the OVF (Overflow) packet may be lost.
+Implication:	When this erratum occurs, the decoder will not see the OVF packet or any TIP.PGD (Target IP – Packet Generation Disabled) and may not see the TraceStop packet at the end of the trace.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW72.	Intel® PT CYCThresh Value of 13 is Not Supported
+Problem:	Intel PT (Intel® Processor Trace) CYC (Cycle Count) threshold is configured through CYCThresh field in bits [22:19] of IA32_RTIT_CTL MSR (570H). A value of 13 is advertised as supported by CPUID (leaf 14H, sub-lead 1H). Due to this erratum, if CYCThresh is set to 13 then the CYC threshold will be 0 cycles instead of 4096 (213-1) cycles.
+Implication:	CYC packets may be issued in higher rate than expected if threshold value of 13 is used.
+Workaround: None identified. Software should not use value of 13 for CYC threshold. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW73.	Intel® PT May Drop Some Timing Packets After Entering Thread C3
+Problem:	Intel PT (Intel® Processor Trace) may temporarily stop sending MTC (Mini Time Counter) and CYC (Cycle) packets after entering thread C3 state. MTC and CYC packets may be missing in up to 1KB of trace output after entering thread C3.
+Implication:	Some Intel PT timing packets may temporarily not be sent after thread C3 is entered. 
+Workaround: It is possible for the BIOS to contain a workaround for this erratum.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+SKW74.	Underflow and Denormal Conditions During a VDPPS Instruction With YMM Operands May Not Produce The Expected Results
+Problem:	A VDPPS (Vector Dot Product of Packed Single Precision Floating-Point Values) instruction operating on YMM registers with denormal operand(s) or experiencing an underflow may not produce the expected result if the exception is masked in the MXCSR. This may also happen when intermediate multiply results have underflow conditions.
+Implication:	VDPPS with YMM registers may not produce the expected result. 
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW75.	APIC Timer Interrupt May be Delivered Early
+Problem: When the APIC timer is configured to TSC Deadline Mode, a timer interrupt may occur before the expected deadline if any of IA32_TSC_DEADLINE MSR (6E0H) bits [63:56] are set.
+Implication:	A timer interrupt may be delivered earlier than specified by the IA32_TSC_DEADLINE MSR.
+
+
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW76.	System May Hang When Using Intel® Trusted Execution Technology (Intel® TXT) And Memory That Supports Address Mirroring
+Problem:	Within platforms that utilize memory that supports address mirroring, processors that utilize Intel TXT (Intel Trusted Execution Technology) measured launch environment may fail to boot and hang.
+Implication:	Due to this erratum, system may hang.
+Workaround: A BIOS code change has been identified and may be implemented as a workaround for this erratum.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW77.	Display Flicker May Occur When Both Intel® Virtualization Technology for Directed I/O (Intel® VT-d) And FBC Are Enabled
+Problem:	Display flickering may occur when both FBC (Frame Buffer Compression) and Intel VT-d (Intel® Virtualization Technology for Directed I/O) are enabled and in use by the display controller.
+Implication:	Due to this erratum, display flickering may be observed.
+Workaround: It is possible for the graphics driver to contain a workaround for this erratum. This workaround will disable FBC.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW78.	Certain Processors May be Configured With an Incorrect TDP
+Problem:	Certain processors should be configured with a TDP (Thermal Design Power) limit of 54 or 51 watts. Due to this erratum, these processors may be incorrectly configured at 65 W TDP. The following processors are affected by this erratum: Intel® Core™ i3 Processor Series, Celeron® and Pentium® (Dual-Core With GT1/GT2). A processor that reports a value of 0x208 in TDP_POWER_OF_SKU field in MSR PACKAGE_POWER_SKU (MSR 614H [14:0]) are affected by this erratum.
+Implication:	Processors affected by this erratum may spend more time in turbo and thus may experience unexpected thermal throttling events.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW79.	MOVNTDQA From WC Memory May Pass Earlier MFENCE Instructions
+Problem:	An execution of MOVNTDQA or VMOVNTDQA that loads from WC (write combining) memory may appear to pass an earlier execution of the MFENCE instruction.
+Implication:	When this erratum occurs, an execution of MOVNTDQA or VMOVNTDQA may appear to execute before memory operations that precede the earlier MFENCE instruction.
+Software that uses MFENCE to order subsequent executions of the MOVNTDQA instructions may not operate properly.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+
+SKW80.	Integrated Audio Codec May Not be Detected
+Problem:	Integrated Audio Codec may lose power when LPSP (Low-Power Single Pipe) mode is enabled for an eDP* (embedded Display Port) or HDMI ports. Platforms with Intel® Smart Sound Technology (Intel® SST) enabled are not affected.
+Implication: The Audio Bus driver may attempt to do enumeration of Codecs when eDP or HDMI port enters LPSP mode, due to this erratum, the Integrated Audio Codec will not be detected and audio maybe be lost.
+Workaround: Intel® Graphics Driver 15.40.11.4308 or later will prevent the Integrated Audio Codec from losing power when LPSP mode is enabled.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW81.	Processor May Hang or Cause Unpredictable System Behavior
+Problem:	Under complex microarchitecture conditions, processor may hang with an internal timeout error (MCACOD 0400H) logged into IA32_MCi_STATUS or cause unpredictable system behavior.
+Implication:	When this issue occurs, the system may cause unpredictable system behavior. 
+Workaround: It is possible for the BIOS to contain a workaround for this erratum.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW82.	REP MOVS May Not Operate Correctly With EPT Enabled
+Problem:	Execution of REP MOVS may incorrectly change [R/E]CX, [R/E]SI, and/or [R/E]DI register values during instruction execution. This erratum occurs only if the execution would set an accessed or dirty flag in a paging structure to which EPT does not
+allow writes.
+Implication:	Incorrect changes to RCX, RSI, and/or RDI may lead to a block-copy operation with an unexpected length, an unexpected source location, and/or an unexpected
+destination location.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW83.	Ring Frequency Changes May Cause a Machine Check And System Hang
+Problem:	Ring frequency changes may lead to a system hang with the processor logging a machine check in IA32_MCi_STATUS where the MCACOD (bits[15:0]) value is 0x0402 and the MSCOD (bits[31:16]) value is 0x77yy (yy is any 8-bit value).
+Implication:	When this erratum occurs, the system will log a machine check and hang. Power management activity, including system power state changes, can result in ring frequency changes that may trigger this erratum.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW84.	x87 FPU Data Pointer Updated Only For Instructions That Incur Unmasked Exceptions
+Problem:	The x87 FPU data pointer points to the data (operand) for the last x87 non-control instruction executed, unless CPUID.(EAX=07H,ECX=0H):EBX.FDP_EXCPTN_ONLY[bit 6] is 1, in which case it points to the operand for the last x87 non-control instruction that incurred an unmasked x87 exception. Due to this erratum, x87 FPU data pointer behaves as if the FDP_EXCPTN_ONLY flag is 1 even when that bit is 0.
+
+
+Implication:	If the most recent x87 non-control instruction did not incur an unmasked x87 exception, software that then examines the x87 FPU data pointer will see an incorrect value. Intel has not observed this erratum with any commercially available software.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW85.	WRMSR to IA32_BIOS_UPDT_TRIG Concurrent With an SMX SENTER/ SEXIT May Result in a System Hang
+Problem:	Performing WRMSR to IA32_BIOS_UPDT_TRIG (MSR 79H) on a logical processor while another logical processor is executing an SMX (Safer Mode Extensions) SENTER/SEXIT operation (GETSEC[SENTER] or GETSEC[SEXIT] instruction) may cause the processor to hang.
+Implication:	When this erratum occurs, the system will hang. Intel has not observed this erratum with any commercially available system.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW86.	Incorrect Branch Predicted Bit in BTS/BTM Branch Records
+Problem: BTS (Branch Trace Store) and BTM (Branch Trace Message) send branch records to the Debug Store management area and system bus respectively. The Branch Predicted bit (bit 4 of eighth byte in BTS/BTM records) should report whether the most recent branch was predicted correctly. Due to this erratum, the Branch Predicted bit may be incorrect.
+Implication:	BTS and BTM cannot be used to determine the accuracy of branch prediction. 
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW87.	MACHINE_CLEARS.MEMORY_ORDERING Performance Monitoring Event May Undercount
+Problem:	The performance monitoring event MACHINE_CLEARS.MEMORY_ORDERING (Event C3H; Umask 02H) counts the number of machine clears caused by memory ordering conflicts. However due to this erratum, this event may undercount for VGATHER*/ VPGATHER* instructions with four or more elements.
+Implication:	MACHINE_CLEARS.MEMORY_ORDERING performance monitoring event may undercount.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW88.	CTR_FRZ May Not Freeze Some Counters
+Problem:	IA32_PERF_GLOBAL_STATUS.CTR_FRZ (MSR 38EH, bit 59) is set when either (1) IA32_DEBUGCTL.FREEZE_PERFMON_ON_PMI (MSR 1D9H, bit 12) is set and a PMI is
+triggered, or (2) software sets bit 59 of IA32_PERF_GLOBAL_STATUS_SET (MSR 391H). When set, CTR_FRZ should stop all core performance monitoring counters from counting. However, due to this erratum, IA32_PMC4-7 (MSR C5-C8H) may not stop counting. IA32_PMC4-7 are only available when a processor core is not shared by two logical processors.
+Implication:	General performance monitoring counters 4-7 may not freeze when IA32_PERF_GLOBAL_STATUS.CTR_FRZ is set.
+Workaround: None identified.
+
+
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+SKW89.		Instructions And Branches Retired Performance Monitoring Events May Overcount
+Problem:	The performance monitoring events INST_RETIRED (Event C0H; any Umask value) and BR_INST_RETIRED (Event C4H; any Umask value) count instructions retired and branches retired, respectively. However, due to this erratum, these events may overcount in certain conditions when:
+Executing VMASKMOV* instructions with at least one masked vector element
+Executing REP MOVS or REP STOS with Fast Strings enabled (IA32_MISC_ENABLES MSR (1A0H), bit 0 set)
+An Intel MPX #BR exception occurs on BNDLDX/BNDSTX instructions and the BR_INST_RETIRED (Event C4H; Umask is 00H or 04H) is used.
+Implication:	INST_RETIRED and BR_INST_RETIRED performance monitoring events may overcount. 
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW90.		Some OFFCORE_RESPONSE Performance Monitoring Events May Overcount
+Problem:	The performance monitoring events OFFCORE_RESPONSE (Events B7H and BBH) should count off-core responses matching the request-response configuration specified in MSR_OFFCORE_RSP_0 and MSR_OFFCORE_RSP_1 (1A6H and 1A7H, respectively) for core-originated requests. However, due to this erratum, DMND_RFO (bit 1), DMND_IFETCH (bit 2) and OTHER (bit 15) request types may overcount.
+Implication:	Some OFFCORE_RESPONSE events may overcount.
+Workaround: None identified. Software may use the following model-specific events that provide related performance monitoring data: OFFCORE_REQUESTS (all sub-events), L2_TRANS.L2_WB and L2_RQSTS.PF_MISS.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW91.	Using BIOS to Disable Cores May Lead to a System Hang
+Problem:	Using the BIOS hardware core disable facility may cause the processor to hang when it attempts to enter or exit Package C6.
+Implication:	When this erratum occurs, attempting to enter or exit Package C6 state will hang the system.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW92.	#GP After RSM May Push Incorrect RFLAGS Value When Intel® Processor Trace (Intel® PT) is Enabled
+Problem:	If Intel PT is enabled, a #GP (general-protection exception) caused by the instruction fetch immediately following execution of an RSM instruction may push an incorrect value for RFLAGS onto the stack.
+Implication:	Software that relies on the RFLAGS value pushed on the stack under the conditions described may not work properly.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+
+SKW93.	Display Flickering May be Observed with Specific eDP Panels
+Problem:	The processor may incorrectly configure transmitter buffer characteristics if the associated eDP panel requests VESA equalization preset 3, 5, 6, or 8.
+Implication:	Display flickering or display loss maybe observed.
+Workaround: Intel® Graphics Driver version 15.40.12.4326 or later contains a workaround for this erratum.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW94.	PEBS Record May Be Generated After Being Disabled
+Problem:	A performance monitoring counter may generate a PEBS (Precise Event Based Sampling) record after disabling PEBS or the performance monitoring counter by clearing the corresponding enable bit in IA32_PEBS_ENABLE MSR (3F1H) or IA32_PERF_GLOBAL_CTRL MSR (38FH).
+Implication:	A PEBS record generated after a VMX transition will store into memory according to the post-transition DS (Debug Store) configuration. These stores may be unexpected if PEBS is not enabled following the transition.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. A software workaround is possible through disallowing PEBS during VMX non-root operation and disabling PEBS prior to VM entry.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW95.	MTF VM Exit on XBEGIN Instruction May Save State Incorrectly
+Problem:	Execution of an XBEGIN instruction while the “monitor trap flag” VM-execution control is 1 will be immediately followed by an MTF VM exit. If advanced debugging of RTM transactional regions has been enabled, the VM exit will erroneously save the address of the XBEGIN instruction as the instruction pointer (instead of the fallback instruction address specified by the XBEGIN instruction). In addition, it will erroneously set bit 16 of the pending-debug-exceptions field in the VMCS indicating that a debug exception or a breakpoint exception occurred.
+Implication:	Software using the monitor trap flag to debug or trace transactional regions may not operate properly. Intel has not observed this erratum with any commercially available software.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW96.	Access to Intel SGX EPC Page in BLOCKED State is Not Reported as an Intel SGX-Induced Page Fault
+Problem:	If a page fault results from an attempt to access a page in the Intel SGX (Intel® Software Guard Extensions) EPC (Enclave Page Cache) that is in the BLOCKED state, the processor does not indicate that the page fault was Intel SGX-induced by setting bit 15 of the error code pushed on the stack.
+Implication:	Due to this erratum, software may not recognize these page faults as being Intel SGX- induced.
+Workaround: Before using the EBLOCK instruction to marking a page as BLOCKED, software should mark the page not present.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+
+SKW97.	Software Using Intel® TSX May Behave Unpredictably
+Problem:	Under a complex set of internal timing conditions and system events, software using the Intel TSX (Intel Transactional Synchronization Extensions) instructions may behave unpredictably.
+Implication:	This erratum may result in unpredictable behavior of the software using Intel TSX. 
+Workaround: It is possible for the BIOS to contain a workaround for this erratum.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW98.	DTS2.0 Fan Control Regulation is Incorrect
+Problem:	The DTS2.0 (Digital Thermal Sensor, version 2.0) fan control temperature is incorrect.
+Implication:	Due to this erratum, the incorrect fan control temperature may lead to the processor running hot enough to reach its thermal throttling point, unnecessarily reducing processor performance. Other thermal control methods are not impacted by
+this erratum.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW99.	Package-C6 Exit Latency May be Higher Than Expected Leading to Display Flicker
+Problem:	Package-C6 exit latency may be higher than expected.
+Implication:	Due to this erratum, the display may flicker or other Isochronous devices may be affected.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW100.	PCIe* Ports Do Not Support DLL Link Active Reporting
+Problem:	The PCIe Base Specification requires every “Downstream Port that supports Link speeds greater than 5.0 GT/s” to support DLL (Data Link Layer) Link Active Reporting, However, the PCIe ports do not support DLL Link Active Reporting.
+Implication:	Due to this erratum, the PCIe ports do not support DLL Link Active Reporting. This may be reported by a PCIe compliance test.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW101.	MOVNTDQA From WC Memory May Pass Earlier Locked Instructions
+Problem:	An execution of (V)MOVNTDQA (streaming load instruction) that loads from WC (write combining) memory may appear to pass an earlier locked instruction that accesses a different cache line.
+Implication:	Software that expects a lock to fence subsequent (V)MOVNTDQA instructions may not operate properly.
+Workaround: None identified. Software that relies on a locked instruction to fence subsequent executions of (V)MOVNTDQA should insert an MFENCE instruction between the locked instruction and subsequent (V)MOVNTDQA instruction.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+
+SKW102.	System May Hang When EDRAM is Enabled And DDR is Operating at 1600 MHz
+Problem:	When EDRAM is enabled and the DDR operating frequency is 1600 MHz, a system hang may occur.
+Implication:	When this erratum occurs, the system may hang.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW103.	DR6.B0-B3 May Not Report All Breakpoints Matched When a MOV/POP SS is Followed by a Store or an MMX Instruction
+Problem:	Normally, data breakpoints matches that occur on a MOV SS, r/m or POP SS will not cause a debug exception immediately after MOV/POP SS but will be delayed until the instruction boundary following the next instruction is reached. After the debug exception occurs, DR6.B0-B3 bits will contain information about data breakpoints matched during the MOV/POP SS as well as breakpoints detected by the following instruction. Due to this erratum, DR6.B0-B3 bits may not contain information about data breakpoints matched during the MOV/POP SS when the following instruction is either an MMX instruction that uses a memory addressing mode with an index or a store instruction.
+Implication:	When this erratum occurs, DR6 may not contain information about all breakpoints matched. This erratum will not be observed under the recommended usage of the MOV SS,r/m or POP SS instructions (that is, following them only with an instruction that writes (E/R)SP).
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+SKW104.	Package C3 Exit Latency May be Longer Than Expected Leading to Display Flicker
+Problem:	Package C3 exit latency may be longer than expected.
+Implication:	When this erratum occurs on a system with multiple high resolution displays, the displays may flicker.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW105.	Processor DDR VREF Signals May Briefly Exceed JEDEC Spec When Entering S3 State
+Problem:	Voltage glitch of up to 200 mV on the VREF signal lasting for about 1 mS may be observed when entering System S3 state. This violates the JEDEC DDR specifications
+Implication:	Intel has not observed this erratum to impact the operation of any commercially available system.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+
+SKW106.	Uncore Performance Monitoring Counters May be Disabled or Cleared After Package C7
+Problem:	After entering into Package C7, the following Uncore performance monitoring MSRs may be cleared to zero: MSR_ UNC _PERF_GLOBAL_CTRL (E01H), MSR_ UNC
+_PERF_GLOBAL_STATUS (E02H), MSR_ UNC _PERF_FIXED_CTRL (394H), MSR_ UNC
+_PERF_FIXED_CTR (395H).
+Implication:	Uncore performance monitoring counters may be disabled and some counter state may be cleared after Package C7.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW107.	Complex Interactions With Internal Graphics May Impact Processor Responsiveness
+Problem:	Under complex conditions associated with the use of internal graphics, the processor may exceed the MAX_LAT CSR values (PCI configuration space, offset 03FH, bits[7:0]).
+Implication:	When this erratum occurs, the processor responsiveness is affected. Intel has not observed this erratum with any commercially available software.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+SKW108.		#GP on Segment Selector Descriptor that Straddles Canonical Boundary May Not Provide Correct Exception Error Code
+Problem:	During a #GP (General Protection Exception), the processor pushes an error code on to the exception handler’s stack. If the segment selector descriptor straddles the canonical boundary, the error code pushed onto the stack may be incorrect.
+Implication:	An incorrect error code may be pushed onto the stack. Intel has not observed this erratum with any commercially available software.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+SKW109.	(Management Component Transport Protocol) Header Packets with TAG 0x5 May Be Dropped
+Problem:	Downstream MCTP packets from the processor to the PCH will be incorrectly routed during MCTP device enumeration if the TAG field of the MCTP message header has a value of 0x5 and the routing type is Route to Root Complex (Type=0).
+Implication:	The device will function but cannot be MCTP managed. Note: This issue has only been observed with a synthetic test device where the MCTP header field was set to 0x5.
+Workaround: MCTP devices should not use a TAG of 0x5 when performing MCTP enumeration. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW110.	Intel® PT ToPA PMI Does Not Freeze Performance Monitoring Counters
+Problem:	Due to this erratum, if IA32_DEBUGCTL.FREEZE_PERFMON_ON_PMI (MSR 1D9H, bit
+is set to 1 when Intel PT (Processor Trace) triggers a ToPA (Table of Physical Addresses) PMI (PerfMon Interrupt), performance monitoring counters are not frozen as expected.
+Implication:	Performance monitoring counters will continue to count for events that occur during PMI handler execution.
+
+
+Workaround: PMI handler software can programmatically stop performance monitoring counters upon entry.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW111.	Use of VMASKMOV to Store When Using EPT May Fail
+Problem:	Use of VMASKMOV instructions to store data that splits over two pages, when the instruction resides on the first page may cause a hang if EPT (Extended Page Tables) is in use, and the store to the second page requires setting the A/D bits in the EPT entry.
+Implication:	Due to this erratum, the CPU may hang on the execution of VMASKMOV. 
+Workaround: It is possible for the BIOS to contain a workaround for this erratum.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW112.	HWP’s Maximum_Performance Value is Reset to 0xFF
+Problem:	According to HWP (Hardware P-states) specification, the reset value of the Maximum_Performance field (bits [15:8]) in IA32_HWP_REQUEST MSR (774h) should be set to the value of IA32_HWP_CAPABILITIES MSR (771H) Highest_Performance field (bits[7:0]) after reset. Due to this erratum, the reset value of Maximum_Performance is always set to 0xFF.
+Implication:	Software may see an unexpected value in Maximum Performance field. Hardware clipping will prevent invalid performance states.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+SKW113.	HWP’s Guaranteed_Performance Updated Only on Configurable TDP Changes
+Problem:	According to HWP (Hardware P-states) specification, the Guaranteed_Performance field (bits[15:8]) in the IA32_HWP_CAPABILITIES MSR (771H) should be updated as a result of changes in the configuration of TDP, RAPL (Running Average Power Limit), RATL and other platform tuning options that may have dynamic effects on the actual guaranteed performance support level. Due to this erratum, the processor will update the Guaranteed_Performance field only as a result of configurable TDP dynamic changes.
+Implication:	Software may read a stale value of the Guaranteed _Performance field. 
+Workaround: None identified
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+SKW114.	HWP’s Guaranteed_Performance and Relevant Status/Interrupt May be Updated More Than Once Per Second
+Problem:	According to HWP (Hardware P-states) specification, the Guaranteed_Performance field (bits[15:8]) in the IA32_HWP_CAPABILITIES MSR (771H) and the Guaranteed_Performance_Change (bit 0) bit in IA32_HWP_STATUS MSR (777H) should not be changed more than once per second nor should the thermal interrupt associated with the change to these fields be signaled more than once per second. Due to this erratum, the processor may change these fields and generate the associated interrupt more than once per second.
+Implication:	HWP interrupt rate due to Guaranteed_Performance field change can be higher than specified.
+
+
+Workaround: Clearing the Guaranteed_Performance_Change status bit no more than once per second will ensure that interrupts are not generated at too fast a rate.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW115.	Removed
+SKW116.	Core and/or Ring Frequency May be Briefly Lower Than Expected After BIOS Completes
+Problem:	Due to this erratum, the core and ring frequencies may be lower than expected for up to several seconds after BIOS completes
+Implication:	Processing immediately after BIOS completes may take longer than expected. The erratum does not cause any functional failures.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW117.	RF May be Incorrectly Set in The EFLAGS That is Saved on a Fault in PEBS or BTS
+Problem: After a fault due to a failed PEBS (Processor Event Based Sampling) or BTS (Branch Trace Store) address translation, the RF (resume flag) may be incorrectly set in the EFLAGS image that is saved.
+Implication:	When this erratum occurs, a code breakpoint on the instruction following the return from handling the fault will not be detected. This erratum only happens when the user does not prevent faults on PEBS or BTS.
+Workaround: Software should always prevent faults on PEBS or BTS.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW118.	Some Memory Performance Monitoring Events May Produce Incorrect Results When Filtering on Either OS or USR Modes
+Problem:	The memory at-retirement performance monitoring events (listed below) may produce incorrect results when a performance counter is configured in OS-only or USR-only modes (bits 17 or 16 in IA32_PERFEVTSELx MSR). Counters with both OS and USR bits set are not affected by this erratum.
+The list of affected memory at-retirement events is as follows: MEM_INST_RETIRED.STLB_MISS_LOADS event D0H, umask 11H MEM_INST_RETIRED.STLB_MISS_STORES event D0H, umask 12H MEM_INST_RETIRED.LOCK_LOADS event D0H, umask 21H MEM_INST_RETIRED.SPLIT_LOADS event D0H, umask 41H MEM_INST_RETIRED.SPLIT_STORES event D0H, umask 42H
+MEM_LOAD_RETIRED.L2_HIT event D1H, umask 02H MEM_LOAD_RETIRED.L3_HIT event D1H, umask 04H MEM_LOAD_RETIRED.L4_HIT event D1H, umask 80H MEM_LOAD_RETIRED.L1_MISS event D1H, umask 08H MEM_LOAD_RETIRED.L2_MISS event D1H, umask 10H MEM_LOAD_RETIRED.L3_MISS event D1H, umask 20H MEM_LOAD_RETIRED.FB_HIT event D1H, umask 40H MEM_LOAD_L3_HIT_RETIRED.XSNP_MISS event D2H, umask 01H MEM_LOAD_L3_HIT_RETIRED.XSNP_HIT event D2H, umask 02H MEM_LOAD_L3_HIT_RETIRED.XSNP_HITM event D2H, umask 04H MEM_LOAD_L3_HIT_RETIRED.XSNP_NONE event D2H, umask 08H
+Implication:	The listed performance monitoring events may produce incorrect results including PEBS records generated at an incorrect point.
+
+
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW119.	RING_PERF_LIMIT_REASONS May be Incorrect
+Problem:	Under certain conditions, RING_PERF_LIMIT_REASONS (MSR 6B1H) may incorrectly assert the OTHER status bit (bit 8) as well as the OTHER log bit (bit 24).
+Implication:	When this erratum occurs, software using this register will incorrectly report clipping because of the OTHER reason.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW120.	HWP May Generate Thermal Interrupt While Not Enabled
+Problem:	Due to this erratum, the conditions for HWP (Hardware P-states) to generate a thermal interrupt on a logical processor may generate thermal interrupts on both logical processors of that core.
+Implication:	If two logical processors of a core have different configurations of HWP (e.g. only enabled on one), an unexpected thermal interrupt may occur on one logical processor due to the HWP settings of the other logical processor.
+Workaround: Software should configure HWP consistently on all logical processors of a core. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW121.	Camera Device Does Not Issue an MSI When INTx is Enabled
+Problem: When both MSI (Message Signaled Interrupts) and legacy INTx are enabled by the camera device, INTx is asserted rather than issuing the MSI, in violation of the PCI Local Bus Specification.
+Implication:	Due to this erratum, camera device interrupts can be lost leading to device failure. 
+Workaround: The camera device must disable legacy INTx by setting bit 10 of PCICMD (Bus 0;
+Device 5; Function 0; Offset 04H) before MSI is enabled 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW122.	Violations of Intel SGX Access-Control Requirements Produce #GP Instead of #PF
+Problem:	Intel® Software Guard Extensions (Intel® SGX) define new access-control requirements on memory accesses. A violation of any of these requirements causes a page fault (#PF) that sets bit 15 (SGX) in the page-fault error code. Due to this erratum, these violations instead cause general-protection exceptions (#GP).
+Implication:	Software resuming from system sleep states S3 or S4 and relying on receiving a page fault from the above enclave accesses may not operate properly.
+Workaround: Software can monitor #GP faults to detect that an enclave has been destroyed and needs to be rebuilt after resuming from S3 or S4.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW123.	PCIe* and PEG AER is Not Enabled
+Problem:	The PCIe and PEG (PCIe* Express Graphics) AER (Advanced Error Reporting) capability is not enabled for Server/Workstation SKUs.
+Implication:	Software cannot use AER capabilities.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum.
+
+
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+SKW124.	Performance Monitoring Counters May Undercount When Using CPL Filtering
+Problem:	Performance Monitoring counters configured to count only OS or only USR events by setting exactly one of bits 16 or 17 in IA32_PERFEVTSELx MSRs (186H-18DH) may not count for a brief period during the transition to a new CPL.
+Implication:	A measurement of ring transitions (using the edge-detect bit 18 in IA32_PERFEVTSELx) may undercount, such as CPL_CYCLES.RING0_TRANS (Event 5CH, Umask 01H).
+Additionally, the sum of an OS-only event and a USR-only event may not exactly equal an event counting both OS and USR. Intel has not observed any other software-visible impact.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW125.		SMRAM State-Save Area Above the 4GB Boundary May Cause Unpredictable System Behavior
+Problem:	If BIOS uses the RSM instruction to load the SMBASE register with a value that would cause any part of the SMRAM state-save area to have an address above 4-GBytes, subsequent transitions into and out of SMM (system-management mode) might save and restore processor state from incorrect addresses.
+Implication:	This erratum may cause unpredictable system behavior. Intel has not observed this erratum with any commercially available system.
+Workaround: Ensure that the SMRAM state-save area is located entirely below the 4GB address boundary.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+SKW126.	Certain Non-Canonical IA32_BNDCFGS Values Will Not Cause VM- Entry Failures
+Problem:	If the VM-entry controls Load IA32_BNDCFGS field (bit 16) is 1, VM-entry should fail when the value of the guest IA32_BNDCFGS field in the VMCS is not canonical (that is, when bits 63:47 are not identical). Due to this erratum, VM-entry does not fail if bits 63:48 are identical but differ from bit 47. In this case, VM-entry loads the IA32_BNDCFGS MSR with a value in which bits 63:48 are identical to the value of bit 47 in the VMCS field.
+Implication:	If the value of the guest IA32_BNDCFGS field in the VMCS is not canonical, VM-entry may load the IA32_BNDCFGS MSR with a value different from that of the VMCS field.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW127.	PEBS EventingIP Field May Be Incorrect Under Certain Conditions
+Problem:	The EventingIP field in the PEBS (Processor Event-Based Sampling) record reports the address of the instruction that triggered the PEBS event. Under certain complex microarchitectural conditions, the EventingIP field may be incorrect.
+Implication:	When this erratum occurs, performance monitoring software may not attribute the PEBS events to the correct instruction.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+
+SKW128.	Executing a 256 Bit Intel AVX Instruction May Cause Unpredictable Behavior
+Problem:	Under complex micro-architectural conditions, executing a 256 Intel AVX bit instruction may result in unpredictable system behavior.
+Implication:	When this erratum occurs, the system may behave unpredictably. 
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW129.	An x87 Store Instruction Which Pends #PE May Lead to Unexpected Behavior When EPT A/D is Enabled.
+Problem:	An x87 store instruction which causes a #PE (Precision Exception) to be pended and updates an EPT (Extended Page Tables) A/D bit and causes a VM exit (such as EPT violation or #PF VM exit) may lead to unexpected behavior.
+Implication:	The VMM may experience unexpected x87 fault or a machine check exception with the value of 0x150 in IA32_MC0_STATUS.MCACOD (bits [15:0] in MSR 401H)
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW130.	PECI May Not be Functional After Power On or S3/S4/S5 Resume
+Problem:	When resuming from S3/S4/S5 or following a power on, PECI may fail to function properly.
+Implication:	When this erratum occurs, the PECI does not respond to any command. 
+Workaround: It is possible for the BIOS to contain a workaround for this erratum.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW131.	A System Hang or Machine Check May Occur When eDRAM is Enabled
+Problem:	When eDRAM is enabled, the processor may experience a hang or a machine check exception with an error reported in IA32_MC10_STATUS.
+Implication:	When this erratum occurs, the system will generate a machine check error or hang. 
+Workaround: It is possible for the BIOS to contain a workaround for this erratum.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW132.	Load Latency Performance Monitoring Facility May Stop Counting
+Problem:	The performance monitoring events MEM_TRANS_RETIRED.LOAD_LATENCY_* (Event CDH; UMask 01H; any latency) count load instructions whose latency exceed a predefined threshold, where the loads are randomly selected using the Load Latency facility (PEBS extension). However due to this erratum, load latency facility may stop counting load instructions when Intel® Hyper-Threading Technology is enabled.
+Implication:	Counters programmed with the affected events stop incrementing and do not generate PEBS records.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+
+SKW133.	BNDLDX And BNDSTX May Not Signal #GP on Non-Canonical Bound Directory Access
+Problem:	BNDLDX and BNDSTX instructions access the bound’s directory and table to load or store bounds. These accesses should signal #GP (general protection exception) when the address is not canonical (i.e., bits 48 to 63 are not the sign extension of bit 47). Due to this erratum, #GP may not be generated by the processor when a non-canonical address is used by BNDLDX or BNDSTX for their bound directory memory access.
+Implication:	Intel has not observed this erratum with any commercially available software. 
+Workaround: Software should use canonical addresses for bound directory accesses.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW134.	DTS Temperature Reading May be Inaccurate on DDR4 systems
+Problem:	The temperature reported by the DTS (Digital Thermal Sensor) on DDr4 systems may vary from the actual temperature by +5°C to -15°C rather than the specified ±5°C.
+Implication:	When this erratum occurs, CPU throttling may occur later than expected. Intel has not observed this erratum to have any impact on system.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW135.	Performance Monitoring Load Latency Events May Be Inaccurate For Gather Instructions
+Problem:	The performance monitoring events MEM_TRANS_RETIRED.LOAD_LATENCY_* (Event CDH; UMask 01H; any latency) count load instructions whose latency exceed a predefined threshold, where the loads are randomly selected using the load latency facility (an extension of PEBS). However due to this erratum, these events may count incorrectly for VGATHER*/VPGATHER* instructions.
+Implication:	The Load Latency Performance Monitoring events may be Inaccurate for Gather instructions.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW136.	IA32_RTIT_CR3_MATCH MSR Bits[11:5] Are Treated As Reserved
+Problem:	Due to this erratum, bits[11:5] in IA32_RTIT_CR3_MATCH (MSR 572H) are reserved; an MSR write that attempts to set that field to a non-zero value will result in a #GP fault.
+Implication:	The inability to write the identified bit field does not affect the functioning of Intel® PT (Intel® Processor Trace) operation because, as described in erratum SKL061, the bit field that is the subject of this erratum is not used during Intel PT CR3 filtering.
+Workaround: Ensure that bits 11:5 of the value written to IA32_RTIT_CR3_MATCH are zero, including cases where the selected page-directory-pointer-table base address has non- zero bits in this range.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+
+SKW137.	APIC Timer Interrupt May Not be Generated at The Correct Time In TSC-Deadline Mode
+Problem:	After writing to the IA32_TSC_ADJUST MSR (3BH), any subsequent write to the IA32_TSC_DEADLINE MSR (6E0H) may incorrectly process the desired deadline. When this erratum occurs, the resulting timer interrupt may be generated at the incorrect time.
+Implication:	When the local APIC (Advanced Programmable Interrupt Controller) timer is configured for TSC-Deadline mode, a timer interrupt may be generated much earlier than expected or much later than expected. Intel has not observed this erratum with most commercially available software.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW138.	Some Bits in MSR_MISC_PWR_MGMT May be Updated on Writing Illegal Values to This MSR
+Problem: Attempts to write illegal values to MSR_MISC_PWR_MGMT (MSR 0x1AA) result in #GP (General Protection Fault) and should not change the MSR value. Due to this erratum, some bits in the MSR may be updated on writing an illegal value.
+Implication:	Certain fields may be updated with allowed values when writing illegal values to MSR_MISC_PWR_MGMT. Such writes will always result in #GP as expected.
+Workaround: None identified. Software should not attempt to write illegal values to this MSR. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW139.	Unpredictable System Behavior May Occur When System Agent Enhanced Intel SpeedStep® Technology is Enabled
+Problem:	Under complex system conditions, System Agent Enhanced Intel SpeedStep® Technology may result in unpredictable system behavior.
+Implication:	When this erratum occurs, the system may behave unpredictably. 
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW140.	Processor May Hang Under Complex Scenarios
+Problem:	Under complex micro-architectural conditions, the processor may hang with an internal timeout error (MCACOD 0400H) logged into IA32_MCi_STATUS.
+Implication:	This erratum results in a processor hang.
+Workaround: It is possible for the BIOS to contain a workaround for this erratum. 
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW141.	The Intel PT CR3 Filter is Not Re-evaluated on VM Entry
+Problem:	On a VMRESUME or VMLAUNCH with both TraceEn[0] and CR3Filter[7] in IA32_RTIT_CTL (MSR 0570H) set to 1 both before the VM Entry and after, the new value of CR3 is not compared with IA32_RTIT_CR3_MATCH (MSR 0572H).
+Implication:	The Intel PT (Processor Trace) CR3 filtering mechanism may continue to generate packets despite a mismatching CR3 value, or may fail to generate packets despite a matching CR3, as a result of an incorrect value of IA32_RTIT_STATUS.ContextEn[1] (MSR 0571H) that results from the failure to re-evaluate the CR3 match on VM entry.
+Workaround: None identified.
+
+
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+SKW142.	Display Slowness May be Observed Under Certain Display Commands Scenario
+Problem:	Back-to-back accesses to the VGA register ports (I/O addresses 0x3C2, 0x3CE, 0x3CF) will experience higher than expected latency.
+Implication:	Due to this erratum, the processor may redraw the screen slowly when in VGA mode. 
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW143.	CPUID TLB Associativity Information is Inaccurate
+Problem:	CPUID leaf 2 (EAX=02H) TLB information inaccurately reports that the shared 2nd- Level TLB is 6-way set associative (value C3H), although it is 12-way set associative. Other information reported by CPUID leaf 2 is accurate.
+Implication: Software that uses CPUID shared 2nd-level TLB associativity information for value C3H may operate incorrectly. Intel has not observed this erratum to impact the operation of any commercially available software.
+Workaround: None identified. Software should ignore the shared 2nd-Level TLB associativity information reported by CPUID for the affected processors.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+SKW144.	Short Loops Which Use AH/BH/CH/DH Registers May Cause Unpredictable System Behavior
+Problem: Under complex micro-architectural conditions, short loops of less than 64 instructions that use AH, BH, CH or DH registers as well as their corresponding wider register (for example, RAX, EAX or AX for AH) may cause unpredictable system behavior. This can only happen when both logical processors on the same physical processor are active.
+Implication:	Due to this erratum, the system may experience unpredictable system behavior. 
+Workaround: It is possible for the BIOS to contain a workaround for this erratum.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+SKW145.	Processor Graphics May Render Incorrectly or May Hang Following Warm Reset With Package C8 Disabled
+Problem:	Processor Graphics may not properly restore internal configuration after warm reset when package C8 is disabled.
+Implication:	Due to this erratum Processor Graphics may render incorrectly or hang on warm reset. 
+Workaround: It is possible for the BIOS to contain a workaround for this erratum.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW146.	Unpredictable System Behavior May Occur in DDR4 Multi-Rank System
+Problem:	Due to incorrect configuration of DDR4 ODT by BIOS, it is possible for a multi-rank system to violate section 4.27 of the DDR4 JEDEC spec revision JESED79-4A.
+Implication:	Due to this erratum, complex microarchitectural conditions may result in unpredictable system behavior.
+Workaround: A BIOS code change has been identified and may be implemented as a workaround for this erratum.
+Status:	For the steppings affected, see the Summary Table of Changes.
+
+
+SKW147.	Processor May Hang on Complex Sequence of Conditions
+Problem:	A complex set of architectural and micro-architectural conditions may lead to a processor hang with an internal timeout error (MCACOD 0400H) logged into IA32_MCi_STATUS. When both logical processors in a core are active, this erratum will not occur unless there is no store on one of the logical processors for more than 10 seconds.
+Implication:	This erratum may result in a processor hang. Intel has not observed this erratum with any commercially available software.
+Workaround: None Identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW148.	Display Artifacts May be Seen With High Bandwidth, Multiple Display Configurations
+Problem:	With high bandwidth, multiple display configurations, display engine underruns may occur.
+Implication:	Due to this erratum, the display engine may generate display artifacts.
+Workaround: This erratum can be worked around by Intel Graphics Driver revisions of 15.46.4.64.4749 or later.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW149.	Spurious Corrected Errors May be Reported
+Problem:	Due to this erratum, spurious corrected errors may be logged in the IA32_MC0_STATUS MSR (401H) register with the valid field (bit 63) set, the uncorrected error field bit (bit
+61) not set, a Model Specific Error Code (bits [31:16]) of 0x0001, and an MCA Error Code (bits [15:0]) of 0x0005. If CMCI is enabled, these spurious corrected errors also signal interrupts.
+Implication:	When this erratum occurs, software may see an unusually high rate of reported corrected errors. As it is not possible to distinguish between spurious and non-spurious errors, this erratum may interfere with reporting non-spurious corrected errors.
+Workaround: None Identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW150.	Masked Bytes in a Vector Masked Store Instructions May Cause Write Back of a Cache Line
+Problem: Vector masked store instructions to WB (write-back) memory-type that cross cache lines may lead to CPU writing back cached data even for cache lines where all of the bytes are masked.
+Implication:	The processor may generate writes of un-modified data. This can affect MMIO (Memory Mapped IO) or non-coherent agents in the following ways:
+
+For MMIO range that is mapped as WB memory type, this erratum may lead to MCE (Machine Check Exception) due to writing back data into the MMIO space. This applies only to cross page vector masked stores where one of the pages is in MMIO range.
+
+If the CPU cached data is stale, for example in the case of memory written directly by a non-coherent agent (agent that uses non-coherent writes), this erratum may lead to writing back stale cached data even if these bytes are masked.
+Workaround: Platforms should not map MMIO memory space or non-coherent device memory space as WB memory. If WB is used for MMIO range, software or VMM should not map such
+
+
+MMIO page adjacent to a regular WB page (adjacent on the linear address space, before or after the IO page). Memory that may be written by non-coherent agents should be separated by at least 64 bytes from regular memory used for other purposes (on the linear address space).
+Status:	For the steppings affected, see the Summary Table of Changes.
+SKW151.	Processor May Incorrectly Assert PROCHOT During PkgC10
+Problem:	If the PROCHOT# pin is configured as an output-only signal, PROCHOT# may incorrectly be asserted during PkgC10.
+Implication:	When this erratum occurs, PROCHOT# may be incorrectly asserted. This can lead to the system fan unnecessarily turning on during PkgC10 or other unexpected platform behaviors.
+Workaround: None identified.
+Status:	For the steppings affected, see the Summary Table of Changes.
