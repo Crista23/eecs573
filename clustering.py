@@ -41,6 +41,7 @@ for i in range(len(ARM7and9_lines)):
 	errata_id = line[2]
 	module_criticality = line[3]
 	workaround = line[4]
+	print "WORKAROUND", workaround
 	revisions_impacted = line[5]
 	failure_fix_status = line[6]
 	masks_affected = line[7]
@@ -48,8 +49,8 @@ for i in range(len(ARM7and9_lines)):
 	d = {"details_core": details_core, "errata_id": errata_id, "module_criticality": module_criticality, "workaround": workaround, "revisions_impacted": revisions_impacted, "failure_fix_status": failure_fix_status, "masks_affected": masks_affected, "manufacturer": manufacturer}
 	arm[chip_id].append(d)
 	#error_descriptions.append(details_core)
-	#error_descriptions.append(workaround)
-	error_descriptions.append(failure_fix_status)
+	error_descriptions.append(workaround)
+	#error_descriptions.append(failure_fix_status)
 
 print "ERROR DESCRIPTIONS", error_descriptions
 #cluster documents overall
@@ -66,6 +67,7 @@ for chip_id, values in arm.iteritems():
 	cluster_documents(1, chip_errors)
 """
 
+"""
 with open("data/CortexA8.csv") as f:
 	CortexA8_lines = f.readlines()
 print len(CortexA8_lines)
@@ -125,5 +127,5 @@ for i in range(len(CortexA9_lines)):
 print "ERROR DESCRIPTIONS", error_descriptions
 #cluster documents overall
 cluster_documents(5, error_descriptions)
-
+"""
 
