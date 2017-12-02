@@ -2,6 +2,8 @@ import string
 import csv
 import math
 from textblob import TextBlob as tb
+from nltk.corpus import stopwords
+import re
 import sys
 
 def tf(word, blob):
@@ -26,21 +28,28 @@ sys.setdefaultencoding('utf8')
 data = []
 currCore = ""
 # Read all the data in
-file = open("data/NewData.tsv", "r")
+file = open("../data/NewDataTag.tsv", "rb")
 for line in file:
     line = line.strip().split("\t")
     if len(line) > 1:
       category = line[0]
-      detail = line[1]
-      if category == "title":
-        data.append(detail)
+      detail = line[1].encode('ascii', errors='ignore')
+      output = ""
+      for word in detail.split():
+          pair = word.split("|")
+          if pair[0] not in stopwords.words("english"):
+              output += word + " "
+      if category == "problem":
+        data.append(tb(output.strip()))
+file.close()
 
-print len(data)
-'''
-for i, d in enumerate(dataList):
-    print("Top words in document {}".format(i + 1))
-    scores = {word: tfidf(word, d, dataList) for word in d.words}
+file = open("tfidf_results.txt", "w")
+for i, d in enumerate(data):
+    file.write("Top words in document {}".format(i + 1))
+    file.write("\n")
+    scores = {word: tfidf(word, d, data) for word in d.words}
     sorted_words = sorted(scores.items(), key=lambda x: x[1], reverse=True)
-    for word, score in sorted_words[:10]:
-        print("{}\t{}".format(word, round(score, 5)))
-'''
+    for word, score in sorted_words[:11]:
+        file.write("{}\t{}".format(word, round(score, 5)))
+        file.write("\n")
+file.close()
