@@ -1,6 +1,6 @@
 title	reported memory type may not be used to access the vmcs and referenced data structures										
 problem	bits 53:50 of the ia32_vmx_basic msr report the memory type that the processor uses to access the vmcs and data structures referenced by pointers in the vmcs. due to this erratum, a vmx access to the vmcs or referenced data structures will instead use the memory type that the mtrrs (memory-type range registers) specify for the physical address of the access.										
-implication	bits 53:50 of the ia32_vmx_basic msr report that the wb (write-back) memory type will be used but the processor may use a different memory type.										
+implication	bits 53:50 of the ia32_vmx_basic msr report that the wb (write-back) memory type will be used but the processor may use a different memory type.
 workaround	software should ensure that the vmcs and referenced data structures are located at physical addresses that are mapped to wb memory type by the mtrrs.										
 											
 title	instruction fetch may cause machine check if page size and memory type was changed without invalidation										
