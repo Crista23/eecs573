@@ -1,0 +1,40 @@
+5 topics w/ top10 words
+Topic 0: software register use mode dma device offset registers ensure exception
+Topic 1: software memory use instructions always value field peci system usb
+Topic 2: bios contain identified change implemented vector firmware configuration changes isr
+Topic 3: software instruction memory avoid page type used use io using
+Topic 4: software memory msr address entry value instruction vm write ensure
+
+10 topics w/ top10 words
+Topic 0: contain bios firmware partial acm sinit potential purposes require dropped
+Topic 1: mode exception address memory page occur operating instructions v86 limit
+Topic 2: dma offset device xor legacy software ensure descriptor disable processor
+Topic 3: instruction io vector software isr handler locked smm spurious smi
+Topic 4: software memory ensure type avoid accesses addresses used around pages
+Topic 5: software affected value system usb registers controller paging performance setting
+Topic 6: software entry address vm value size pebs msr operation exit
+Topic 7: bios identified change implemented configuration power changes processor contain driver
+Topic 8: software use avoid instruction write page prefix developers monitor manual
+Topic 9: software instruction mov register ss instructions use apic debug ignore
+
+20 topics w/ top10 words
+Topic 0: gpio use access register driver information registers completed device block
+Topic 1: software msr monitor write guest disable virtualmachine allow ia32_misc_enable field
+Topic 2: bios identified change implemented bit47 circuitry extending sign easily bits6261
+Topic 3: exception mode address v86 used size handler occur check systems
+Topic 4: vector isr programmed interrupts spurious eoi occur clock using associated
+Topic 5: driver use mode ensure version refer interrupt please memory reference
+Topic 6: software memory avoid reading mode limit timer accesses lvt irr
+Topic 7: instruction software instructions locked field movntdqa executing execute always execution
+Topic 8: processor reset configuration peci changes host platform power case disabled
+Topic 9: software ensure register apic instructions pages memory system used write
+Topic 10: memory software type page wb addresses address avoid mapped ensure
+Topic 11: software vm entry value control vmx pebs exit threshold disabling
+Topic 12: dma software use legacy xor descriptor operations channel fxsave fxrstor
+Topic 13: instruction fp trace decoder operand ensure ignore 64bit used boundary
+Topic 14: paging affected perform value system software structure invalidation saved ensure
+Topic 15: offset device function controller register mode software use read usb
+Topic 16: value software event performance msr enabled values ensure one written
+Topic 17: io page smm handler port instruction smi read restart determine
+Topic 18: software developers avoid mov manual ss architecture use volume section
+Topic 19: contain bios firmware issue compatibility largepage mr2 valleyview softstrap hdaudio

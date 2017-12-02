@@ -1,0 +1,41 @@
+5 topics w/ top10 words
+Topic 0: processor device pcie link system function offset bus power reset
+Topic 1: processor page fault address instruction vm memory software entry exit
+Topic 2: instruction exception machine check execution ss cache debug following packet
+Topic 3: event msr performance umask counter count pebs instructions monitoring events
+Topic 4: interrupt branch register address dma instruction mode trace msr incorrect
+
+10 topics w/ top10 words
+Topic 0: machine check exception processor system instruction memory report hang occurs
+Topic 1: observed software available commercially device expected pcie functional behave using
+Topic 2: link reported software pcie result value mode trace processor packet
+Topic 3: memory expected interrupt state timer package power enabled occur page
+Topic 4: reset system processor occurs hang interrupt interrupts device power state
+Topic 5: software overflow page vm stack occurs processor incorrect corrected instruction
+Topic 6: performance count event events monitoring instruction software expected instructions incorrect
+Topic 7: fault occur dma software instruction processors processor faults enter occurs
+Topic 8: software value field values unexpected read mode incorrect programming vmcs
+Topic 9: system observed available commercially software behavior hang unpredictable result occurs
+
+
+20 topics w/ top10 words
+Topic 0: device usb controller function affected observed transactions devices sd display
+Topic 1: observed available commercially software system impact operation hang processor result
+Topic 2: power expected state package bios processor behave platform temperature dram
+Topic 3: interrupt timer expected generated vector apic entry properly interrupts lvt
+Topic 4: lbr used pebs incorrect bts occur one event instruction btm
+Topic 5: system behavior unpredictable result hang lead cause occur unexpected experience
+Topic 6: dma occurs address instruction information faults channel incorrect dr6 usage
+Topic 7: memory page fault occur size violation address access ordering bytes
+Topic 8: software value cache field reported uses instruction read ring using
+Topic 9: system hang processor reset occurs occur processors warm operating lead
+Topic 10: pcie link functional trace failures packets port decoder qpi packet
+Topic 11: processor incorrectly software memory address type instructions properly subsequent instruction
+Topic 12: machine check hang system processor occurs uncorrectable exception peci cause
+Topic 13: instruction software observed feature operation execute incorrect commercially disabled available
+Topic 14: software unexpected fault system stack observed execution gp operating general
+Topic 15: vm mode load cause unexpected exit instruction field 64bit without
+Topic 16: exception corrected overflow occurs instead logged software indication signaled ud
+Topic 17: performance count events monitoring counter event multiple pebs monitor expected
+Topic 18: software value values using state msr read incorrect msrs andor
+Topic 19: software mode event expected register observed behave impact protected umask
