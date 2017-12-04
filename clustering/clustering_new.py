@@ -34,6 +34,7 @@ docs_retrieved = es.search(INDEX, body=query_text)
 total_found_documents = docs_retrieved["hits"]["total"]
 print "TOTAL DOCUMENTS", total_found_documents
 
+docs_per_category = defaultdict(list)
 bug_categories = []
 bug_details = []
 for doc in scan(es, query=query_text, index=INDEX):
@@ -42,6 +43,7 @@ for doc in scan(es, query=query_text, index=INDEX):
 	#print "category", doc_category
 	doc_detail = doc["_source"]["detail"]
 	#print "!!!doc_detail", doc_detail
+	docs_per_category[doc_category].append(doc_detail)
 	bug_categories.append(doc_category)
 	bug_details.append(doc_detail)
 
@@ -49,10 +51,18 @@ for doc in scan(es, query=query_text, index=INDEX):
 #print "BUG CATEGORIES"
 #print "CATEGORIES", len(bug_categories)
 #print bug_categories
-cluster_documents(5, bug_categories)
+#cluster_documents(5, bug_categories, "overall_clusters")
 #print "DETAILS", bug_details
-#cluster_documents(15, bug_details)
 
+#cluster_documents(5, bug_details)
+#cluster_documents(10, bug_details)
+#cluster_documents(15, bug_details)
+#cluster_documents(20, bug_details)
+
+print docs_per_category
+for category, errors in docs_per_category.iteritems():
+	print "category=", category
+	cluster_documents(20, errors)
 
 
 
