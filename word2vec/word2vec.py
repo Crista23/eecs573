@@ -56,7 +56,7 @@ for doc in scan(es, query=query_text, index=INDEX):
 	#if  i == 10:
 	#	break
 
-model = Word2Vec(bug_details, min_count=200)
+model = Word2Vec(bug_details, min_count=150)
 
 X = model[model.vocab]
 pca = PCA(n_components=2)
@@ -67,8 +67,8 @@ words = list(model.vocab)
 for i, word in enumerate(words):
 	plt.annotate(word, xy=(result[i, 0], result[i, 1]), size=8, ha='left', va='bottom')
 
-plt.xlim(-1, 1)
-plt.ylim(-1, 1)
+plt.xlim(-2, 2)
+plt.ylim(-2, 2)
 
 plt.tight_layout() #show plot with tight layout
 plt.savefig("word2vec_vectors.png") #show the plot
