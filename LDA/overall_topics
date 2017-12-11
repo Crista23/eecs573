@@ -1,41 +1,7 @@
-5 topics w/ top10 words
-Topic 0: event performance msr count counter monitoring events overflow pebs value
-Topic 1: bios pcie contain device link offset function bus port controller
-Topic 2: system hang processor behavior result reset cause unpredictable machine memory
-Topic 3: instruction exception software mode interrupt fault register incorrect gp execution
-Topic 4: software page memory address processor vm instruction entry exit dma
-
-10 topics w/ top10 words
-Topic 0: system hang processor reset behavior cause conditions memory unpredictable result
-Topic 1: page memory vm address software exit entry instruction type processor
-Topic 2: processor power package system peci state hang frequency enabled result
-Topic 3: software observed available commercially system processor unexpected instruction behavior fault
-Topic 4: bios contain interrupt identified packet timer change implemented trace register
-Topic 5: pcie device link function offset port usb controller bus qpi
-Topic 6: instruction exception mode debug incorrect branch execution ss segment mov
-Topic 7: machine check logged uncorrectable corrected msr overflow cache incorrectly interrupt
-Topic 8: dma address software xor descriptor technology channel value field register
-Topic 9: event performance count counter monitoring events msr pebs umask monitor
-
-
-20 topics w/ top10 words
-Topic 0: fault gp exception mode segment general protection instruction processor cause
-Topic 1: reset usb controller warm device host xhci peci sd processor
-Topic 2: memory processor instruction instructions rep software write locked wc size
-Topic 3: vm exit software field entry vmx vmcs control operation ia32_misc_enable
-Topic 4: msr value counter pmi software performance overflow values msrs enabled
-Topic 5: package processor power core state frequency c6 peci system exit
-Topic 6: check machine logged corrected cache uncorrectable overflow incorrectly msr count
-Topic 7: event performance count events monitoring pebs umask counter monitor instructions
-Topic 8: instruction memory fp mode operand x87 64bit pointer address exception
-Topic 9: dma xor descriptor channel graphics address vtd technology quickdata occur
-Topic 10: bios contain identified change implemented mf technology acm interrupts tpm
-Topic 11: link pcie packet processor qpi trace packets state speed pt
-Topic 12: page address fault processor entry software translation paging ept linear
-Topic 13: observed software available commercially branch incorrect lbr system bts btm
-Topic 14: software expected exception timer register instructions ud behave produce instruction
-Topic 15: memory address type access software used processor cache use different
-Topic 16: instruction ss mov debug exception following breakpoint execution breakpoints stack
-Topic 17: system hang behavior unpredictable result memory cause lead conditions processor
-Topic 18: device offset function pcie bus register field port incorrectly mode
-Topic 19: interrupt apic instruction processor vector smi generated io timer execution
+Topic 0: page memory addres software processor fault instruction type bit intel
+Topic 1: system processor hang intel occur result behavior observed reset memory
+Topic 2: event performance msr bit count counter monitoring peb overflow instruction
+Topic 3: device pcie link function bit port offset controller register intel
+Topic 4: instruction bit interrupt vm set exception software exit register occur
+Topic 5: bio workaround possible contain packet intel code change value identified
+Topic 6: instruction exception software mode fault gp addres branch incorrect segment
