@@ -1,0 +1,5 @@
+incorrect address computed for last byte of fxsavefxrstor or xsavexrstor image leads to partial memory update
+performance monitoring event fp_mmx_trans_to_mmx may not count some transitions
+system hang may occur when memory sparing is enabled
+processor may livelock during on demand clock modulation
+executing an rsm instruction with intel processor trace enabled will signal a gp

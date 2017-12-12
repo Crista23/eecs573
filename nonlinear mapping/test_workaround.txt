@@ -1,0 +1,5 @@
+software should avoid memory accesses that wrap around the respective 16bit and 32bit mode memory limits
+none identified
+it is possible for the bios to contain a workaround for this erratum
+this erratum will not occur if clock modulation is enabled on all threads when using on demand clock modulation or if the duty cycle programmed in the ia32_clock_modulation msr is 1875 or higher
+if software enables intel pt in systemmanagement mode it should disable intel pt before executing rsm
