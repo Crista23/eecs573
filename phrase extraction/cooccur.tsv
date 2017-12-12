@@ -1,0 +1,1133 @@
+pcie	implication	processor may operate in polling compliance mode with an incorrect transmitter de
+pcie	implication	the processor may operate in polling compliance mode with an incorrect transmitter
+pcie	implication	specification intel has not observed any functional failures due to this erratum
+pcie	implication	operate in polling compliance mode with an incorrect transmitter de emphasis level
+pcie	implication	may operate in polling compliance mode with an incorrect transmitter de emphasis
+pcie	implication	may set a correctable error status bit which has no functional effect
+pcie	implication	this erratum the pcie root port may not initiate a link speed
+pcie	implication	port may not initiate a link speed change during some hardware scenarios
+pcie	implication	link to operate at a lower than expected speed intel has not
+pcie	implication	to this erratum the pcie ports do not support dll link active
+pcie	implication	this erratum the pcie ports do not support dll link active reporting
+pcie	implication	the pcie ports do not support dll link active reporting this may
+pcie	implication	pcie specification intel has not observed any functional failures due to this
+pcie	implication	the tlp request the link partner may set a correctable error status
+pcie	implication	will replay the tlp request the link partner may set a correctable
+pcie	implication	scenarios causing the pcie link to operate at a lower than expected
+pcie	implication	to this erratum the pcie root port may not initiate a link
+pcie	implication	pcie link partner will replay the tlp request the link partner may
+pcie	implication	link partner will replay the tlp request the link partner may set
+pcie	implication	functional failures due to this erratum with any commercially available pcie devices
+pcie	implication	the link partner may set a correctable error status bit which has
+pcie	implication	to operate at a lower than expected speed intel has not observed
+pcie	implication	pcie root port may not initiate a link speed change during some
+pcie	implication	due to this erratum the pcie root port may not initiate a
+pcie	implication	speed change during some hardware scenarios causing the pcie link to operate
+pcie	implication	the pcie link partner will replay the tlp request the link partner
+pcie	implication	the pcie root port may not initiate a link speed change during
+pcie	implication	partner will replay the tlp request the link partner may set a
+pcie	implication	not initiate a link speed change during some hardware scenarios causing the
+pcie	implication	than expected speed intel has not observed this erratum with any commercially
+pcie	implication	the recovery event the pcie link partner will replay the tlp request
+pcie	implication	a link speed change during some hardware scenarios causing the pcie link
+pcie	implication	ports do not support dll link active reporting this may be reported
+pcie	implication	the pcie link to operate at a lower than expected speed intel
+pcie	implication	pcie ports do not support dll link active reporting this may be
+pcie	implication	operate at a lower than expected speed intel has not observed this
+pcie	implication	replay the tlp request the link partner may set a correctable error
+pcie	implication	has not observed any functional failures due to this erratum with any
+pcie	implication	correctable errors may be reported by a pcie controller for unused lanes
+pcie	implication	some hardware scenarios causing the pcie link to operate at a lower
+pcie	implication	change during some hardware scenarios causing the pcie link to operate at
+pcie	implication	link active reporting this may be reported by a pcie compliance test
+pcie	implication	may not initiate a link speed change during some hardware scenarios causing
+pcie	implication	not support dll link active reporting this may be reported by a
+pcie	implication	event the pcie link partner will replay the tlp request the link
+pcie	implication	intel has not observed any functional failures due to this erratum with
+pcie	implication	recovery event the pcie link partner will replay the tlp request the
+pcie	implication	not observed any functional failures due to this erratum with any commercially
+pcie	implication	at a lower than expected speed intel has not observed this erratum
+pcie	implication	hardware scenarios causing the pcie link to operate at a lower than
+pcie	implication	dll link active reporting this may be reported by a pcie compliance
+pcie	implication	request the link partner may set a correctable error status bit which
+pcie	implication	tlp request the link partner may set a correctable error status bit
+pcie	implication	expected speed intel has not observed this erratum with any commercially available
+pcie	implication	lower than expected speed intel has not observed this erratum with any
+pcie	implication	erratum the pcie ports do not support dll link active reporting this
+pcie	implication	observed any functional failures due to this erratum with any commercially available
+pcie	implication	partner may set a correctable error status bit which has no functional
+pcie	implication	do not support dll link active reporting this may be reported by
+pcie	implication	erratum the pcie root port may not initiate a link speed change
+pcie	implication	a lower than expected speed intel has not observed this erratum with
+pcie	implication	the pcie specification intel has not observed any functional failures due to
+pcie	implication	support dll link active reporting this may be reported by a pcie
+pcie	implication	link partner may set a correctable error status bit which has no
+pcie	implication	link speed change during some hardware scenarios causing the pcie link to
+pcie	implication	speed intel has not observed this erratum with any commercially available platform
+pcie	implication	root port may not initiate a link speed change during some hardware
+pcie	implication	after completing the recovery event the pcie link partner will replay the
+pcie	implication	during some hardware scenarios causing the pcie link to operate at a
+pcie	implication	pcie link to operate at a lower than expected speed intel has
+pcie	implication	due to this erratum the pcie ports do not support dll link
+pcie	implication	any functional failures due to this erratum with any commercially available pcie
+pcie	implication	causing the pcie link to operate at a lower than expected speed
+pcie	implication	initiate a link speed change during some hardware scenarios causing the pcie
+pcie	implication	completing the recovery event the pcie link partner will replay the tlp
+pcie	workaround	A bios code change has been identified and may be implemented as a workaround for this erratum
+gp	implication	an incorrect error code may be pushed onto the stack intel has
+gp	implication	code may be pushed onto the stack intel has not observed this
+gp	implication	incorrect error code may be pushed onto the stack intel has not
+gp	implication	be pushed onto the stack intel has not observed this erratum with
+gp	implication	onto the stack intel has not observed this erratum with any commercially
+gp	implication	stack intel has not observed this erratum with any commercially available software
+gp	implication	may be pushed onto the stack intel has not observed this erratum
+gp	implication	error code may be pushed onto the stack intel has not observed
+gp	implication	pushed onto the stack intel has not observed this erratum with any
+gp	implication	the stack intel has not observed this erratum with any commercially available
+gp	implication	fault intel has not observed this erratum with any commercially available software
+gp	implication	may observe a gp fault being serviced before higher priority interrupts and
+gp	implication	a busy tss may get invalid tss fault instead of a gp
+gp	implication	set when attempting to execute a mov on debug registers in v86
+gp	implication	the gd bit set when attempting to execute a mov on debug
+gp	implication	to execute a mov on debug registers in v86 mode a debug
+gp	implication	tss fault instead of a gp fault intel has not observed this
+gp	implication	execute a mov on debug registers in v86 mode a debug exception
+gp	implication	get invalid tss fault instead of a gp fault intel has not
+gp	implication	a gp fault intel has not observed this erratum with any commercially
+gp	implication	busy tss may get invalid tss fault instead of a gp fault
+gp	implication	access a busy tss may get invalid tss fault instead of a
+gp	implication	observe a gp fault being serviced before higher priority interrupts and exceptions
+gp	implication	systems that access a busy tss may get invalid tss fault instead
+gp	implication	operating systems may observe a gp fault being serviced before higher priority
+gp	implication	bit set when attempting to execute a mov on debug registers in
+gp	implication	that access a busy tss may get invalid tss fault instead of
+gp	implication	tss may get invalid tss fault instead of a gp fault intel
+gp	implication	fault instead of a gp fault intel has not observed this erratum
+gp	implication	instead of a gp fault intel has not observed this erratum with
+gp	implication	attempting to execute a mov on debug registers in v86 mode a
+gp	implication	of a gp fault intel has not observed this erratum with any
+gp	implication	invalid tss fault instead of a gp fault intel has not observed
+gp	implication	may get invalid tss fault instead of a gp fault intel has
+gp	implication	systems may observe a gp fault being serviced before higher priority interrupts
+gp	implication	gp fault intel has not observed this erratum with any commercially available
+gp	implication	gd bit set when attempting to execute a mov on debug registers
+gp	implication	when attempting to execute a mov on debug registers in v86 mode
+gp	implication	operation systems that access a busy tss may get invalid tss fault
+gp	implication	software restoring these msrs from saved values are subject to this erratum
+gp	implication	a gp fault being serviced before higher priority interrupts and exceptions intel
+gp	implication	debug registers in v86 mode a debug exception will be generated instead
+gp	implication	a debug exception will be generated instead of the expected general protection
+gp	implication	interrupts and exceptions intel has not observed this erratum on any commercially
+gp	implication	62 61 contain in_tsx and tsx_abort information respectively software restoring these msrs
+gp	implication	and exceptions intel has not observed this erratum on any commercially available
+gp	implication	from msr_lastbranch_x_from_ip is unaffected by this erratum bits 62 61 contain in_tsx
+gp	implication	fault being serviced before higher priority interrupts and exceptions intel has not
+gp	implication	gp fault being serviced before higher priority interrupts and exceptions intel has
+gp	implication	msr_lastbranch_x_from_ip is unaffected by this erratum bits 62 61 contain in_tsx and
+gp	implication	priority interrupts and exceptions intel has not observed this erratum on any
+gp	implication	is unaffected by this erratum bits 62 61 contain in_tsx and tsx_abort
+gp	implication	unaffected by this erratum bits 62 61 contain in_tsx and tsx_abort information
+gp	implication	in_tsx and tsx_abort information respectively software restoring these msrs from saved values
+gp	implication	by this erratum bits 62 61 contain in_tsx and tsx_abort information respectively
+gp	implication	mode a debug exception will be generated instead of the expected general
+gp	implication	being serviced before higher priority interrupts and exceptions intel has not observed
+gp	implication	debug exception will be generated instead of the expected general protection fault
+gp	implication	erratum bits 62 61 contain in_tsx and tsx_abort information respectively software restoring
+gp	implication	bits 62 61 contain in_tsx and tsx_abort information respectively software restoring these
+gp	implication	higher priority interrupts and exceptions intel has not observed this erratum on
+gp	implication	on debug registers in v86 mode a debug exception will be generated
+gp	implication	registers in v86 mode a debug exception will be generated instead of
+gp	implication	tsx_abort information respectively software restoring these msrs from saved values are subject
+gp	implication	a mov on debug registers in v86 mode a debug exception will
+gp	implication	before higher priority interrupts and exceptions intel has not observed this erratum
+gp	implication	serviced before higher priority interrupts and exceptions intel has not observed this
+gp	implication	61 contain in_tsx and tsx_abort information respectively software restoring these msrs from
+gp	implication	exceptions intel has not observed this erratum on any commercially available software
+gp	implication	information respectively software restoring these msrs from saved values are subject to
+gp	implication	and tsx_abort information respectively software restoring these msrs from saved values are
+gp	implication	v86 mode a debug exception will be generated instead of the expected
+gp	implication	read from msr_lastbranch_x_from_ip is unaffected by this erratum bits 62 61 contain
+gp	implication	in v86 mode a debug exception will be generated instead of the
+gp	implication	contain in_tsx and tsx_abort information respectively software restoring these msrs from saved
+gp	implication	the value read from msr_lastbranch_x_from_ip is unaffected by this erratum bits 62
+gp	implication	this erratum bits 62 61 contain in_tsx and tsx_abort information respectively software
+gp	implication	mov on debug registers in v86 mode a debug exception will be
+gp	implication	respectively software restoring these msrs from saved values are subject to this
+gp	implication	value read from msr_lastbranch_x_from_ip is unaffected by this erratum bits 62 61
+gp	implication	fault instructions of greater than 15 bytes in length can only occur
+gp	implication	in lieu of a gp fault instructions of greater than 15 bytes
+gp	implication	15 bytes in length can only occur if redundant prefixes are placed
+gp	implication	occurring before or in lieu of a gp fault instructions of greater
+gp	implication	may observe a lower priority fault occurring before or in lieu of
+gp	implication	a gp fault instructions of greater than 15 bytes in length can
+gp	implication	priority fault occurring before or in lieu of a gp fault instructions
+gp	implication	fault occurring before or in lieu of a gp fault instructions of
+gp	implication	lieu of a gp fault instructions of greater than 15 bytes in
+gp	implication	bytes in length can only occur if redundant prefixes are placed before
+gp	implication	software may observe a lower priority fault occurring before or in lieu
+gp	implication	observe a lower priority fault occurring before or in lieu of a
+gp	implication	of greater than 15 bytes in length can only occur if redundant
+gp	implication	before or in lieu of a gp fault instructions of greater than
+gp	implication	than 15 bytes in length can only occur if redundant prefixes are
+gp	implication	lower priority fault occurring before or in lieu of a gp fault
+gp	implication	of a gp fault instructions of greater than 15 bytes in length
+gp	implication	gp fault instructions of greater than 15 bytes in length can only
+gp	implication	length can only occur if redundant prefixes are placed before the instruction
+gp	implication	greater than 15 bytes in length can only occur if redundant prefixes
+gp	implication	instructions of greater than 15 bytes in length can only occur if
+gp	implication	in length can only occur if redundant prefixes are placed before the
+gp	implication	a lower priority fault occurring before or in lieu of a gp
+gp	implication	or in lieu of a gp fault instructions of greater than 15
+gp	implication	fpu tag word register may be incorrectly set to a 0x0000 value
+gp	implication	met the x87 fpu tag word register may be incorrectly set to
+gp	implication	multiple drivers concurrently accessing gpio registers may result in unpredictable system behavior
+gp	implication	conditions are met the x87 fpu tag word register may be incorrectly
+gp	implication	incorrectly set to a 0x0000 value when it should not have been
+gp	implication	register may be incorrectly set to a 0x0000 value when it should
+gp	implication	word register may be incorrectly set to a 0x0000 value when it
+gp	implication	may be incorrectly set to a 0x0000 value when it should not
+gp	implication	if the erratum conditions are met the x87 fpu tag word register
+gp	implication	x87 fpu tag word register may be incorrectly set to a 0x0000
+gp	implication	are met the x87 fpu tag word register may be incorrectly set
+gp	implication	be incorrectly set to a 0x0000 value when it should not have
+gp	implication	the x87 fpu tag word register may be incorrectly set to a
+gp	implication	set to a 0x0000 value when it should not have been modified
+gp	implication	erratum conditions are met the x87 fpu tag word register may be
+gp	implication	tag word register may be incorrectly set to a 0x0000 value when
+gp	implication	the erratum conditions are met the x87 fpu tag word register may
+gp	implication	when concurrently enabling any one of lbr bts or btm with intel
+gp	implication	with debug register protection enabled that is the gd bit set when
+gp	implication	with debug register protection enabled i e the gd bit set when
+gp	implication	occur when concurrently enabling any one of lbr bts or btm with
+gp	implication	an unexpected gp may occur when concurrently enabling any one of lbr
+gp	implication	e the gd bit set when attempting to execute a mov on
+gp	implication	occur in 32 bit mode the system may not issue a gp
+gp	implication	may occur when concurrently enabling any one of lbr bts or btm
+gp	implication	register protection enabled that is the gd bit set when attempting to
+gp	implication	i e the gd bit set when attempting to execute a mov
+gp	implication	debug register protection enabled that is the gd bit set when attempting
+gp	implication	is the gd bit set when attempting to execute a mov on
+gp	implication	that is the gd bit set when attempting to execute a mov
+gp	implication	memory accesses occur in 32 bit mode the system may not issue
+gp	implication	gp may occur when concurrently enabling any one of lbr bts or
+gp	implication	such memory accesses occur in 32 bit mode the system may not
+gp	implication	accesses occur in 32 bit mode the system may not issue a
+gp	implication	concurrently enabling any one of lbr bts or btm with intel pt
+gp	implication	in 32 bit mode the system may not issue a gp fault
+gp	implication	enabled i e the gd bit set when attempting to execute a
+gp	implication	protection enabled i e the gd bit set when attempting to execute
+gp	implication	protection enabled that is the gd bit set when attempting to execute
+gp	implication	register protection enabled i e the gd bit set when attempting to
+gp	implication	when such memory accesses occur in 32 bit mode the system may
+gp	implication	unexpected gp may occur when concurrently enabling any one of lbr bts
+gp	implication	debug register protection enabled i e the gd bit set when attempting
+gp	implication	enabled that is the gd bit set when attempting to execute a
+gp	workaround	debug exception handler should check that the exception did not occur in v86 mode before continuing if
+gp	workaround	handler should check that the exception did not occur in v86 mode before continuing if the exception
+gp	workaround	bit when they are in v86 mode the gd bit is generally set and used by debuggers
+gp	workaround	continuing if the exception did occur in v86 mode the exception may be directed to the general
+gp	workaround	debuggers the debug exception handler should check that the exception did not occur in v86 mode before
+gp	workaround	v86 mode before continuing if the exception did occur in v86 mode the exception may be directed
+gp	workaround	exception handler should check that the exception did not occur in v86 mode before continuing if the
+gp	workaround	not occur in v86 mode before continuing if the exception did occur in v86 mode the exception
+gp	workaround	is generally set and used by debuggers the debug exception handler should check that the exception did
+gp	workaround	the debug exception handler should check that the exception did not occur in v86 mode before continuing
+gp	workaround	before continuing if the exception did occur in v86 mode the exception may be directed to the
+gp	workaround	in v86 mode before continuing if the exception did occur in v86 mode the exception may be
+gp	workaround	the gd bit when they are in v86 mode the gd bit is generally set and used
+gp	workaround	mode before continuing if the exception did occur in v86 mode the exception may be directed to
+gp	workaround	in general operating systems do not set the gd bit when they are in v86 mode the
+gp	workaround	set the gd bit when they are in v86 mode the gd bit is generally set and
+gp	workaround	do not set the gd bit when they are in v86 mode the gd bit is generally
+gp	workaround	exception did occur in v86 mode the exception may be directed to the general protection exception handler
+gp	workaround	generally set and used by debuggers the debug exception handler should check that the exception did not
+gp	workaround	they are in v86 mode the gd bit is generally set and used by debuggers the debug
+gp	workaround	that the exception did not occur in v86 mode before continuing if the exception did occur in
+gp	workaround	are in v86 mode the gd bit is generally set and used by debuggers the debug exception
+gp	workaround	v86 mode the gd bit is generally set and used by debuggers the debug exception handler should
+gp	workaround	mode the gd bit is generally set and used by debuggers the debug exception handler should check
+gp	workaround	operating systems do not set the gd bit when they are in v86 mode the gd bit
+gp	workaround	not set the gd bit when they are in v86 mode the gd bit is generally set
+gp	workaround	the exception did occur in v86 mode the exception may be directed to the general protection exception
+gp	workaround	the exception did not occur in v86 mode before continuing if the exception did occur in v86
+gp	workaround	occur in v86 mode before continuing if the exception did occur in v86 mode the exception may
+gp	workaround	the gd bit is generally set and used by debuggers the debug exception handler should check that
+gp	workaround	if the exception did occur in v86 mode the exception may be directed to the general protection
+gp	workaround	check that the exception did not occur in v86 mode before continuing if the exception did occur
+gp	workaround	gd bit when they are in v86 mode the gd bit is generally set and used by
+gp	workaround	in v86 mode the gd bit is generally set and used by debuggers the debug exception handler
+gp	workaround	systems do not set the gd bit when they are in v86 mode the gd bit is
+gp	workaround	and used by debuggers the debug exception handler should check that the exception did not occur in
+gp	workaround	did not occur in v86 mode before continuing if the exception did occur in v86 mode the
+gp	workaround	general operating systems do not set the gd bit when they are in v86 mode the gd
+gp	workaround	by debuggers the debug exception handler should check that the exception did not occur in v86 mode
+gp	workaround	exception did not occur in v86 mode before continuing if the exception did occur in v86 mode
+gp	workaround	should check that the exception did not occur in v86 mode before continuing if the exception did
+gp	workaround	used by debuggers the debug exception handler should check that the exception did not occur in v86
+gp	workaround	when they are in v86 mode the gd bit is generally set and used by debuggers the
+gp	workaround	gd bit is generally set and used by debuggers the debug exception handler should check that the
+gp	workaround	bit is generally set and used by debuggers the debug exception handler should check that the exception
+gp	workaround	set and used by debuggers the debug exception handler should check that the exception did not occur
+gp	workaround	before writing msr_lastbranch_x_from_ip ensure the value being written has bit 47 replicated in bits 62 61 this
+gp	workaround	being written has bit 47 replicated in bits 62 61 this is most easily accomplished by sign
+gp	workaround	writing msr_lastbranch_x_from_ip ensure the value being written has bit 47 replicated in bits 62 61 this is
+gp	workaround	bit 47 replicated in bits 62 61 this is most easily accomplished by sign extending from bit
+gp	workaround	written has bit 47 replicated in bits 62 61 this is most easily accomplished by sign extending
+gp	workaround	bits 62 61 this is most easily accomplished by sign extending from bit 47 to bits 62
+gp	workaround	ensure the value being written has bit 47 replicated in bits 62 61 this is most easily
+gp	workaround	msr_lastbranch_x_from_ip ensure the value being written has bit 47 replicated in bits 62 61 this is most
+gp	workaround	replicated in bits 62 61 this is most easily accomplished by sign extending from bit 47 to
+gp	workaround	the value being written has bit 47 replicated in bits 62 61 this is most easily accomplished
+gp	workaround	in bits 62 61 this is most easily accomplished by sign extending from bit 47 to bits
+gp	workaround	has bit 47 replicated in bits 62 61 this is most easily accomplished by sign extending from
+gp	workaround	47 replicated in bits 62 61 this is most easily accomplished by sign extending from bit 47
+gp	workaround	value being written has bit 47 replicated in bits 62 61 this is most easily accomplished by
+gp	workaround	62 61 this is most easily accomplished by sign extending from bit 47 to bits 62 48
+pebs	implication	record may be saved after an rsm instruction due to the associated
+pebs	implication	instruction due to the associated performance counter detecting the monitored event during
+pebs	implication	may be saved after an rsm instruction due to the associated performance
+pebs	implication	the associated performance counter detecting the monitored event during smm even when
+pebs	implication	an rsm instruction due to the associated performance counter detecting the monitored
+pebs	implication	be saved after an rsm instruction due to the associated performance counter
+pebs	implication	saved after an rsm instruction due to the associated performance counter detecting
+pebs	implication	pebs record may be saved after an rsm instruction due to the
+pebs	implication	counter detecting the monitored event during smm even when freeze_while_smm is set
+pebs	implication	performance counter detecting the monitored event during smm even when freeze_while_smm is
+pebs	implication	a pebs record may be saved after an rsm instruction due to
+pebs	implication	associated performance counter detecting the monitored event during smm even when freeze_while_smm
+pebs	implication	after an rsm instruction due to the associated performance counter detecting the
+pebs	implication	due to the associated performance counter detecting the monitored event during smm
+pebs	implication	to the associated performance counter detecting the monitored event during smm even
+pebs	implication	rsm instruction due to the associated performance counter detecting the monitored event
+pebs	implication	a code breakpoint on the instruction following the return from handling the
+pebs	implication	this erratum when using low sav values the program may get incorrect
+pebs	implication	erratum occurs a code breakpoint on the instruction following the return from
+pebs	implication	according to the post transition ds debug store configuration these stores may
+pebs	implication	the post transition ds debug store configuration these stores may be unexpected
+pebs	implication	from handling the fault will not be detected this erratum only happens
+pebs	implication	get incorrect pebs or pmi interrupts and or an invalid counter state
+pebs	implication	generated after a vmx transition will store into memory according to the
+pebs	implication	instruction following the return from handling the fault will not be detected
+pebs	implication	post transition ds debug store configuration these stores may be unexpected if
+pebs	implication	will not be detected this erratum only happens when the user does
+pebs	implication	record generated after a vmx transition will store into memory according to
+pebs	implication	following the return from handling the fault will not be detected this
+pebs	implication	code breakpoint on the instruction following the return from handling the fault
+pebs	implication	store into memory according to the post transition ds debug store configuration
+pebs	implication	when this erratum occurs a code breakpoint on the instruction following the
+pebs	implication	these stores may be unexpected if pebs is not enabled following the
+pebs	implication	the return from handling the fault will not be detected this erratum
+pebs	implication	a vmx transition will store into memory according to the post transition
+pebs	implication	handling the fault will not be detected this erratum only happens when
+pebs	implication	low sav values the program may get incorrect pebs or pmi interrupts
+pebs	implication	this erratum only happens when the user does not prevent faults on
+pebs	implication	transition will store into memory according to the post transition ds debug
+pebs	implication	the fault will not be detected this erratum only happens when the
+pebs	implication	stores may be unexpected if pebs is not enabled following the transition
+pebs	implication	due to this erratum when using low sav values the program may
+pebs	implication	transition ds debug store configuration these stores may be unexpected if pebs
+pebs	implication	ds debug store configuration these stores may be unexpected if pebs is
+pebs	implication	using low sav values the program may get incorrect pebs or pmi
+pebs	implication	program may get incorrect pebs or pmi interrupts and or an invalid
+pebs	implication	be detected this erratum only happens when the user does not prevent
+pebs	implication	only happens when the user does not prevent faults on pebs or
+pebs	implication	will store into memory according to the post transition ds debug store
+pebs	implication	this erratum occurs a code breakpoint on the instruction following the return
+pebs	implication	vmx transition will store into memory according to the post transition ds
+pebs	implication	erratum only happens when the user does not prevent faults on pebs
+pebs	implication	breakpoint on the instruction following the return from handling the fault will
+pebs	implication	into memory according to the post transition ds debug store configuration these
+pebs	implication	erratum when using low sav values the program may get incorrect pebs
+pebs	implication	return from handling the fault will not be detected this erratum only
+pebs	implication	to this erratum when using low sav values the program may get
+pebs	implication	values the program may get incorrect pebs or pmi interrupts and or
+pebs	implication	a pebs record generated after a vmx transition will store into memory
+pebs	implication	pebs record generated after a vmx transition will store into memory according
+pebs	implication	memory according to the post transition ds debug store configuration these stores
+pebs	implication	after a vmx transition will store into memory according to the post
+pebs	implication	the instruction following the return from handling the fault will not be
+pebs	implication	occurs a code breakpoint on the instruction following the return from handling
+pebs	implication	not be detected this erratum only happens when the user does not
+pebs	implication	on the instruction following the return from handling the fault will not
+pebs	implication	may get incorrect pebs or pmi interrupts and or an invalid counter
+pebs	implication	debug store configuration these stores may be unexpected if pebs is not
+pebs	implication	store configuration these stores may be unexpected if pebs is not enabled
+pebs	implication	configuration these stores may be unexpected if pebs is not enabled following
+pebs	implication	when using low sav values the program may get incorrect pebs or
+pebs	implication	happens when the user does not prevent faults on pebs or bts
+pebs	implication	detected this erratum only happens when the user does not prevent faults
+pebs	implication	sav values the program may get incorrect pebs or pmi interrupts and
+pebs	implication	the program may get incorrect pebs or pmi interrupts and or an
+pebs	implication	to the post transition ds debug store configuration these stores may be
+pebs	implication	fault will not be detected this erratum only happens when the user
+pebs	implication	zero cs base is supported and cs base is changed intel has
+pebs	implication	monitoring software using pebs may incorrectly attribute pebs events that occur on
+pebs	implication	is changed intel has not observed this erratum to impact the operation
+pebs	implication	and cs base is changed intel has not observed this erratum to
+pebs	implication	when non zero cs base is supported and cs base is changed
+pebs	implication	not observed this erratum to impact the operation of any commercially available
+pebs	implication	has not observed this erratum to impact the operation of any commercially
+pebs	implication	software using pebs may incorrectly attribute pebs events that occur on a
+pebs	implication	storage of the pebs record being delayed by one instruction following execution
+pebs	implication	instruction when non zero cs base is supported and cs base is
+pebs	implication	execution of mov ss or sti the state information in the pebs
+pebs	implication	cs base is supported and cs base is changed intel has not
+pebs	implication	incorrectly attribute pebs events that occur on a jcc to the preceding
+pebs	implication	performance monitoring software using pebs may incorrectly attribute pebs events that occur
+pebs	implication	changed intel has not observed this erratum to impact the operation of
+pebs	implication	one instruction following execution of mov ss or sti the state information
+pebs	implication	the pebs record being delayed by one instruction following execution of mov
+pebs	implication	following execution of mov ss or sti the state information in the
+pebs	implication	pebs record being delayed by one instruction following execution of mov ss
+pebs	implication	state information in the pebs record will also reflect the one instruction
+pebs	implication	delayed by one instruction following execution of mov ss or sti the
+pebs	implication	information in the pebs record will also reflect the one instruction delay
+pebs	implication	supported and cs base is changed intel has not observed this erratum
+pebs	implication	observed this erratum to impact the operation of any commercially available system
+pebs	implication	is supported and cs base is changed intel has not observed this
+pebs	implication	may incorrectly attribute pebs events that occur on a jcc to the
+pebs	implication	incorrect instruction when non zero cs base is supported and cs base
+pebs	implication	of the pebs record being delayed by one instruction following execution of
+pebs	implication	intel has not observed this erratum to impact the operation of any
+pebs	implication	occurs software may observe storage of the pebs record being delayed by
+pebs	implication	mov ss or sti the state information in the pebs record will
+pebs	implication	base is supported and cs base is changed intel has not observed
+pebs	implication	or sti the state information in the pebs record will also reflect
+pebs	implication	erratum occurs software may observe storage of the pebs record being delayed
+pebs	implication	when this erratum occurs software may observe storage of the pebs record
+pebs	implication	observe storage of the pebs record being delayed by one instruction following
+pebs	implication	attribute pebs events that occur on a jcc to the preceding instruction
+pebs	implication	sti the state information in the pebs record will also reflect the
+pebs	implication	by one instruction following execution of mov ss or sti the state
+pebs	implication	being delayed by one instruction following execution of mov ss or sti
+pebs	implication	software may observe storage of the pebs record being delayed by one
+pebs	implication	of mov ss or sti the state information in the pebs record
+pebs	implication	instruction following execution of mov ss or sti the state information in
+pebs	implication	ss or sti the state information in the pebs record will also
+pebs	implication	may observe storage of the pebs record being delayed by one instruction
+pebs	implication	base is changed intel has not observed this erratum to impact the
+pebs	implication	non zero cs base is supported and cs base is changed intel
+pebs	implication	this erratum occurs software may observe storage of the pebs record being
+pebs	implication	cs base is changed intel has not observed this erratum to impact
+pebs	implication	the state information in the pebs record will also reflect the one
+pebs	implication	pebs may incorrectly attribute pebs events that occur on a jcc to
+pebs	implication	using pebs may incorrectly attribute pebs events that occur on a jcc
+pebs	implication	record being delayed by one instruction following execution of mov ss or
+pebs	implication	instruction which caused the pebs event may identify the incorrect instruction when
+pebs	implication	this erratum occurs performance monitoring software may not attribute the pebs events
+pebs	implication	caused the pebs event may identify the incorrect instruction when non zero
+pebs	implication	which caused the pebs event may identify the incorrect instruction when non
+pebs	implication	identify the incorrect instruction when non zero cs base is supported and
+pebs	implication	attempting to identify the instruction which caused the pebs event may identify
+pebs	implication	the pebs event may identify the incorrect instruction when non zero cs
+pebs	implication	may identify the incorrect instruction when non zero cs base is supported
+pebs	implication	pebs event may identify the incorrect instruction when non zero cs base
+pebs	implication	occurs performance monitoring software may not attribute the pebs events to the
+pebs	implication	identify the instruction which caused the pebs event may identify the incorrect
+pebs	implication	event may identify the incorrect instruction when non zero cs base is
+pebs	implication	the incorrect instruction when non zero cs base is supported and cs
+pebs	implication	performance monitoring software may not attribute the pebs events to the correct
+pebs	implication	monitoring software may not attribute the pebs events to the correct instruction
+pebs	implication	erratum occurs performance monitoring software may not attribute the pebs events to
+pebs	implication	software attempting to identify the instruction which caused the pebs event may
+pebs	implication	the instruction which caused the pebs event may identify the incorrect instruction
+pebs	implication	when this erratum occurs performance monitoring software may not attribute the pebs
+pebs	implication	to identify the instruction which caused the pebs event may identify the
+pebs	implication	with the affected events stop incrementing and do not generate pebs records
+pebs	implication	counters programmed with the affected events stop incrementing and do not generate
+pebs	implication	due to this erratum the pebs buffer may not be updated by
+pebs	implication	to this erratum the pebs buffer may not be updated by overflows
+pebs	implication	programmed with the affected events stop incrementing and do not generate pebs
+pebs	implication	erratum the pebs buffer may not be updated by overflows that occur
+pebs	implication	the pebs buffer may not be updated by overflows that occur during
+pebs	implication	this erratum the pebs buffer may not be updated by overflows that
+pebs	implication	buffer may not be updated by overflows that occur during probe mode
+pebs	implication	pebs buffer may not be updated by overflows that occur during probe
+pebs	implication	performance monitor feature pdir may generate redundant pebs records for an overflow
+pebs	implication	the performance monitor feature pdir may generate redundant pebs records for an
+pebs	workaround	to contain a workaround for this erratum a software workaround is possible through disallowing pebs during vmx
+pebs	workaround	a software workaround is possible through disallowing pebs during vmx non root operation and disabling pebs prior
+pebs	workaround	it is possible for the bios to contain a workaround for this erratum a software workaround is
+pebs	workaround	bios to contain a workaround for this erratum a software workaround is possible through disallowing pebs during
+pebs	workaround	contain a workaround for this erratum a software workaround is possible through disallowing pebs during vmx non
+pebs	workaround	erratum a software workaround is possible through disallowing pebs during vmx non root operation and disabling pebs
+pebs	workaround	workaround for this erratum a software workaround is possible through disallowing pebs during vmx non root operation
+pebs	workaround	workaround is possible through disallowing pebs during vmx non root operation and disabling pebs prior to vm
+pebs	workaround	a workaround for this erratum a software workaround is possible through disallowing pebs during vmx non root
+pebs	workaround	the bios to contain a workaround for this erratum a software workaround is possible through disallowing pebs
+pebs	workaround	is possible through disallowing pebs during vmx non root operation and disabling pebs prior to vm entry
+pebs	workaround	for the bios to contain a workaround for this erratum a software workaround is possible through disallowing
+pebs	workaround	this erratum a software workaround is possible through disallowing pebs during vmx non root operation and disabling
+pebs	workaround	is possible for the bios to contain a workaround for this erratum a software workaround is possible
+pebs	workaround	for this erratum a software workaround is possible through disallowing pebs during vmx non root operation and
+pebs	workaround	software workaround is possible through disallowing pebs during vmx non root operation and disabling pebs prior to
+pebs	workaround	possible for the bios to contain a workaround for this erratum a software workaround is possible through
+vm	implication	execute disable feature enabled despite the fact that the feature should be
+vm	implication	root operation may execute with the execute disable feature enabled despite the
+vm	implication	with the execute disable feature enabled despite the fact that the feature
+vm	implication	software in vmx root operation may execute with the execute disable feature
+vm	implication	feature enabled despite the fact that the feature should be disabled by
+vm	implication	disable feature enabled despite the fact that the feature should be disabled
+vm	implication	enabled despite the fact that the feature should be disabled by the
+vm	implication	may execute with the execute disable feature enabled despite the fact that
+vm	implication	the execute disable feature enabled despite the fact that the feature should
+vm	implication	vmx root operation may execute with the execute disable feature enabled despite
+vm	implication	in vmx root operation may execute with the execute disable feature enabled
+vm	implication	despite the fact that the feature should be disabled by the ia32_misc_enable
+vm	implication	operation may execute with the execute disable feature enabled despite the fact
+vm	implication	execute with the execute disable feature enabled despite the fact that the
+vm	implication	msr intel has not observed this erratum with any commercially available software
+vm	implication	fact that the feature should be disabled by the ia32_misc_enable msr intel
+vm	implication	the ia32_misc_enable msr intel has not observed this erratum with any commercially
+vm	implication	the feature should be disabled by the ia32_misc_enable msr intel has not
+vm	implication	disabled by the ia32_misc_enable msr intel has not observed this erratum with
+vm	implication	that the feature should be disabled by the ia32_misc_enable msr intel has
+vm	implication	be disabled by the ia32_misc_enable msr intel has not observed this erratum
+vm	implication	ia32_misc_enable msr intel has not observed this erratum with any commercially available
+vm	implication	by the ia32_misc_enable msr intel has not observed this erratum with any
+vm	implication	should be disabled by the ia32_misc_enable msr intel has not observed this
+vm	implication	feature should be disabled by the ia32_misc_enable msr intel has not observed
+vm	implication	the fact that the feature should be disabled by the ia32_misc_enable msr
+vm	implication	will be used but the processor may use a different memory type
+vm	implication	memory type will be used but the processor may use a different
+vm	implication	this erratum this erratum will have no further effects once the original
+vm	implication	further effects once the original instruction is restarted because the instruction will
+vm	implication	bits 53 50 of the ia32_vmx_basic msr report that the wb write
+vm	implication	no further effects once the original instruction is restarted because the instruction
+vm	implication	report that the wb write back memory type will be used but
+vm	implication	have no further effects once the original instruction is restarted because the
+vm	implication	that the wb write back memory type will be used but the
+vm	implication	affected by this erratum this erratum will have no further effects once
+vm	implication	by this erratum this erratum will have no further effects once the
+vm	implication	erratum will have no further effects once the original instruction is restarted
+vm	implication	instruction is restarted because the instruction will produce the same results as
+vm	implication	ia32_vmx_basic msr report that the wb write back memory type will be
+vm	implication	type will be used but the processor may use a different memory
+vm	implication	restarted because the instruction will produce the same results as if it
+vm	implication	effects once the original instruction is restarted because the instruction will produce
+vm	implication	will produce the same results as if it had initially completed without
+vm	implication	erratum this erratum will have no further effects once the original instruction
+vm	implication	msr report that the wb write back memory type will be used
+vm	implication	53 50 of the ia32_vmx_basic msr report that the wb write back
+vm	implication	the ia32_vmx_basic msr report that the wb write back memory type will
+vm	implication	arithmetic flag values intel has not identified software that is affected by
+vm	implication	the wb write back memory type will be used but the processor
+vm	implication	instruction will produce the same results as if it had initially completed
+vm	implication	this erratum will have no further effects once the original instruction is
+vm	implication	values intel has not identified software that is affected by this erratum
+vm	implication	back memory type will be used but the processor may use a
+vm	implication	will have no further effects once the original instruction is restarted because
+vm	implication	may contain incorrect arithmetic flag values intel has not identified software that
+vm	implication	the instruction will produce the same results as if it had initially
+vm	implication	that is affected by this erratum this erratum will have no further
+vm	implication	of the ia32_vmx_basic msr report that the wb write back memory type
+vm	implication	write back memory type will be used but the processor may use
+vm	implication	original instruction is restarted because the instruction will produce the same results
+vm	implication	wb write back memory type will be used but the processor may
+vm	implication	once the original instruction is restarted because the instruction will produce the
+vm	implication	identified software that is affected by this erratum this erratum will have
+vm	implication	contain incorrect arithmetic flag values intel has not identified software that is
+vm	implication	not identified software that is affected by this erratum this erratum will
+vm	implication	is restarted because the instruction will produce the same results as if
+vm	implication	has not identified software that is affected by this erratum this erratum
+vm	implication	intel has not identified software that is affected by this erratum this
+vm	implication	incorrect arithmetic flag values intel has not identified software that is affected
+vm	implication	the original instruction is restarted because the instruction will produce the same
+vm	implication	flag values intel has not identified software that is affected by this
+vm	implication	because the instruction will produce the same results as if it had
+vm	implication	is affected by this erratum this erratum will have no further effects
+vm	implication	software that is affected by this erratum this erratum will have no
+vm	implication	50 of the ia32_vmx_basic msr report that the wb write back memory
+vm	implication	none identified although the eflags value saved by an affected event a
+vm	implication	or an ept induced vm exit may contain incorrect arithmetic flag values
+vm	implication	ept induced vm exit may contain incorrect arithmetic flag values intel has
+vm	implication	by an affected event a page fault or an ept induced vm
+vm	implication	event a page fault or an ept induced vm exit may contain
+vm	implication	value saved by an affected event a page fault or an ept
+vm	implication	exit may contain incorrect arithmetic flag values intel has not identified software
+vm	implication	identified although the eflags value saved by an affected event a page
+vm	implication	vm exit may contain incorrect arithmetic flag values intel has not identified
+vm	implication	eflags value saved by an affected event a page fault or an
+vm	implication	page fault or an ept induced vm exit may contain incorrect arithmetic
+vm	implication	results as if it had initially completed without fault or vm exit
+vm	implication	saved by an affected event a page fault or an ept induced
+vm	implication	an ept induced vm exit may contain incorrect arithmetic flag values intel
+vm	implication	produce the same results as if it had initially completed without fault
+vm	implication	fault or an ept induced vm exit may contain incorrect arithmetic flag
+vm	implication	the eflags value saved by an affected event a page fault or
+vm	implication	an affected event a page fault or an ept induced vm exit
+vm	implication	a page fault or an ept induced vm exit may contain incorrect
+vm	implication	affected event a page fault or an ept induced vm exit may
+vm	implication	the same results as if it had initially completed without fault or
+vm	implication	although the eflags value saved by an affected event a page fault
+vm	implication	induced vm exit may contain incorrect arithmetic flag values intel has not
+vm	implication	same results as if it had initially completed without fault or vm
+vm	implication	transactional regions may not operate properly intel has not observed this erratum
+vm	implication	that uses the value reported in ia32_vmx_vmcs_enum 9 1 to read and
+vm	implication	in ia32_vmx_vmcs_enum 9 1 to read and write all vmcs fields may
+vm	implication	the value reported in ia32_vmx_vmcs_enum 9 1 to read and write all
+vm	implication	uses the value reported in ia32_vmx_vmcs_enum 9 1 to read and write
+vm	implication	using the monitor trap flag to debug or trace transactional regions may
+vm	implication	flag to debug or trace transactional regions may not operate properly intel
+vm	implication	trace transactional regions may not operate properly intel has not observed this
+vm	implication	the monitor trap flag to debug or trace transactional regions may not
+vm	implication	operate properly intel has not observed this erratum with any commercially available
+vm	implication	debug or trace transactional regions may not operate properly intel has not
+vm	implication	or trace transactional regions may not operate properly intel has not observed
+vm	implication	may not operate properly intel has not observed this erratum with any
+vm	implication	properly intel has not observed this erratum with any commercially available software
+vm	implication	1 to read and write all vmcs fields may omit one field
+vm	implication	software using the monitor trap flag to debug or trace transactional regions
+vm	implication	may crash or experience unpredictable behavior as a result of this erratum
+vm	implication	value reported in ia32_vmx_vmcs_enum 9 1 to read and write all vmcs
+vm	implication	guest software may crash or experience unpredictable behavior as a result of
+vm	implication	not operate properly intel has not observed this erratum with any commercially
+vm	implication	software that uses the value reported in ia32_vmx_vmcs_enum 9 1 to read
+vm	implication	to debug or trace transactional regions may not operate properly intel has
+vm	implication	software may crash or experience unpredictable behavior as a result of this
+vm	implication	monitor trap flag to debug or trace transactional regions may not operate
+vm	implication	reported in ia32_vmx_vmcs_enum 9 1 to read and write all vmcs fields
+vm	implication	trap flag to debug or trace transactional regions may not operate properly
+vm	implication	regions may not operate properly intel has not observed this erratum with
+vm	implication	ia32_vmx_vmcs_enum 9 1 to read and write all vmcs fields may omit
+vm	implication	9 1 to read and write all vmcs fields may omit one
+vm	implication	that caused the ept violation intel has not observed this erratum to
+vm	implication	original memory access that caused the ept violation intel has not observed
+vm	implication	observed this erratum to impact the operation of any commercially available software
+vm	implication	offset of the original memory access that caused the ept violation intel
+vm	implication	intel has not observed this erratum to impact the operation of any
+vm	implication	easily able to determine the page offset of the original memory access
+vm	implication	the ept violation intel has not observed this erratum to impact the
+vm	implication	check exception and software attempting to handle the pe may not behave
+vm	implication	not observed this erratum to impact the operation of any commercially available
+vm	implication	able to determine the page offset of the original memory access that
+vm	implication	and software attempting to handle the pe may not behave as expected
+vm	implication	machine check exception and software attempting to handle the pe may not
+vm	implication	the page offset of the original memory access that caused the ept
+vm	implication	determine the page offset of the original memory access that caused the
+vm	implication	be easily able to determine the page offset of the original memory
+vm	implication	has not observed this erratum to impact the operation of any commercially
+vm	implication	of the original memory access that caused the ept violation intel has
+vm	implication	ept violation intel has not observed this erratum to impact the operation
+vm	implication	the original memory access that caused the ept violation intel has not
+vm	implication	access that caused the ept violation intel has not observed this erratum
+vm	implication	violation intel has not observed this erratum to impact the operation of
+vm	implication	to determine the page offset of the original memory access that caused
+vm	implication	caused the ept violation intel has not observed this erratum to impact
+vm	implication	software may not be easily able to determine the page offset of
+vm	implication	memory access that caused the ept violation intel has not observed this
+vm	implication	page offset of the original memory access that caused the ept violation
+vm	implication	not be easily able to determine the page offset of the original
+vm	implication	exception and software attempting to handle the pe may not behave as
+vm	implication	may not be easily able to determine the page offset of the
+vm	implication	may receive an expected machine check exception and software attempting to handle
+vm	implication	a virtual nmi which is virtually asynchronous the erratum may affect vmms
+vm	implication	should generally be unaffected as the erratum causes at most a one
+vm	implication	delay in the injection of a virtual nmi which is virtually asynchronous
+vm	implication	the erratum causes at most a one instruction delay in the injection
+vm	implication	virtual nmi which is virtually asynchronous the erratum may affect vmms relying
+vm	implication	unaffected as the erratum causes at most a one instruction delay in
+vm	implication	when this erratum occurs the vmm may receive an expected machine check
+vm	implication	the processor may erroneously execute an instruction that should have caused a
+vm	implication	as the erratum causes at most a one instruction delay in the
+vm	implication	causes at most a one instruction delay in the injection of a
+vm	implication	most a one instruction delay in the injection of a virtual nmi
+vm	implication	may erroneously execute an instruction that should have caused a general protection
+vm	implication	instruction delay in the injection of a virtual nmi which is virtually
+vm	implication	generally be unaffected as the erratum causes at most a one instruction
+vm	implication	expected machine check exception and software attempting to handle the pe may
+vm	implication	a one instruction delay in the injection of a virtual nmi which
+vm	implication	processor may erroneously execute an instruction that should have caused a general
+vm	implication	one instruction delay in the injection of a virtual nmi which is
+vm	implication	algorithms that rely on cache disabling may not function properly in vmx
+vm	implication	virtually asynchronous the erratum may affect vmms relying on deterministic delivery of
+vm	implication	which is virtually asynchronous the erratum may affect vmms relying on deterministic
+vm	implication	the vmm may receive an expected machine check exception and software attempting
+vm	implication	erratum occurs the vmm may receive an expected machine check exception and
+vm	implication	erratum may affect vmms relying on deterministic delivery of the affected vm
+vm	implication	erroneously execute an instruction that should have caused a general protection exception
+vm	implication	be unaffected as the erratum causes at most a one instruction delay
+vm	implication	an expected machine check exception and software attempting to handle the pe
+vm	implication	erratum causes at most a one instruction delay in the injection of
+vm	implication	that rely on cache disabling may not function properly in vmx operation
+vm	implication	injection of a virtual nmi which is virtually asynchronous the erratum may
+vm	implication	vmm may receive an expected machine check exception and software attempting to
+vm	implication	the injection of a virtual nmi which is virtually asynchronous the erratum
+vm	implication	nmi which is virtually asynchronous the erratum may affect vmms relying on
+vm	implication	the erratum may affect vmms relying on deterministic delivery of the affected
+vm	implication	this erratum occurs the vmm may receive an expected machine check exception
+vm	implication	at most a one instruction delay in the injection of a virtual
+vm	implication	receive an expected machine check exception and software attempting to handle the
+vm	implication	is virtually asynchronous the erratum may affect vmms relying on deterministic delivery
+vm	implication	of a virtual nmi which is virtually asynchronous the erratum may affect
+vm	implication	in the injection of a virtual nmi which is virtually asynchronous the
+vm	implication	may affect vmms relying on deterministic delivery of the affected vm exits
+vm	implication	asynchronous the erratum may affect vmms relying on deterministic delivery of the
+vm	implication	occurs the vmm may receive an expected machine check exception and software
+vm	implication	exiting for nmi virtualization should generally be unaffected as the erratum causes
+vm	implication	nmi virtualization should generally be unaffected as the erratum causes at most
+vm	implication	vmm software using nmi window exiting for nmi virtualization should generally be
+vm	implication	window exiting for nmi virtualization should generally be unaffected as the erratum
+vm	implication	incorrectly translate linear addresses intel has not observed this erratum with any
+vm	implication	translate linear addresses intel has not observed this erratum with any commercially
+vm	implication	nmi window exiting for nmi virtualization should generally be unaffected as the
+vm	implication	processor may incorrectly translate linear addresses intel has not observed this erratum
+vm	implication	software using nmi window exiting for nmi virtualization should generally be unaffected
+vm	implication	virtualization should generally be unaffected as the erratum causes at most a
+vm	implication	for nmi virtualization should generally be unaffected as the erratum causes at
+vm	implication	addresses intel has not observed this erratum with any commercially available software
+vm	implication	linear addresses intel has not observed this erratum with any commercially available
+vm	implication	may incorrectly translate linear addresses intel has not observed this erratum with
+vm	implication	the processor may incorrectly translate linear addresses intel has not observed this
+vm	implication	using nmi window exiting for nmi virtualization should generally be unaffected as
+vm	workaround	referenced data structures are located at physical addresses that are mapped to wb memory type by the
+vm	workaround	and referenced data structures are located at physical addresses that are mapped to wb memory type by
+vm	workaround	data structures are located at physical addresses that are mapped to wb memory type by the mtrrs
+vm	workaround	the vmcs and referenced data structures are located at physical addresses that are mapped to wb memory
+vm	workaround	ensure that the vmcs and referenced data structures are located at physical addresses that are mapped to
+vm	workaround	that the vmcs and referenced data structures are located at physical addresses that are mapped to wb
+vm	workaround	vmcs and referenced data structures are located at physical addresses that are mapped to wb memory type
+vm	workaround	should ensure that the vmcs and referenced data structures are located at physical addresses that are mapped
+vm	workaround	software should ensure that the vmcs and referenced data structures are located at physical addresses that are
+vm	workaround	of the saved eflags value then system software should perform a synchronized paging structure modification and tlb
+vm	workaround	the arithmetic portion of the saved eflags value then system software should perform a synchronized paging structure
+vm	workaround	the saved eflags value then system software should perform a synchronized paging structure modification and tlb invalidation
+vm	workaround	arithmetic portion of the saved eflags value then system software should perform a synchronized paging structure modification
+vm	workaround	portion of the saved eflags value then system software should perform a synchronized paging structure modification and
+vm	workaround	inspects the arithmetic portion of the saved eflags value then system software should perform a synchronized paging
+vm	workaround	of the affected events inspects the arithmetic portion of the saved eflags value then system software should
+vm	workaround	if the handler of the affected events inspects the arithmetic portion of the saved eflags value then
+vm	workaround	events inspects the arithmetic portion of the saved eflags value then system software should perform a synchronized
+vm	workaround	handler of the affected events inspects the arithmetic portion of the saved eflags value then system software
+vm	workaround	affected events inspects the arithmetic portion of the saved eflags value then system software should perform a
+vm	workaround	the affected events inspects the arithmetic portion of the saved eflags value then system software should perform
+vm	workaround	the handler of the affected events inspects the arithmetic portion of the saved eflags value then system
+vm	workaround	access address can derive it by simulating the effective address computation of the instruction that caused the
+vm	workaround	the page offset of the original memory access address can derive it by simulating the effective address
+vm	workaround	address can derive it by simulating the effective address computation of the instruction that caused the ept
+vm	workaround	requiring the page offset of the original memory access address can derive it by simulating the effective
+vm	workaround	the original memory access address can derive it by simulating the effective address computation of the instruction
+vm	workaround	original memory access address can derive it by simulating the effective address computation of the instruction that
+vm	workaround	offset of the original memory access address can derive it by simulating the effective address computation of
+vm	workaround	of the original memory access address can derive it by simulating the effective address computation of the
+vm	workaround	can derive it by simulating the effective address computation of the instruction that caused the ept violation
+vm	workaround	page offset of the original memory access address can derive it by simulating the effective address computation
+vm	workaround	software requiring the page offset of the original memory access address can derive it by simulating the
+vm	workaround	memory access address can derive it by simulating the effective address computation of the instruction that caused
+vm	workaround	when a vmm emulates a branch instruction it should inject a general protection exception if the instructions
+vm	workaround	should not enter a guest with enable vpid set to 1 when activate secondary controls is set
+vm	workaround	software should not enter a guest with enable vpid set to 1 when activate secondary controls is
+vm	workaround	emulates a branch instruction it should inject a general protection exception if the instructions target eip is
+vm	workaround	a vmm emulates a branch instruction it should inject a general protection exception if the instructions target
+vm	workaround	a branch instruction it should inject a general protection exception if the instructions target eip is beyond
+vm	workaround	not enter a guest with enable vpid set to 1 when activate secondary controls is set to
+vm	workaround	branch instruction it should inject a general protection exception if the instructions target eip is beyond the
+vm	workaround	vmm emulates a branch instruction it should inject a general protection exception if the instructions target eip
+vm	workaround	it should inject a general protection exception if the instructions target eip is beyond the cs limit
+vm	workaround	instruction it should inject a general protection exception if the instructions target eip is beyond the cs
+vm	workaround	enter a guest with enable vpid set to 1 when activate secondary controls is set to 0
+bios	implication	unpredictable system behavior intel has not observed this erratum with any commercially
+bios	implication	may cause unpredictable system behavior intel has not observed this erratum with
+bios	implication	cause unpredictable system behavior intel has not observed this erratum with any
+bios	implication	system behavior intel has not observed this erratum with any commercially available
+bios	implication	behavior intel has not observed this erratum with any commercially available system
+bios	implication	this erratum may cause unpredictable system behavior intel has not observed this
+bios	implication	erratum may cause unpredictable system behavior intel has not observed this erratum
+bios	implication	due to this erratum the pcie root port may not initiate a
+bios	implication	lower than expected speed intel has not observed this erratum with any
+bios	implication	this erratum the pcie root port may not initiate a link speed
+bios	implication	link to operate at a lower than expected speed intel has not
+bios	implication	erratum the pcie root port may not initiate a link speed change
+bios	implication	a lower than expected speed intel has not observed this erratum with
+bios	implication	to operate at a lower than expected speed intel has not observed
+bios	implication	some hardware scenarios causing the pcie link to operate at a lower
+bios	implication	speed change during some hardware scenarios causing the pcie link to operate
+bios	implication	port may not initiate a link speed change during some hardware scenarios
+bios	implication	the pcie root port may not initiate a link speed change during
+bios	implication	change during some hardware scenarios causing the pcie link to operate at
+bios	implication	link speed change during some hardware scenarios causing the pcie link to
+bios	implication	speed intel has not observed this erratum with any commercially available platform
+bios	implication	may not initiate a link speed change during some hardware scenarios causing
+bios	implication	root port may not initiate a link speed change during some hardware
+bios	implication	not initiate a link speed change during some hardware scenarios causing the
+bios	implication	than expected speed intel has not observed this erratum with any commercially
+bios	implication	during some hardware scenarios causing the pcie link to operate at a
+bios	implication	scenarios causing the pcie link to operate at a lower than expected
+bios	implication	to this erratum the pcie root port may not initiate a link
+bios	implication	pcie link to operate at a lower than expected speed intel has
+bios	implication	a link speed change during some hardware scenarios causing the pcie link
+bios	implication	operate at a lower than expected speed intel has not observed this
+bios	implication	the pcie link to operate at a lower than expected speed intel
+bios	implication	causing the pcie link to operate at a lower than expected speed
+bios	implication	at a lower than expected speed intel has not observed this erratum
+bios	implication	initiate a link speed change during some hardware scenarios causing the pcie
+bios	implication	hardware scenarios causing the pcie link to operate at a lower than
+bios	implication	pcie root port may not initiate a link speed change during some
+bios	implication	expected speed intel has not observed this erratum with any commercially available
+bios	workaround	a bios code change has been identified and may be implemented as a workaround for this erratum
+msr	implication	execute disable feature enabled despite the fact that the feature should be
+msr	implication	root operation may execute with the execute disable feature enabled despite the
+msr	implication	the execute disable feature enabled despite the fact that the feature should
+msr	implication	software in vmx root operation may execute with the execute disable feature
+msr	implication	feature enabled despite the fact that the feature should be disabled by
+msr	implication	disable feature enabled despite the fact that the feature should be disabled
+msr	implication	enabled despite the fact that the feature should be disabled by the
+msr	implication	may execute with the execute disable feature enabled despite the fact that
+msr	implication	with the execute disable feature enabled despite the fact that the feature
+msr	implication	vmx root operation may execute with the execute disable feature enabled despite
+msr	implication	in vmx root operation may execute with the execute disable feature enabled
+msr	implication	execute with the execute disable feature enabled despite the fact that the
+msr	implication	despite the fact that the feature should be disabled by the ia32_misc_enable
+msr	implication	operation may execute with the execute disable feature enabled despite the fact
+msr	implication	msr intel has not observed this erratum with any commercially available software
+msr	implication	fact that the feature should be disabled by the ia32_misc_enable msr intel
+msr	implication	the ia32_misc_enable msr intel has not observed this erratum with any commercially
+msr	implication	the feature should be disabled by the ia32_misc_enable msr intel has not
+msr	implication	disabled by the ia32_misc_enable msr intel has not observed this erratum with
+msr	implication	be disabled by the ia32_misc_enable msr intel has not observed this erratum
+msr	implication	ia32_misc_enable msr intel has not observed this erratum with any commercially available
+msr	implication	by the ia32_misc_enable msr intel has not observed this erratum with any
+msr	implication	should be disabled by the ia32_misc_enable msr intel has not observed this
+msr	implication	that the feature should be disabled by the ia32_misc_enable msr intel has
+msr	implication	feature should be disabled by the ia32_misc_enable msr intel has not observed
+msr	implication	the fact that the feature should be disabled by the ia32_misc_enable msr
+msr	implication	or under count the count may not be consistent between multiple executions
+msr	implication	under count the count may not be consistent between multiple executions of
+msr	implication	count may not be consistent between multiple executions of the same code
+msr	implication	the count may not be consistent between multiple executions of the same
+msr	implication	count the count may not be consistent between multiple executions of the
+msr	implication	the corrected error count overflow indication will be lost if the overflow
+msr	implication	lost if the overflow occurs after an uncorrectable error has been logged
+msr	implication	corrected error count overflow indication will be lost if the overflow occurs
+msr	implication	be lost if the overflow occurs after an uncorrectable error has been
+msr	implication	overflow indication will be lost if the overflow occurs after an uncorrectable
+msr	implication	error count overflow indication will be lost if the overflow occurs after
+msr	implication	will be lost if the overflow occurs after an uncorrectable error has
+msr	implication	indication will be lost if the overflow occurs after an uncorrectable error
+msr	implication	count overflow indication will be lost if the overflow occurs after an
+msr	implication	memory type will be used but the processor may use a different
+msr	implication	report that the wb write back memory type will be used but
+msr	implication	that the wb write back memory type will be used but the
+msr	implication	type will be used but the processor may use a different memory
+msr	implication	msr report that the wb write back memory type will be used
+msr	implication	53 50 of the ia32_vmx_basic msr report that the wb write back
+msr	implication	the wb write back memory type will be used but the processor
+msr	implication	the ia32_vmx_basic msr report that the wb write back memory type will
+msr	implication	back memory type will be used but the processor may use a
+msr	implication	bits 53 50 of the ia32_vmx_basic msr report that the wb write
+msr	implication	of the ia32_vmx_basic msr report that the wb write back memory type
+msr	implication	write back memory type will be used but the processor may use
+msr	implication	wb write back memory type will be used but the processor may
+msr	implication	ia32_vmx_basic msr report that the wb write back memory type will be
+msr	implication	will be used but the processor may use a different memory type
+msr	implication	50 of the ia32_vmx_basic msr report that the wb write back memory
+msr	implication	record may be saved after an rsm instruction due to the associated
+msr	implication	may be saved after an rsm instruction due to the associated performance
+msr	implication	cause a system hang and an internal timer error to be logged
+msr	implication	the associated performance counter detecting the monitored event during smm even when
+msr	implication	an rsm instruction due to the associated performance counter detecting the monitored
+msr	implication	be saved after an rsm instruction due to the associated performance counter
+msr	implication	performance counter detecting the monitored event during smm even when freeze_while_smm is
+msr	implication	uncorrectable errors logged in ia32_cr_mc2_status can further cause a system hang and
+msr	implication	associated performance counter detecting the monitored event during smm even when freeze_while_smm
+msr	implication	after an rsm instruction due to the associated performance counter detecting the
+msr	implication	due to the associated performance counter detecting the monitored event during smm
+msr	implication	to the associated performance counter detecting the monitored event during smm even
+msr	implication	further cause a system hang and an internal timer error to be
+msr	implication	rsm instruction due to the associated performance counter detecting the monitored event
+msr	implication	pebs record may be saved after an rsm instruction due to the
+msr	implication	saved after an rsm instruction due to the associated performance counter detecting
+msr	implication	ia32_cr_mc2_status can further cause a system hang and an internal timer error
+msr	implication	instruction due to the associated performance counter detecting the monitored event during
+msr	implication	can further cause a system hang and an internal timer error to
+msr	implication	logged in ia32_cr_mc2_status can further cause a system hang and an internal
+msr	implication	counter detecting the monitored event during smm even when freeze_while_smm is set
+msr	implication	errors logged in ia32_cr_mc2_status can further cause a system hang and an
+msr	implication	a pebs record may be saved after an rsm instruction due to
+msr	implication	in ia32_cr_mc2_status can further cause a system hang and an internal timer
+msr	implication	retired may over count or under count the count may not be
+msr	implication	later than expected intel has not observed this erratum with most commercially
+msr	implication	get incorrect pebs or pmi interrupts and or an invalid counter state
+msr	implication	counting instructions retired may over or under count the count may not
+msr	implication	record generated after a vmx transition will store into memory according to
+msr	implication	that uses the value reported in ia32_vmx_vmcs_enum 9 1 to read and
+msr	implication	msr_lastbranch_x_from_ip is unaffected by this erratum bits 62 61 contain in_tsx and
+msr	implication	in ia32_vmx_vmcs_enum 9 1 to read and write all vmcs fields may
+msr	implication	the value reported in ia32_vmx_vmcs_enum 9 1 to read and write all
+msr	implication	these stores may be unexpected if pebs is not enabled following the
+msr	implication	mode a timer interrupt may be generated much earlier than expected or
+msr	implication	performance counter counting instructions retired may over count or under count the
+msr	implication	interrupt controller timer is configured for tsc deadline mode a timer interrupt
+msr	implication	vmx transition will store into memory according to the post transition ds
+msr	implication	information respectively software restoring these msrs from saved values are subject to
+msr	implication	and tsx_abort information respectively software restoring these msrs from saved values are
+msr	implication	when using low sav values the program may get incorrect pebs or
+msr	implication	tsc deadline mode a timer interrupt may be generated much earlier than
+msr	implication	the value read from msr_lastbranch_x_from_ip is unaffected by this erratum bits 62
+msr	implication	to the post transition ds debug store configuration these stores may be
+msr	implication	over count or under count the count may not be consistent between
+msr	implication	value read from msr_lastbranch_x_from_ip is unaffected by this erratum bits 62 61
+msr	implication	timer is configured for tsc deadline mode a timer interrupt may be
+msr	implication	the local apic advanced programmable interrupt controller timer is configured for tsc
+msr	implication	configured for tsc deadline mode a timer interrupt may be generated much
+msr	implication	from msr_lastbranch_x_from_ip is unaffected by this erratum bits 62 61 contain in_tsx
+msr	implication	apic advanced programmable interrupt controller timer is configured for tsc deadline mode
+msr	implication	controller timer is configured for tsc deadline mode a timer interrupt may
+msr	implication	counting instructions retired may over count or under count the count may
+msr	implication	store into memory according to the post transition ds debug store configuration
+msr	implication	deadline mode a timer interrupt may be generated much earlier than expected
+msr	implication	transition will store into memory according to the post transition ds debug
+msr	implication	stores may be unexpected if pebs is not enabled following the transition
+msr	implication	transition ds debug store configuration these stores may be unexpected if pebs
+msr	implication	in_tsx and tsx_abort information respectively software restoring these msrs from saved values
+msr	implication	by this erratum bits 62 61 contain in_tsx and tsx_abort information respectively
+msr	implication	memory according to the post transition ds debug store configuration these stores
+msr	implication	using low sav values the program may get incorrect pebs or pmi
+msr	implication	will store into memory according to the post transition ds debug store
+msr	implication	erratum bits 62 61 contain in_tsx and tsx_abort information respectively software restoring
+msr	implication	bits 62 61 contain in_tsx and tsx_abort information respectively software restoring these
+msr	implication	to this erratum when using low sav values the program may get
+msr	implication	be generated much earlier than expected or much later than expected intel
+msr	implication	may get incorrect pebs or pmi interrupts and or an invalid counter
+msr	implication	61 contain in_tsx and tsx_abort information respectively software restoring these msrs from
+msr	implication	debug store configuration these stores may be unexpected if pebs is not
+msr	implication	store configuration these stores may be unexpected if pebs is not enabled
+msr	implication	configuration these stores may be unexpected if pebs is not enabled following
+msr	implication	sav values the program may get incorrect pebs or pmi interrupts and
+msr	implication	the program may get incorrect pebs or pmi interrupts and or an
+msr	implication	1 to read and write all vmcs fields may omit one field
+msr	implication	expected or much later than expected intel has not observed this erratum
+msr	implication	expected intel has not observed this erratum with most commercially available software
+msr	implication	software restoring these msrs from saved values are subject to this erratum
+msr	implication	this erratum when using low sav values the program may get incorrect
+msr	implication	count or under count the count may not be consistent between multiple
+msr	implication	counter counting instructions retired may over or under count the count may
+msr	implication	according to the post transition ds debug store configuration these stores may
+msr	implication	is configured for tsc deadline mode a timer interrupt may be generated
+msr	implication	the post transition ds debug store configuration these stores may be unexpected
+msr	implication	a performance counter counting instructions retired may over or under count the
+msr	implication	retired may over or under count the count may not be consistent
+msr	implication	generated after a vmx transition will store into memory according to the
+msr	implication	62 61 contain in_tsx and tsx_abort information respectively software restoring these msrs
+msr	implication	than expected or much later than expected intel has not observed this
+msr	implication	post transition ds debug store configuration these stores may be unexpected if
+msr	implication	local apic advanced programmable interrupt controller timer is configured for tsc deadline
+msr	implication	for tsc deadline mode a timer interrupt may be generated much earlier
+msr	implication	low sav values the program may get incorrect pebs or pmi interrupts
+msr	implication	may be generated much earlier than expected or much later than expected
+msr	implication	may over count or under count the count may not be consistent
+msr	implication	advanced programmable interrupt controller timer is configured for tsc deadline mode a
+msr	implication	value reported in ia32_vmx_vmcs_enum 9 1 to read and write all vmcs
+msr	implication	erratum when using low sav values the program may get incorrect pebs
+msr	implication	pebs record generated after a vmx transition will store into memory according
+msr	implication	instructions retired may over count or under count the count may not
+msr	implication	read from msr_lastbranch_x_from_ip is unaffected by this erratum bits 62 61 contain
+msr	implication	contain in_tsx and tsx_abort information respectively software restoring these msrs from saved
+msr	implication	over or under count the count may not be consistent between multiple
+msr	implication	interrupt may be generated much earlier than expected or much later than
+msr	implication	generated much earlier than expected or much later than expected intel has
+msr	implication	programmable interrupt controller timer is configured for tsc deadline mode a timer
+msr	implication	counter counting instructions retired may over count or under count the count
+msr	implication	tsx_abort information respectively software restoring these msrs from saved values are subject
+msr	implication	software that uses the value reported in ia32_vmx_vmcs_enum 9 1 to read
+msr	implication	a timer interrupt may be generated much earlier than expected or much
+msr	implication	uses the value reported in ia32_vmx_vmcs_enum 9 1 to read and write
+msr	implication	a vmx transition will store into memory according to the post transition
+msr	implication	when the local apic advanced programmable interrupt controller timer is configured for
+msr	implication	due to this erratum when using low sav values the program may
+msr	implication	ds debug store configuration these stores may be unexpected if pebs is
+msr	implication	program may get incorrect pebs or pmi interrupts and or an invalid
+msr	implication	earlier than expected or much later than expected intel has not observed
+msr	implication	or much later than expected intel has not observed this erratum with
+msr	implication	much later than expected intel has not observed this erratum with most
+msr	implication	into memory according to the post transition ds debug store configuration these
+msr	implication	reported in ia32_vmx_vmcs_enum 9 1 to read and write all vmcs fields
+msr	implication	than expected intel has not observed this erratum with most commercially available
+msr	implication	values the program may get incorrect pebs or pmi interrupts and or
+msr	implication	a pebs record generated after a vmx transition will store into memory
+msr	implication	performance counter counting instructions retired may over or under count the count
+msr	implication	after a vmx transition will store into memory according to the post
+msr	implication	unaffected by this erratum bits 62 61 contain in_tsx and tsx_abort information
+msr	implication	much earlier than expected or much later than expected intel has not
+msr	implication	may over or under count the count may not be consistent between
+msr	implication	is unaffected by this erratum bits 62 61 contain in_tsx and tsx_abort
+msr	implication	ia32_vmx_vmcs_enum 9 1 to read and write all vmcs fields may omit
+msr	implication	a performance counter counting instructions retired may over count or under count
+msr	implication	instructions retired may over or under count the count may not be
+msr	implication	9 1 to read and write all vmcs fields may omit one
+msr	implication	timer interrupt may be generated much earlier than expected or much later
+msr	implication	this erratum bits 62 61 contain in_tsx and tsx_abort information respectively software
+msr	implication	respectively software restoring these msrs from saved values are subject to this
+msr	implication	performance monitoring counters will continue to count after a pmi occurs in
+msr	implication	as a result of this erratum the performance monitoring counters will continue
+msr	implication	this erratum the performance monitoring counters will continue to count after a
+msr	implication	result of this erratum the performance monitoring counters will continue to count
+msr	implication	erratum the performance monitoring counters will continue to count after a pmi
+msr	implication	the performance monitoring counters will continue to count after a pmi occurs
+msr	implication	monitoring counters will continue to count after a pmi occurs in smm
+msr	implication	program execution may stall on both threads of the core subject to
+msr	implication	may stall on both threads of the core subject to this erratum
+msr	implication	execution may stall on both threads of the core subject to this
+msr	implication	counters will continue to count after a pmi occurs in smm system
+msr	implication	will continue to count after a pmi occurs in smm system management
+msr	implication	of this erratum the performance monitoring counters will continue to count after
+msr	implication	a result of this erratum the performance monitoring counters will continue to
+msr	implication	continue to count after a pmi occurs in smm system management mode
+msr	implication	performance monitoring events may produce incorrect results including pebs records generated at
+msr	implication	monitoring events may produce incorrect results including pebs records generated at an
+msr	implication	a pmi subsequent pmc overflows may not be logged in ia32_perf_global_status msr
+msr	implication	listed performance monitoring events may produce incorrect results including pebs records generated
+msr	implication	on a pmi subsequent pmc overflows may not be logged in ia32_perf_global_status
+msr	implication	may produce incorrect results including pebs records generated at an incorrect point
+msr	implication	events may produce incorrect results including pebs records generated at an incorrect
+msr	implication	the listed performance monitoring events may produce incorrect results including pebs records
+msr	implication	performance monitoring software may not function properly if the lbr stack and
+msr	implication	is less than the size of the output region which triggered the
+msr	implication	by ia32_rtit_ctl os 0 may include cr3 address information this may be
+msr	implication	user mode tracing indicated by ia32_rtit_ctl os 0 may include cr3 address
+msr	implication	erratum occurs user mode tracing indicated by ia32_rtit_ctl os 0 may include
+msr	implication	do not operate as expected intel has not observed this erratum to
+msr	implication	erratum incorrect logging of an uncorrectable memory error in ia32_mci_status may occur
+msr	implication	the stop condition intel pt analysis software should not attempt to decode
+msr	implication	analysis software should not attempt to decode packet data bytes beyond the
+msr	implication	561h holds a value that is less than the size of the
+msr	implication	software should not attempt to decode packet data bytes beyond the outputoffset
+msr	implication	of the output region which triggered the stop condition intel pt analysis
+msr	implication	mode tracing indicated by ia32_rtit_ctl os 0 may include cr3 address information
+msr	implication	successive fixed counter overflows may be discarded when freeze perfmon on pmi
+msr	implication	expected intel has not observed this erratum to impact any commercially available
+msr	implication	intel has not observed this erratum to impact any commercially available system
+msr	implication	than the size of the output region which triggered the stop condition
+msr	implication	that is less than the size of the output region which triggered
+msr	implication	when concurrently enabling any one of lbr bts or btm with intel
+msr	implication	intel pt analysis software should not attempt to decode packet data bytes
+msr	implication	and performance counters freeze on pmi do not operate as expected intel
+msr	implication	lbr stack and performance counters freeze on pmi do not operate as
+msr	implication	an unexpected gp may occur when concurrently enabling any one of lbr
+msr	implication	a value that is less than the size of the output region
+msr	implication	when this erratum occurs user mode tracing indicated by ia32_rtit_ctl os 0
+msr	implication	tracing indicated by ia32_rtit_ctl os 0 may include cr3 address information this
+msr	implication	monitoring software may not function properly if the lbr stack and performance
+msr	implication	output region which triggered the stop condition intel pt analysis software should
+msr	implication	value that is less than the size of the output region which
+msr	implication	the size of the output region which triggered the stop condition intel
+msr	implication	occurs user mode tracing indicated by ia32_rtit_ctl os 0 may include cr3
+msr	implication	not function properly if the lbr stack and performance counters freeze on
+msr	implication	may include cr3 address information this may be an undesirable leakage of
+msr	implication	as expected intel has not observed this erratum to impact any commercially
+msr	implication	condition intel pt analysis software should not attempt to decode packet data
+msr	implication	may not function properly if the lbr stack and performance counters freeze
+msr	implication	if the lbr stack and performance counters freeze on pmi do not
+msr	implication	counter overflows may be discarded when freeze perfmon on pmi is used
+msr	implication	this erratum incorrect logging of an uncorrectable memory error in ia32_mci_status may
+msr	implication	region which triggered the stop condition intel pt analysis software should not
+msr	implication	include cr3 address information this may be an undesirable leakage of kernel
+msr	implication	may occur when concurrently enabling any one of lbr bts or btm
+msr	implication	operate as expected intel has not observed this erratum to impact any
+msr	implication	due to this erratum incorrect logging of an uncorrectable memory error in
+msr	implication	0 may include cr3 address information this may be an undesirable leakage
+msr	implication	triggered the stop condition intel pt analysis software should not attempt to
+msr	implication	this erratum software may be unable to clear the perfmon counter overflow
+msr	implication	concurrently enabling any one of lbr bts or btm with intel pt
+msr	implication	the output region which triggered the stop condition intel pt analysis software
+msr	implication	performance counters freeze on pmi do not operate as expected intel has
+msr	implication	not operate as expected intel has not observed this erratum to impact
+msr	implication	the lbr stack and performance counters freeze on pmi do not operate
+msr	implication	on pmi do not operate as expected intel has not observed this
+msr	implication	ia32_rtit_output_mask_ptrs msr 561h holds a value that is less than the size
+msr	implication	occur when concurrently enabling any one of lbr bts or btm with
+msr	implication	software may not function properly if the lbr stack and performance counters
+msr	implication	properly if the lbr stack and performance counters freeze on pmi do
+msr	implication	stack and performance counters freeze on pmi do not operate as expected
+msr	implication	erratum software may be unable to clear the perfmon counter overflow status
+msr	implication	freeze on pmi do not operate as expected intel has not observed
+msr	implication	ia32_rtit_ctl os 0 may include cr3 address information this may be an
+msr	implication	indicated by ia32_rtit_ctl os 0 may include cr3 address information this may
+msr	implication	unexpected gp may occur when concurrently enabling any one of lbr bts
+msr	implication	fixed counter overflows may be discarded when freeze perfmon on pmi is
+msr	implication	to this erratum incorrect logging of an uncorrectable memory error in ia32_mci_status
+msr	implication	which triggered the stop condition intel pt analysis software should not attempt
+msr	implication	to this erratum software may be unable to clear the perfmon counter
+msr	implication	due to this erratum software may be unable to clear the perfmon
+msr	implication	this erratum occurs user mode tracing indicated by ia32_rtit_ctl os 0 may
+msr	implication	os 0 may include cr3 address information this may be an undesirable
+msr	implication	size of the output region which triggered the stop condition intel pt
+msr	implication	pt analysis software should not attempt to decode packet data bytes beyond
+msr	implication	counters freeze on pmi do not operate as expected intel has not
+msr	implication	msr 561h holds a value that is less than the size of
+msr	implication	holds a value that is less than the size of the output
+msr	implication	gp may occur when concurrently enabling any one of lbr bts or
+msr	implication	cr3 address information this may be an undesirable leakage of kernel information
+msr	implication	less than the size of the output region which triggered the stop
+msr	implication	stop condition intel pt analysis software should not attempt to decode packet
+msr	implication	pmi do not operate as expected intel has not observed this erratum
+msr	implication	software may be unable to clear the perfmon counter overflow status indication
+msr	implication	function properly if the lbr stack and performance counters freeze on pmi
+msr	workaround	referenced data structures are located at physical addresses that are mapped to wb memory type by the
+msr	workaround	and referenced data structures are located at physical addresses that are mapped to wb memory type by
+msr	workaround	that the vmcs and referenced data structures are located at physical addresses that are mapped to wb
+msr	workaround	data structures are located at physical addresses that are mapped to wb memory type by the mtrrs
+msr	workaround	the vmcs and referenced data structures are located at physical addresses that are mapped to wb memory
+msr	workaround	vmcs and referenced data structures are located at physical addresses that are mapped to wb memory type
+msr	workaround	ensure that the vmcs and referenced data structures are located at physical addresses that are mapped to
+msr	workaround	should ensure that the vmcs and referenced data structures are located at physical addresses that are mapped
+msr	workaround	software should ensure that the vmcs and referenced data structures are located at physical addresses that are
+msr	workaround	workaround is possible through disallowing pebs during vmx non root operation and disabling pebs prior to vm
+msr	workaround	the bios to contain a workaround for this erratum a software workaround is possible through disallowing pebs
+msr	workaround	this erratum a software workaround is possible through disallowing pebs during vmx non root operation and disabling
+msr	workaround	bios to contain a workaround for this erratum a software workaround is possible through disallowing pebs during
+msr	workaround	a workaround for this erratum a software workaround is possible through disallowing pebs during vmx non root
+msr	workaround	contain a workaround for this erratum a software workaround is possible through disallowing pebs during vmx non
+msr	workaround	erratum a software workaround is possible through disallowing pebs during vmx non root operation and disabling pebs
+msr	workaround	it is possible for the bios to contain a workaround for this erratum a software workaround is
+msr	workaround	for the bios to contain a workaround for this erratum a software workaround is possible through disallowing
+msr	workaround	to contain a workaround for this erratum a software workaround is possible through disallowing pebs during vmx
+msr	workaround	workaround for this erratum a software workaround is possible through disallowing pebs during vmx non root operation
+msr	workaround	a software workaround is possible through disallowing pebs during vmx non root operation and disabling pebs prior
+msr	workaround	is possible through disallowing pebs during vmx non root operation and disabling pebs prior to vm entry
+msr	workaround	is possible for the bios to contain a workaround for this erratum a software workaround is possible
+msr	workaround	for this erratum a software workaround is possible through disallowing pebs during vmx non root operation and
+msr	workaround	software workaround is possible through disallowing pebs during vmx non root operation and disabling pebs prior to
+msr	workaround	possible for the bios to contain a workaround for this erratum a software workaround is possible through
+msr	workaround	enabled on all threads when using on demand clock modulation or if the duty cycle programmed in
+msr	workaround	will not occur if clock modulation is enabled on all threads when using on demand clock modulation
+msr	workaround	threads when using on demand clock modulation or if the duty cycle programmed in the ia32_clock_modulation msr
+msr	workaround	this erratum will not occur if clock modulation is enabled on all threads when using on demand
+msr	workaround	is enabled on all threads when using on demand clock modulation or if the duty cycle programmed
+msr	workaround	demand clock modulation or if the duty cycle programmed in the ia32_clock_modulation msr is 18 75 or
+msr	workaround	re enabling the pmcs in ia32_perf_global_ctrl will log the overflows that were not previously logged in ia32_perf_global_status
+msr	workaround	modulation is enabled on all threads when using on demand clock modulation or if the duty cycle
+msr	workaround	erratum will not occur if clock modulation is enabled on all threads when using on demand clock
+msr	workaround	clock modulation or if the duty cycle programmed in the ia32_clock_modulation msr is 18 75 or higher
+msr	workaround	clock modulation is enabled on all threads when using on demand clock modulation or if the duty
+msr	workaround	if clock modulation is enabled on all threads when using on demand clock modulation or if the
+msr	workaround	not occur if clock modulation is enabled on all threads when using on demand clock modulation or
+msr	workaround	when using on demand clock modulation or if the duty cycle programmed in the ia32_clock_modulation msr is
+msr	workaround	all threads when using on demand clock modulation or if the duty cycle programmed in the ia32_clock_modulation
+msr	workaround	using on demand clock modulation or if the duty cycle programmed in the ia32_clock_modulation msr is 18
+msr	workaround	on demand clock modulation or if the duty cycle programmed in the ia32_clock_modulation msr is 18 75
+msr	workaround	on all threads when using on demand clock modulation or if the duty cycle programmed in the
+msr	workaround	occur if clock modulation is enabled on all threads when using on demand clock modulation or if
+msr	workaround	writing msr_lastbranch_x_from_ip ensure the value being written has bit 47 replicated in bits 62 61 this is
+msr	workaround	being written has bit 47 replicated in bits 62 61 this is most easily accomplished by sign
+msr	workaround	bit 47 replicated in bits 62 61 this is most easily accomplished by sign extending from bit
+msr	workaround	written has bit 47 replicated in bits 62 61 this is most easily accomplished by sign extending
+msr	workaround	msr_lastbranch_x_from_ip ensure the value being written has bit 47 replicated in bits 62 61 this is most
+msr	workaround	in bits 62 61 this is most easily accomplished by sign extending from bit 47 to bits
+msr	workaround	has bit 47 replicated in bits 62 61 this is most easily accomplished by sign extending from
+msr	workaround	a bios code change has been identified and may be implemented as a workaround for this erratum
+msr	workaround	bits 62 61 this is most easily accomplished by sign extending from bit 47 to bits 62
+msr	workaround	value being written has bit 47 replicated in bits 62 61 this is most easily accomplished by
+msr	workaround	47 replicated in bits 62 61 this is most easily accomplished by sign extending from bit 47
+msr	workaround	62 61 this is most easily accomplished by sign extending from bit 47 to bits 62 48
+msr	workaround	the value being written has bit 47 replicated in bits 62 61 this is most easily accomplished
+msr	workaround	before writing msr_lastbranch_x_from_ip ensure the value being written has bit 47 replicated in bits 62 61 this
+msr	workaround	ensure the value being written has bit 47 replicated in bits 62 61 this is most easily
+msr	workaround	replicated in bits 62 61 this is most easily accomplished by sign extending from bit 47 to
+msr	workaround	this erratum by clearing the perfmon counter value prior to disabling it and then clearing the overflow
+msr	workaround	avoid this erratum by clearing the perfmon counter value prior to disabling it and then clearing the
+msr	workaround	may avoid this erratum by clearing the perfmon counter value prior to disabling it and then clearing
+msr	workaround	software may avoid this erratum by clearing the perfmon counter value prior to disabling it and then
+msr	workaround	erratum by clearing the perfmon counter value prior to disabling it and then clearing the overflow status
+msr	workaround	clearing the perfmon counter value prior to disabling it and then clearing the overflow status indication bit
+msr	workaround	by clearing the perfmon counter value prior to disabling it and then clearing the overflow status indication
