@@ -1,0 +1,5 @@
+fxsavefxrstor or xsavexrstor will incur a gp fault due to the memory limit violation as expected but the memory state may be only partially saved or restored
+the count value for performance monitoring event fp_mmx_trans_to_mmx may be lower than expected the degree of undercounting is dependent on the occurrences of the erratum condition while the counter is active intel has not observed this erratum with any commercially available software
+enabling memory sparing may result in a system may hang
+program execution may stall on both threads of the core subject to this erratum
+when this erratum occurs a gp will be signaled
