@@ -1,4 +1,4 @@
 This folder includes all the codes, intermediate files and final results of bidirectional Seq2Seq.
 
-The main_s2s.py is the main src code for training the bidirectional seq2seq model and show the texts of both groundtruth test implications (test_implications) and the predicted (generated) implications once given the test problems in test_problem.txt. 
+The main_s2s.py is the main src code for training the bidirectional seq2seq model and show the texts of both groundtruth test implications (test_implication.txt) and the predicted (generated) implications once given the test problems in test_problem.txt. 
 
