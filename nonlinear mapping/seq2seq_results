@@ -1,0 +1,18 @@
+Test Problem 1 (original text):
+performance monitor event fp_mmx_trans_to_mmx event cch umask 01h counts transitions from x87 floating point fp to mmx instructions due to this erratum if only a small number of mmx instructions including emms are executed immediately after the last fp instruction a fp to mmx transition may not be counted
+
+Groundtruth Implication 1 (using stop words):
+count, value, performance, monitoring, event, may, lower, expected, degree, undercounting, dependent, occurrences, erratum, condition, counter, active, intel,observed, erratum, commercially, available, software
+
+Generated Implication 1:
+performance, monitor, event, may, appear, incorrect, accurate,properly, dma, actually, first, technology, legacy, power
+
+
+Test Problem 2 (original text):
+upon delivery of an smi system management interrupt the processor saves and then clears traceen in the ia32_rtit_ctl msr 570h thus disabling intel processor trace intel pt if the smi handler enables intel pt and it remains enabled when an rsm instruction is executed a shutdown event should occur due to this erratum the processor does not shutdown but instead generates a gp generalprotection exception
+
+Associated Groundtruth Implication 2 (using stop words):
+erratum, occurs, gp, signaled
+
+Generated Implication 2:
+bits, instruction, processor, unexpectedly, gp, instead
