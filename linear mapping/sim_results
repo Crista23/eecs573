@@ -1,0 +1,14 @@
+Test problem:
+performance monitor event fp_mmx_trans_to_mmx event cch umask 01h counts transitions from x87 floating point fp to mmx instructions due to this erratum if only a small number of mmx instructions including emms are executed immediately after the last fp instruction a fp to mmx transition may not be counted
+
+Associated Groundtruth Implication:
+the count value for performance monitoring event fp_mmx_trans_to_mmx may be lower than expected the degree of undercounting is dependent on the occurrences of the erratum condition while the counter is active intel has not observed this erratum with any commercially available software
+
+Similar Implication by our algorithm:
+
+Similar Implication 1:
+due to this erratum the system may report incorrect apic timer data and may result in the apic timer interrupt not being generated and subsequent system hang intel has observed this erratum on a small number of l54xx components
+
+Similar Implication 2:
+there may be a smaller than expected value in the inst_retired performance monitoring counter the extent to which this value is smaller than expected is determined by the frequency of the above cases
+
