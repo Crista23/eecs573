@@ -1,0 +1,93 @@
+1. Title
+md
+may,
+
+vb
+cause, result, lead, report, hang, occur,
+
+vbg
+using,
+
+rb
+incorrectly,
+
+nn
+system, performance, intel, processor, instruction, memory, hang, error, mode, exception, behavior, bit, machine, reset, event, exit, check, fault, monitoring, page, monitor, state, execution, pcie*, gp, value, package, address, controller, code, pebs, register, interrupt, field, power, vm,
+
+vbn
+set, enabled, expected,
+
+cd
+1,
+
+jj
+incorrect, unexpected, unpredictable, certain, warm, usb,
+
+nns
+errors, instructions, data, events, bits,
+
+2. Problem.
+md
+may,
+
+nns
+instructions,
+
+nn
+error, instruction, exception, counter, page, event, fault, exit, msr, address, memory, package, bit, reset, power, packet, pebs, code,
+
+cd
+0,
+
+3. implication.
+md
+may,
+
+vb
+hang, occur, result, cause, lead, behave, report, operate, impact, experience,
+
+vbg
+using,
+
+rb
+commercially, incorrectly, properly,
+
+nn
+erratum, system, software, intel, processor, error, performance, behavior, hang, memory, instruction, machine, exception, check, event, monitoring, fault, counter, value, count, operation, mode, address, reset, pebs, interrupt, page, gp, state, register, code, monitor, power, link, execution, pcie,
+
+vbn
+observed, expected, logged, used, set, reported,
+
+jjr
+higher,
+
+jj
+due, available, unpredictable, incorrect, unexpected, multiple,
+
+vbz
+occurs,
+
+nns
+errors, events, data, instructions, interrupts,
+
+4. workaround.
+md
+may,
+
+vb
+contain, ensure, use, avoid,
+
+nn
+none, erratum, workaround, software, code, change, memory, instruction,
+
+vbd
+identified,
+
+vbn
+identified, implemented,
+
+jj
+possible, bios,
+
+nns
+bios,
